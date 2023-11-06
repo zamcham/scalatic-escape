@@ -2,6 +2,18 @@
 
 ![Game Logo](link_to_logo_image)
 
+## Table of Contents
+
+- [Description](#description)
+- [Gameplay](#gameplay)
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Credits](#credits)
+- [Contact](#contact)
+
 ## Description
 
 🎮 Scalatic Escape is an exhilarating auto-scrolling platformer game currently under development for the Game Off game jam hosted by GitHub. Join our alien explorer as they land on a mysterious planet to steal a powerful magic gem, facing daring challenges and obstacles to escape and return to their spaceship!
