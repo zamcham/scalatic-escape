@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float jumpForce = 10f;
-    Rigifbody playerRb;
+    Rigidbody2D rb;
     bool isOnGround = true;
     LayerMask groundLayer = 1 << 8;
 
     void Awake()
     {
-        playerRb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
     }
 }
