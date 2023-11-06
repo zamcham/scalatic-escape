@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 10f;
-    [SerializeField] float jumpSpeed = 10f;
+    [SerializeField] float jumpForce = 10f;
     Vector2 moveInput;
     Rigidbody2D rb;
 
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed)
         {
-            rb.velocity += new Vector2(0f, jumpSpeed);
+            rb.velocity += new Vector2(0f, jumpForce);
         }
     }
 
