@@ -7,8 +7,7 @@
 - [Description](#description)
 - [Gameplay](#gameplay)
 - [Key Features](#key-features)
-- [Installation](#installation)
-- [Usage](#usage)
+- [Live Demo](#live-demo)
 - [Contributing](#contributing)
 - [License](#license)
 - [Credits](#credits)
@@ -30,26 +29,22 @@
 - 🪐 Visually captivating alien landscapes
 - 🎭 Engaging storyline and quest-driven gameplay
 
-## Installation
+## Live Demo
 
-⚙️ [Include instructions on how to install or run the game, along with any prerequisites and dependencies]
-
-## Usage
-
-🕹️ [Provide instructions on how to play the game, including controls and gameplay mechanics]
+🕹️ [Coming Soon]
 
 ## Contributing
 
-🤝 [Guidelines for contributing to the project, including information on how to submit pull requests]
+🤝 [Instructions coming soon]
 
 ## License
 
-📜 [Include information about the project's license]
+📜 [Coming Soon]
 
 ## Credits
 
-🙌 [List any credits for assets, tools, or resources used in the game development]
+🙌 [Coming Soon]
 
 ## Contact
 
-📧 [Provide contact information for inquiries or support]
+📧 Feel free to contact me on Discord: @zamcham
