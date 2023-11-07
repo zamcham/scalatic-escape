@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - GroundChecker
   - Water
   - UI
-  - 
-  - 
+  - Jumpable
+  - BottomBoundary
   - 
   - 
   - 
