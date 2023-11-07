@@ -44,11 +44,9 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        //If the player is not touching the ground, don't jump
-        //(will change later on to allow for double jumps)
-        if (!groundChecker.IsTouchingLayers(LayerMask.GetMask("Jumpable"))){ return; }
+        CheckGround();
 
-        if (value.isPressed)
+        if (value.isPressed && jumpCount < maxJumpCount)
         {
             rb.velocity = new Vector2(rb.velocity.y, jumpForce);
             jumpCount++;
@@ -68,6 +66,13 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector2(Mathf.Sign(rb.velocity.x), 1f);
         }        
     }
+    void CheckGround()
+    {
+        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("Jumpable")) && rb.velocity.y <= 0f)
+        {
+            jumpCount = 0;
+        }
+    }
 
     void GetGroundChecker()
     {
@@ -82,6 +87,7 @@ public class PlayerController : MonoBehaviour
             groundChecker = groundCheckerTransform.gameObject.GetComponent<BoxCollider2D>();
         }
     }
+
 
     void CheckBottomBoundary()
     {
@@ -102,6 +108,8 @@ public class PlayerController : MonoBehaviour
 
         pixie.SetActive(false);
         nomad.SetActive(false);
+
+        maxJumpCount = 0;
     }
 
     void OnNomad(InputValue value)
@@ -112,6 +120,8 @@ public class PlayerController : MonoBehaviour
 
         pixie.SetActive(false);
         titan.SetActive(false);
+
+        maxJumpCount = 1;
     }
 
     void OnPixie(InputValue value)
@@ -122,6 +132,8 @@ public class PlayerController : MonoBehaviour
 
         titan.SetActive(false);
         nomad.SetActive(false);
+
+        maxJumpCount = 2;
     }
 
     void GetCharacters()
@@ -145,7 +157,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            this.nomad = nomad.gameObject;
+            this.nomad = nomad.gameObject;         
         }
 
         if (titan == null)
