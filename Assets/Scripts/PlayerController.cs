@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +5,14 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
+
+    [Header("Jumping")]
+    [SerializeField] private TriggerCollision jumpDetector;
+
+    // Making it public so we can dynamically change it later on
+    public int maxJumpCount = 1;
+    private int jumpCount = 0;
+
     Vector2 moveInput;
     Rigidbody2D rb;
 
@@ -21,6 +27,12 @@ public class PlayerController : MonoBehaviour
     {
         Run();
         FlipSprite();
+
+        // Ground check
+        if (jumpDetector.isHit && rb.velocity.y <= 0f)
+        {
+            jumpCount = 0;
+        }
     }
 
     void OnMove(InputValue value)
@@ -29,11 +41,12 @@ public class PlayerController : MonoBehaviour
         Debug.Log(moveInput);
     }
 
-    void OnJump (InputValue value)
+    void OnJump(InputValue value)
     {
-        if (value.isPressed)
+        if (value.isPressed && jumpCount < maxJumpCount)
         {
-            rb.velocity += new Vector2(0f, jumpForce);
+            rb.velocity = new Vector2(rb.velocity.y, jumpForce);
+            jumpCount++;
         }
     }
 
@@ -48,7 +61,6 @@ public class PlayerController : MonoBehaviour
         if (playerHasHorizontalSpeed)
         {
             transform.localScale = new Vector2(Mathf.Sign(rb.velocity.x), 1f);
-        }
-        
+        }        
     }
 }
