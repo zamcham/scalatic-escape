@@ -39,7 +39,11 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (value.isPressed && jumpCount < maxJumpCount)
+        //If the player is not touching the ground, don't jump
+        //(will change later on to allow for double jumps)
+        if (!groundChecker.IsTouchingLayers(LayerMask.GetMask("Jumpable"))){ return; }
+
+        if (value.isPressed)
         {
             rb.velocity = new Vector2(rb.velocity.y, jumpForce);
             jumpCount++;
