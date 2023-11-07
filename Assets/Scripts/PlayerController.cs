@@ -7,12 +7,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForce = 10f;
 
     [Header("Jumping")]
-    [SerializeField] private TriggerCollision jumpDetector;
+    [SerializeField] TriggerCollision jumpDetector;
     BoxCollider2D groundChecker;
 
-    // Making it public so we can dynamically change it later on
-    public int maxJumpCount = 1;
-    private int jumpCount = 0;
+    [SerializeField] int maxJumpCount = 1;
+    int jumpCount = 0;
 
     Vector2 moveInput;
     Rigidbody2D rb;
