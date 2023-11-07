@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,7 +8,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForce = 10f;
 
     [Header("Jumping")]
-    [SerializeField] TriggerCollision jumpDetector;
     BoxCollider2D groundChecker;
 
     [SerializeField] int maxJumpCount = 1;
@@ -17,10 +17,10 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
 
 
-
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
         GetGroundChecker();
     }
 
@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     {
         Run();
         FlipSprite();
+
+        CheckBottomBoundary();
     }
 
     void OnMove(InputValue value)
@@ -74,6 +76,14 @@ public class PlayerController : MonoBehaviour
         else
         {
             groundChecker = groundCheckerTransform.gameObject.GetComponent<BoxCollider2D>();
+        }
+    }
+
+    void CheckBottomBoundary()
+    {
+        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary"))) 
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
