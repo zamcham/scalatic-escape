@@ -16,12 +16,15 @@ public class PlayerController : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D rb;
 
+    GameObject pixie, nomad, titan;
+
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
 
         GetGroundChecker();
+        GetCharacters();
     }
 
     void Update()
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviour
         CheckBottomBoundary();
     }
 
+    #region Movement
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -86,4 +90,73 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
+    #endregion
+
+    #region Size Shifting
+
+    void OnTitan(InputValue value)
+    {
+        Debug.Log("Titan");
+
+        titan.SetActive(true);
+
+        pixie.SetActive(false);
+        nomad.SetActive(false);
+    }
+
+    void OnNomad(InputValue value)
+    {
+        Debug.Log("Nomad");
+
+        nomad.SetActive(true);
+
+        pixie.SetActive(false);
+        titan.SetActive(false);
+    }
+
+    void OnPixie(InputValue value)
+    {
+        Debug.Log("Pixie");
+
+        pixie.SetActive(true);
+
+        titan.SetActive(false);
+        nomad.SetActive(false);
+    }
+
+    void GetCharacters()
+    {
+        Transform pixie = transform.Find("Pixie");
+        Transform nomad = transform.Find("Nomad");
+        Transform titan = transform.Find("Titan");
+
+        if (pixie == null)
+        {
+            Debug.LogError("Pixie mesh not found!");
+        }
+        else
+        {
+            this.pixie = pixie.gameObject;
+        }
+
+        if (nomad == null)
+        {
+            Debug.LogError("Nomad mesh not found!");
+        }
+        else
+        {
+            this.nomad = nomad.gameObject;
+        }
+
+        if (titan == null)
+        {
+            Debug.LogError("Titan mesh not found!");
+        }
+        else
+        {
+            this.titan = titan.gameObject;
+        }
+    }
+
+    #endregion
 }
