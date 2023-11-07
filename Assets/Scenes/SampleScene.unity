@@ -394,9 +394,8 @@ GameObject:
   - component: {fileID: 943675503}
   - component: {fileID: 943675508}
   - component: {fileID: 943675507}
-  - component: {fileID: 943675506}
   m_Layer: 3
-  m_Name: GroundCollider
+  m_Name: GroundChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,18 +416,6 @@ Transform:
   m_Father: {fileID: 1797230389}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &943675506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 943675502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 344070f71207e21488b2721e44d10b8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &943675507
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -787,7 +774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   jumpForce: 10
-  jumpDetector: {fileID: 943675506}
+  jumpDetector: {fileID: 0}
   maxJumpCount: 1
 --- !u!114 &1797230393
 MonoBehaviour:

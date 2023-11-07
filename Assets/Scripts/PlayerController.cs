@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Jumping")]
     [SerializeField] private TriggerCollision jumpDetector;
+    BoxCollider2D groundChecker;
 
     // Making it public so we can dynamically change it later on
     public int maxJumpCount = 1;
@@ -21,18 +22,13 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        GetGroundChecker();
     }
 
     void Update()
     {
         Run();
         FlipSprite();
-
-        // Ground check
-        if (jumpDetector.isHit && rb.velocity.y <= 0f)
-        {
-            jumpCount = 0;
-        }
     }
 
     void OnMove(InputValue value)
@@ -62,5 +58,19 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector2(Mathf.Sign(rb.velocity.x), 1f);
         }        
+    }
+
+    void GetGroundChecker()
+    {
+        Transform groundCheckerTransform = transform.Find("GroundChecker");
+
+        if (groundCheckerTransform == null)
+        {
+            Debug.LogError("GroundChecker not found!");
+        }
+        else
+        {
+            groundChecker = groundCheckerTransform.gameObject.GetComponent<BoxCollider2D>();
+        }
     }
 }
