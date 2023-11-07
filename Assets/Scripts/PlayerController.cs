@@ -15,14 +15,11 @@ public class PlayerController : MonoBehaviour
 
     Vector2 moveInput;
     Rigidbody2D rb;
-    BoxCollider2D boxCollider;
-
 
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
 
         GetGroundChecker();
     }
