@@ -104,10 +104,10 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Titan");
 
-        titan.SetActive(true);
-
         pixie.SetActive(false);
         nomad.SetActive(false);
+
+        titan.SetActive(true);
 
         maxJumpCount = 0;
     }
@@ -116,10 +116,10 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Nomad");
 
-        nomad.SetActive(true);
-
         pixie.SetActive(false);
         titan.SetActive(false);
+
+        nomad.SetActive(true);
 
         maxJumpCount = 1;
     }
@@ -128,45 +128,41 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Pixie");
 
-        pixie.SetActive(true);
-
         titan.SetActive(false);
         nomad.SetActive(false);
+
+        pixie.SetActive(true);
 
         maxJumpCount = 2;
     }
 
     void GetCharacters()
     {
-        Transform pixie = transform.Find("Pixie");
-        Transform nomad = transform.Find("Nomad");
-        Transform titan = transform.Find("Titan");
+        string[] forms = { "Pixie", "Nomad", "Titan" };
 
-        if (pixie == null)
+        foreach (string form in forms)
         {
-            Debug.LogError("Pixie mesh not found!");
-        }
-        else
-        {
-            this.pixie = pixie.gameObject;
-        }
+            Transform currentForm = transform.Find(form);
 
-        if (nomad == null)
-        {
-            Debug.LogError("Nomad mesh not found!");
-        }
-        else
-        {
-            this.nomad = nomad.gameObject;         
-        }
-
-        if (titan == null)
-        {
-            Debug.LogError("Titan mesh not found!");
-        }
-        else
-        {
-            this.titan = titan.gameObject;
+            if (currentForm == null)
+            {
+                Debug.LogError($"{form} mesh not found!");
+            }
+            else
+            {
+                switch (form)
+                {
+                    case "Pixie":
+                        this.pixie = currentForm.gameObject;
+                        break;
+                    case "Nomad":
+                        this.nomad = currentForm.gameObject;
+                        break;
+                    case "Titan":
+                        this.titan = currentForm.gameObject;
+                        break;
+                }
+            }
         }
     }
 
