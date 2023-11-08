@@ -23,4 +23,14 @@ public class EnergyManagement : MonoBehaviour
 
         energyBar.SetValue(currentEnergy);
     }
+
+    public void AddEnergyPercent(float percent)
+    {
+        float energy = maxEnergy * (percent / 100f);
+
+        currentEnergy += energy;
+        currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
+
+        energyBar.SetValue(currentEnergy);
+    }
 }
