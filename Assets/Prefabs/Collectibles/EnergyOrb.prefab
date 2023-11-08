@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4280946077880180730}
   - component: {fileID: 1810607545971896579}
-  - component: {fileID: 771735269308937509}
   - component: {fileID: 3787399240754052604}
+  - component: {fileID: 771735269308937509}
   m_Layer: 8
   m_Name: EnergyOrb
   m_TagString: Untagged
@@ -86,19 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &771735269308937509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 462411640376559846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aa71c3fc44534449b130247c44f5016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energyGain: 25
 --- !u!58 &3787399240754052604
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -134,3 +121,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.703125
+--- !u!114 &771735269308937509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462411640376559846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aa71c3fc44534449b130247c44f5016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyGain: 25
+  collectSound: {fileID: 8300000, guid: e37f9ab24365c0648a1c7197ca7580cf, type: 3}
