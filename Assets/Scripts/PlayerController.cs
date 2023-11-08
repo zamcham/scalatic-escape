@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
 
@@ -16,12 +17,15 @@ public class PlayerController : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D rb;
 
+    [Header("Size Shifting & Energy")]
+    EnergyManagement energyManagement;
     GameObject pixie, nomad, titan;
 
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        energyManagement = GetComponent<EnergyManagement>();
 
         GetGroundChecker();
         GetCharacters();
@@ -104,36 +108,78 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Titan");
 
-        pixie.SetActive(false);
-        nomad.SetActive(false);
+        if (!titan.activeSelf)
+        {
+            if (energyManagement.currentEnergy >= energyManagement.titanEnergyCost)
+            {
+                energyManagement.AddEnergy(-energyManagement.titanEnergyCost);
 
-        titan.SetActive(true);
+                pixie.SetActive(false);
+                nomad.SetActive(false);
 
-        maxJumpCount = 0;
+                titan.SetActive(true);
+
+                maxJumpCount = 0;
+
+                Debug.Log("Changed to Titan.");
+            }
+            else
+            {
+                Debug.Log("Not enough energy left for Titan.");
+            }
+        }
+        else
+        {
+            Debug.Log("Titan is already active.");
+        }
     }
 
     void OnNomad(InputValue value)
     {
-        Debug.Log("Nomad");
 
-        pixie.SetActive(false);
-        titan.SetActive(false);
+        if (!nomad.activeSelf)
+        {
+            pixie.SetActive(false);
+            titan.SetActive(false);
 
-        nomad.SetActive(true);
+            nomad.SetActive(true);
 
-        maxJumpCount = 1;
+            maxJumpCount = 1;
+
+            Debug.Log("Changed to Nomad.");
+        }
+        else
+        {
+            Debug.Log("Nomad is already active.");
+        }
     }
 
     void OnPixie(InputValue value)
-    {
-        Debug.Log("Pixie");
+    {       
+        if (!pixie.activeSelf)
+        {
+            if (energyManagement.currentEnergy >= energyManagement.pixieEnergyCost)
+            {
+                energyManagement.AddEnergy(-energyManagement.pixieEnergyCost);
 
-        titan.SetActive(false);
-        nomad.SetActive(false);
+                titan.SetActive(false);
+                nomad.SetActive(false);
 
-        pixie.SetActive(true);
+                pixie.SetActive(true);
 
-        maxJumpCount = 2;
+                maxJumpCount = 2;
+
+                Debug.Log("Changed to Pixie.");
+            }
+            else
+            {
+                Debug.Log("Not enough energy left for Pixie.");
+            }
+        }
+        else
+        {
+            Debug.Log("Pixie is already active.");
+        }
     }
 
     void GetCharacters()

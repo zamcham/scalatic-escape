@@ -5,16 +5,21 @@ public class EnergyManagement : MonoBehaviour
     public float currentEnergy { get; private set; }
 
     [SerializeField] float maxEnergy, startingEnergy;
-    [SerializeField] float pixieEnergyThreshold, titanEnergyThreshold;
 
+    public float pixieEnergyCost, titanEnergyCost;
+
+    [SerializeField] BarUI energyBar;
 
     void Start()
     {
         currentEnergy = startingEnergy;
+        energyBar.SetValue(currentEnergy);
     }
 
-    void Update()
+    public void AddEnergy(float energy)
     {
-        
+        currentEnergy += energy;
+
+        energyBar.SetValue(currentEnergy);
     }
 }

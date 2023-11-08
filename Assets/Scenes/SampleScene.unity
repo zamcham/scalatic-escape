@@ -2165,9 +2165,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxEnergy: 100
-  startingEnergy: 25
-  pixieEnergyThreshold: 50
-  titanEnergyThreshold: 75
+  startingEnergy: 100
+  pixieEnergyCost: 10
+  titanEnergyCost: 25
+  energyBar: {fileID: 1966811014}
 --- !u!1 &1966811011
 GameObject:
   m_ObjectHideFlags: 0
@@ -2273,7 +2274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxValue: 100
-  valueChangeDuration: 1
+  valueLerpDuration: 0.25
 --- !u!1 &2002284999
 GameObject:
   m_ObjectHideFlags: 0
