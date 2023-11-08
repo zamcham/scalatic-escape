@@ -2227,7 +2227,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxEnergy: 100
   startingEnergy: 50
-  pixieEnergyCost: 10
+  pixieEnergyThreshold: 75
+  titanEnergyThreshold: 100
+  nomadEnergyCost: 25
+  pixieEnergyCost: 25
   titanEnergyCost: 25
   energyBar: {fileID: 1966811014}
 --- !u!1 &1966811011

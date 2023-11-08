@@ -109,9 +109,9 @@ public class PlayerController : MonoBehaviour
 
         if (!titan.activeSelf)
         {
-            if (energyManagement.currentEnergy >= energyManagement.titanEnergyCost)
+            if (energyManagement.currentEnergy >= energyManagement.maxEnergy * (energyManagement.titanEnergyThreshold / 100f))
             {
-                energyManagement.AddEnergy(-energyManagement.titanEnergyCost);
+                energyManagement.AddEnergyPercent(-energyManagement.titanEnergyCost);
 
                 pixie.SetActive(false);
                 nomad.SetActive(false);
@@ -138,6 +138,8 @@ public class PlayerController : MonoBehaviour
 
         if (!nomad.activeSelf)
         {
+            energyManagement.AddEnergyPercent(-energyManagement.nomadEnergyCost);
+
             pixie.SetActive(false);
             titan.SetActive(false);
 
@@ -157,9 +159,9 @@ public class PlayerController : MonoBehaviour
     {       
         if (!pixie.activeSelf)
         {
-            if (energyManagement.currentEnergy >= energyManagement.pixieEnergyCost)
+            if (energyManagement.currentEnergy >= energyManagement.maxEnergy * (energyManagement.pixieEnergyThreshold / 100f))
             {
-                energyManagement.AddEnergy(-energyManagement.pixieEnergyCost);
+                energyManagement.AddEnergyPercent(-energyManagement.pixieEnergyCost);
 
                 titan.SetActive(false);
                 nomad.SetActive(false);

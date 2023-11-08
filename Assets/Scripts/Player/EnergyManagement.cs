@@ -4,10 +4,17 @@ public class EnergyManagement : MonoBehaviour
 {
     public float currentEnergy { get; private set; }
 
-    [SerializeField] float maxEnergy, startingEnergy;
+    public float maxEnergy;
+        
+    [SerializeField] float startingEnergy;
 
-    public float pixieEnergyCost, titanEnergyCost;
+    [Header("Size Shifting")]
+    [Tooltip("In percent.")] public float pixieEnergyThreshold;
+    [Tooltip("In percent.")] public float titanEnergyThreshold; // Need to seperate these two, otherwise the header will be applied to both at the same time
 
+    [Tooltip("In percent.")] public float nomadEnergyCost, pixieEnergyCost, titanEnergyCost;
+
+    [Header("UI")]
     [SerializeField] BarUI energyBar;
 
     void Start()
