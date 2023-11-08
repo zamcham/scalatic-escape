@@ -19,6 +19,7 @@ public class EnergyManagement : MonoBehaviour
     public void AddEnergy(float energy)
     {
         currentEnergy += energy;
+        currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
 
         energyBar.SetValue(currentEnergy);
     }

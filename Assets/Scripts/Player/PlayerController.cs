@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        Debug.Log(moveInput);
     }
 
     void OnJump(InputValue value)
@@ -213,4 +212,13 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Collectible"))
+        {
+            ICollectible collectible = collision.gameObject.GetComponent<ICollectible>();
+            collectible.OnCollect(gameObject);
+        }
+    }
 }
