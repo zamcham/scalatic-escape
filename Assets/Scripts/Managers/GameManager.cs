@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,11 +18,20 @@ public class GameManager : MonoBehaviour
 
     float timescaleAtPause = 0.0001f;
 
+    // Levels
+    List<int> completedLevels;
+    int currentLevelIndex;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            completedLevels = new List<int>();
+
+            // We will change this to read from JSON data when implementing the save system
+            // For now, it will stay at zero
+            currentLevelIndex = 0;
         }
         else
         {
@@ -46,6 +56,22 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            switch (gameState)
+            {
+                case GameState.Paused:
+                    Resume();
+
+                    Debug.Log("1");
+                    break;
+                    
+
+                case GameState.Running:
+                    Pause(PauseState.MainMenu);
+                    Debug.Log("2");
+                    break;
+            }
         }
     }
 
@@ -66,13 +92,17 @@ public class GameManager : MonoBehaviour
 
     public void RestartScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(currentLevelIndex);
         Pause(PauseState.MainMenu);
     }
 
     public void LoadNextScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        completedLevels.Add(currentLevelIndex);
+
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        SceneManager.LoadScene(currentLevelIndex);
+
         Pause(PauseState.MainMenu);
     }
 }
