@@ -32,11 +32,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.isPaused) { return; }
-
         Run();
         FlipSprite();
-
         CheckBottomBoundary();
     }
 
@@ -50,7 +47,6 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (GameManager.Instance.isPaused) { return; }
 
         CheckGround();
 
@@ -96,22 +92,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    void CheckBottomBoundary()
-    {
-        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary"))) 
-        {
-            GameManager.Instance.Pause(PauseState.GameOverMenu);
-        }
-    }
     #endregion
 
     #region Size Shifting
 
     void OnTitan(InputValue value)
     {
-        if (GameManager.Instance.isPaused) { return; }
-
         if (!titan.activeSelf)
         {
             if (energyManagement.currentStamina >= energyManagement.maxStamina * (energyManagement.titanEnergyThreshold / 100f))
@@ -140,8 +126,6 @@ public class PlayerController : MonoBehaviour
 
     void OnNomad(InputValue value)
     {
-        if (GameManager.Instance.isPaused) { return; }
-
         if (!nomad.activeSelf)
         {
             energyManagement.AddStaminaPercent(-energyManagement.nomadEnergyCost);
@@ -163,8 +147,6 @@ public class PlayerController : MonoBehaviour
 
     void OnPixie(InputValue value)
     {
-        if (GameManager.Instance.isPaused) { return; }
-
         if (!pixie.activeSelf)
         {
             if (energyManagement.currentStamina >= energyManagement.maxStamina * (energyManagement.pixieEnergyThreshold / 100f))
