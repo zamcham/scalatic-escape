@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance;
+
     [SerializeField] BarUI staminaBar;
     [SerializeField] DisplayUI scoreDisplay;
 
@@ -9,6 +11,16 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         gameSession = GameSession.Instance;
     }
 

@@ -10,13 +10,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public bool isPaused { get { return gameState == GameState.Paused; } }
+    // Manager prefabs
+    [SerializeField] GameObject gameSessionPrefab, uiManagerPrefab;
 
     // States
     public GameState gameState { get; private set; }
     public PauseState pauseState { get; private set; }
 
     float timescaleAtPause = 0.0001f;
+    public bool isPaused { get { return gameState == GameState.Paused; } }
 
     // Levels
     List<int> completedLevels;
@@ -39,6 +41,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        // Create the other managers and made their parent the Managers object
+        Instantiate(gameSessionPrefab, transform.parent);
+        Instantiate(uiManagerPrefab, transform.parent);
 
         /* We made the GameManager the child of the Managers object in the hierarchy for a more organized look
          DontDestroyOnLoad doesn't work with child objects. We only need it to be a child in the editor, so 
