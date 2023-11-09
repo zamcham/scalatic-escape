@@ -10,9 +10,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    // Manager prefabs
-    [SerializeField] GameObject gameSessionPrefab, uiManagerPrefab;
-
     // States
     public GameState gameState { get; private set; }
     public PauseState pauseState { get; private set; }
@@ -41,10 +38,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        // Create the other managers and made their parent the Managers object
-        Instantiate(gameSessionPrefab, transform.parent);
-        Instantiate(uiManagerPrefab, transform.parent);
 
         /* We made the GameManager the child of the Managers object in the hierarchy for a more organized look
          DontDestroyOnLoad doesn't work with child objects. We only need it to be a child in the editor, so 
@@ -90,10 +83,9 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void RestartScene()
+    // EXTERNAL & PUBLIC
+    public void ReloadScene()
     {
-        Debug.Log("Reloading the scene number " + currentLevelIndex);
-
         SceneManager.LoadScene(currentLevelIndex);
         Pause(PauseState.MainMenu);
     }
@@ -103,11 +95,7 @@ public class GameManager : MonoBehaviour
         completedLevels.Add(currentLevelIndex);
 
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        SceneManager.LoadScene(currentLevelIndex);
 
-        Pause(PauseState.MainMenu);
-
-        Debug.Log("Scene completed: " + (currentLevelIndex - 1));
-        Debug.Log("Loading the scene number " + currentLevelIndex);
+        ReloadScene();
     }
 }

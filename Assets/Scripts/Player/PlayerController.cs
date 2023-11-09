@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary"))) 
         {
-            GameManager.Instance.RestartScene();
+            GameManager.Instance.ReloadScene();
         }
     }
     #endregion
