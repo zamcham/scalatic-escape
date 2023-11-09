@@ -4,7 +4,7 @@ public class GameSession : MonoBehaviour
 {
     public static GameSession Instance;
 
-    public int score {  get; private set; }
+    public int score { get; private set; } = 10;
     public float stamina { get; set; }
     public float remainingTime {  get; private set; }
 
