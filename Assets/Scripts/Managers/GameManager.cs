@@ -114,4 +114,10 @@ public class GameManager : MonoBehaviour
 
         ReloadScene();
     }
+
+    public void LoadLevelMap()
+    {
+        SceneManager.LoadScene(0);
+        Pause(PauseState.MainMenu);
+    }
 }
