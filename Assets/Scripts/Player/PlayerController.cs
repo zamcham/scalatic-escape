@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,6 +32,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.isPaused) { return; }
+
         Run();
         FlipSprite();
 
@@ -42,11 +43,15 @@ public class PlayerController : MonoBehaviour
     #region Movement
     void OnMove(InputValue value)
     {
+        if (GameManager.Instance.isPaused) { return; }
+
         moveInput = value.Get<Vector2>();
     }
 
     void OnJump(InputValue value)
     {
+        if (GameManager.Instance.isPaused) { return; }
+
         CheckGround();
 
         if (value.isPressed && jumpCount < maxJumpCount)
@@ -96,7 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary"))) 
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            GameManager.Instance.RestartScene();
         }
     }
     #endregion
@@ -105,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTitan(InputValue value)
     {
-        Debug.Log("Titan");
+        if (GameManager.Instance.isPaused) { return; }
 
         if (!titan.activeSelf)
         {
@@ -135,6 +140,7 @@ public class PlayerController : MonoBehaviour
 
     void OnNomad(InputValue value)
     {
+        if (GameManager.Instance.isPaused) { return; }
 
         if (!nomad.activeSelf)
         {
@@ -156,7 +162,9 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnPixie(InputValue value)
-    {       
+    {
+        if (GameManager.Instance.isPaused) { return; }
+
         if (!pixie.activeSelf)
         {
             if (energyManagement.currentEnergy >= energyManagement.maxEnergy * (energyManagement.pixieEnergyThreshold / 100f))
