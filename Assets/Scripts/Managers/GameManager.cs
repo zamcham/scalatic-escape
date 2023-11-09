@@ -38,9 +38,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Levels Map");
     }
 
-    public void LoadLevel(string leveNumberString)
+    public void LoadLevel(int levelNumber)
     {
-        levelInt = int.Parse(leveNumberString);
-        SceneManager.LoadScene(levelInt);
+        SceneManager.LoadScene(levelNumber);
     }
 }
