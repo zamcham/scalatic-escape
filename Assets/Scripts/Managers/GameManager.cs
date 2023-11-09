@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    int currentSceneIndex;
+    public int currentSceneIndex;
     int totalSceneCount;
 
     void Awake()
