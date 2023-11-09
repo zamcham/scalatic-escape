@@ -2,11 +2,22 @@ using UnityEngine;
 
 public class EnergyManagement : MonoBehaviour
 {
-    public float currentEnergy { get; private set; }
+    public float currentStamina 
+    { 
+        get 
+        {
+            return GameSession.Instance.stamina;
+        } 
 
-    public float maxEnergy;
+        private set
+        {
+            GameSession.Instance.stamina = value;
+        } 
+    }
+
+    public float maxStamina;
         
-    [SerializeField] float startingEnergy;
+    [SerializeField] float startingStamina;
 
     [Header("Size Shifting")]
     [Tooltip("In percent.")] public float pixieEnergyThreshold;
@@ -14,30 +25,22 @@ public class EnergyManagement : MonoBehaviour
 
     [Tooltip("In percent.")] public float nomadEnergyCost, pixieEnergyCost, titanEnergyCost;
 
-    [Header("UI")]
-    [SerializeField] BarUI energyBar;
-
     void Start()
     {
-        currentEnergy = startingEnergy;
-        energyBar.SetValue(currentEnergy);
+        currentStamina = startingStamina;
     }
 
-    public void AddEnergy(float energy)
+    public void AddStamina(float energy)
     {
-        currentEnergy += energy;
-        currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
-
-        energyBar.SetValue(currentEnergy);
+        currentStamina += energy;
+        currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
     }
 
-    public void AddEnergyPercent(float percent)
+    public void AddStaminaPercent(float percent)
     {
-        float energy = maxEnergy * (percent / 100f);
+        float stamina = maxStamina * (percent / 100f);
 
-        currentEnergy += energy;
-        currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
-
-        energyBar.SetValue(currentEnergy);
+        currentStamina += stamina;
+        currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
     }
 }

@@ -11,7 +11,7 @@ public class EnergyOrb : MonoBehaviour, ICollectible
 
         if (energyManager == null) { Debug.Log("The collector does not have an EnergyManagement component!"); return; }
 
-        energyManager.AddEnergyPercent(energyGain);
+        energyManager.AddStaminaPercent(energyGain);
 
         // Might add an animation later on
         // In that case, we will disable this script instead of destroying the object

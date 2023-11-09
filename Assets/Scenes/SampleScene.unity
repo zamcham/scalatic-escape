@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.41162336, g: 0.6489092, b: 0.6981132, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2443,14 +2443,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eea5c9381a151964ab7edbe1668247c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 100
-  startingEnergy: 50
+  maxStamina: 100
+  startingStamina: 0
   pixieEnergyThreshold: 75
   titanEnergyThreshold: 100
   nomadEnergyCost: 25
   pixieEnergyCost: 25
   titanEnergyCost: 25
-  energyBar: {fileID: 1966811014}
 --- !u!1 &1966811011
 GameObject:
   m_ObjectHideFlags: 0
@@ -2758,6 +2757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d36524c73223914f9752d2a9166244b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  staminaBar: {fileID: 1966811014}
 --- !u!1 &2115169986
 GameObject:
   m_ObjectHideFlags: 0
@@ -2919,7 +2919,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
