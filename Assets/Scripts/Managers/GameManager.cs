@@ -21,8 +21,17 @@ public class GameManager : MonoBehaviour
     List<int> completedLevels;
     int currentLevelIndex;
 
+    [Header("Count References")]
+    public int currentSceneIndex;
+    int sceneCount;
+
     void Awake()
     {
+        //Get the current scene index and the total number of scenes
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        sceneCount = SceneManager.sceneCountInBuildSettings;
+
+
         if (Instance == null)
         {
             Instance = this;
