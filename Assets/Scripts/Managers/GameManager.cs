@@ -68,7 +68,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Pause(PauseState pauseState)
+    public void StartScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(sceneIndex);
+
+        Resume();
+    }
+
+    public void Pause(PauseState pauseState)
     {
         gameState = GameState.Paused;
         this.pauseState = pauseState;
@@ -76,7 +83,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = timescaleAtPause;
     }
 
-    void Resume()
+    public void Resume()
     {
         gameState = GameState.Running;
 
