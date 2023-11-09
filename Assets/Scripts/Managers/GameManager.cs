@@ -49,9 +49,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Pause(PauseState.MainMenu);
-
-        Debug.Log(gameState);
-        Debug.Log(pauseState);
     }
 
     private void Update()
@@ -62,14 +59,11 @@ public class GameManager : MonoBehaviour
             {
                 case GameState.Paused:
                     Resume();
-
-                    Debug.Log("1");
                     break;
                     
 
                 case GameState.Running:
                     Pause(PauseState.MainMenu);
-                    Debug.Log("2");
                     break;
             }
         }
@@ -92,6 +86,8 @@ public class GameManager : MonoBehaviour
 
     public void RestartScene()
     {
+        Debug.Log("Reloading the scene number " + currentLevelIndex);
+
         SceneManager.LoadScene(currentLevelIndex);
         Pause(PauseState.MainMenu);
     }
@@ -104,5 +100,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(currentLevelIndex);
 
         Pause(PauseState.MainMenu);
+
+        Debug.Log("Scene completed: " + (currentLevelIndex - 1));
+        Debug.Log("Loading the scene number " + currentLevelIndex);
     }
 }
