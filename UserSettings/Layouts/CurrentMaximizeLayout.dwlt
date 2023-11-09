@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 2114
+  controlID: 7100
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 2115
+  controlID: 7101
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 50}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 2116
+  controlID: 7102
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -237,9 +237,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 02640000
-      m_LastClickedID: 25602
-      m_ExpandedIDs: f0fafffffe630000
+      m_SelectedIDs: d8630000
+      m_LastClickedID: 25560
+      m_ExpandedIDs: a0d9fffff0faffffe0630000fe6300008664000094640000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -671,9 +671,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.6379813, y: -1.2209812, z: -10.123509}
+    m_Target: {x: 547.94855, y: 309.04675, z: -0.19163671}
     speed: 2
-    m_Value: {x: -0.6379813, y: -1.2209812, z: -10.123509}
+    m_Value: {x: 547.94855, y: 309.04675, z: -0.19163671}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -723,9 +723,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 4.649719
+    m_Target: 56.707695
     speed: 2
-    m_Value: 4.649719
+    m_Value: 56.707695
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -848,7 +848,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Managers
+    - Assets/Scripts/UI
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -856,15 +856,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 83
   m_LastFolders:
-  - Assets/Scripts/Managers
+  - Assets/Scripts/UI
   m_LastFoldersGridSize: 83
   m_LastProjectPath: D:\Unity\Projects\scalatic-escape
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: b0760000
-    m_LastClickedID: 30384
+    m_SelectedIDs: c2760000
+    m_LastClickedID: 30402
     m_ExpandedIDs: 0000000002650000046500000665000008650000ae760000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -918,9 +918,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 02640000
-    m_LastClickedInstanceID: 25602
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: d8630000
+    m_LastClickedInstanceID: 25560
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1002,8 +1002,8 @@ MonoBehaviour:
     y: 0
     width: 660
     height: 947
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
