@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    static GameManager Instance;
+
     public int currentSceneIndex;
     int totalSceneCount;
     
@@ -13,9 +15,19 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         totalSceneCount = SceneManager.sceneCountInBuildSettings;
-        DontDestroyOnLoad(this.gameObject);
     }
     void Start()
     {
@@ -27,12 +39,6 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void LoadLevelsMap()
     {
         SceneManager.LoadScene("Levels Map");
@@ -40,8 +46,22 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(int levelNumber)
     {
-        //TODO: make sure the level is unlocked
-        // if not unlocked, Debug.Log("Level locked");
-        SceneManager.LoadScene(levelNumber);
+        if (levelStatus.ContainsKey(levelNumber))
+        {
+            if (levelStatus[levelNumber])
+            {
+                currentSceneIndex = levelNumber;
+                SceneManager.LoadScene(levelNumber);
+                Debug.Log($"Level {levelNumber} is successfully loaded.");
+            }
+            else
+            {
+                Debug.Log($"Level {levelNumber} is not unlocked yet.");
+            }
+        }
+        else
+        {
+            Debug.Log($"There is no such level numbered {levelNumber}");
+        }
     }
 }

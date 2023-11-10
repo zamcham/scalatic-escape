@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -22,31 +21,22 @@ public class LevelButton : MonoBehaviour
         AddListenerToButton();
     }
 
-    void Update()
-    {
-        
-    }
-
     void ChangeButtonNameToLevelNumber()
     {
         buttonText = transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
 
-        if (buttonText.text.StartsWith("Level "))
-        {
-            string number = buttonText.text.Substring(6);
-            gameObject.name = number;
-        }
+        // Using a regex to get only the numbers
+        string number = Regex.Replace(buttonText.text, "[^0-9]", "");
+        gameObject.name = number;
     }
 
     void AddListenerToButton()
     {
-        Debug.Log("AddListenerToButton");
         if (buttonComponent != null && gameManager != null)
         {
             string buttonName = gameObject.name;
             int levelNumber = int.Parse(buttonName);
             buttonComponent.onClick.AddListener(() => gameManager.LoadLevel(levelNumber));
-            Debug.Log("success");
         }
     }
 }

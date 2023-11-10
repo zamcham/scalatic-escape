@@ -5,11 +5,10 @@ public class AutoScroll : MonoBehaviour
     [SerializeField] float speed = 10f;
     GameManager gameManager;
 
-    void Awake()
+    void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
     }
-
 
     void FixedUpdate()
     {
