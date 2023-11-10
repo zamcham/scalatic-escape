@@ -1,21 +1,42 @@
 using UnityEngine;
 
-public class EnergyManagement : MonoBehaviour
-{
-    public float currentEnergy { get; private set; }
+[DisallowMultipleComponent]
+public class LevelManager : MonoBehaviour
+{    
+    public static LevelManager Instance { get; private set; }
+    GameManager gameManager;
 
+    // Stamina & Size Shifting
+    public float currentEnergy { get; private set; }
     public float maxEnergy;
-        
+
+    [Header("Stamina & Size Shifting")]
+
     [SerializeField] float startingEnergy;
 
-    [Header("Size Shifting")]
     [Tooltip("In percent.")] public float pixieEnergyThreshold;
-    [Tooltip("In percent.")] public float titanEnergyThreshold; // Need to seperate these two, otherwise the header will be applied to both at the same time
+    [Tooltip("In percent.")] public float titanEnergyThreshold;
 
     [Tooltip("In percent.")] public float nomadEnergyCost, pixieEnergyCost, titanEnergyCost;
 
     [Header("UI")]
     [SerializeField] BarUI energyBar;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        gameManager = FindObjectOfType<GameManager>();
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
