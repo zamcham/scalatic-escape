@@ -55,6 +55,8 @@ public class PlayerController : MonoBehaviour
         CheckGround();
         Jump();
         CheckBottomBoundary();
+
+        Debug.Log("Current jump: " + maxJumpCount);
     }
 
     #region Movement
