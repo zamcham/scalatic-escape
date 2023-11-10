@@ -27,12 +27,6 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void LoadLevelsMap()
     {
         SceneManager.LoadScene("Levels Map");
@@ -40,6 +34,21 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(int levelNumber)
     {
-        SceneManager.LoadScene(levelNumber);
+        if (levelStatus.ContainsKey(levelNumber))
+        {
+            if (levelStatus[levelNumber])
+            {
+                SceneManager.LoadScene(levelNumber);
+                Debug.Log($"Level {levelNumber} is successfully loaded.");
+            }
+            else
+            {
+                Debug.Log($"Level {levelNumber} is not unlocked yet.");
+            }
+        }
+        else
+        {
+            Debug.Log($"There is no such level numbered {levelNumber}");
+        }
     }
 }
