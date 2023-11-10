@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(int levelNumber)
     {
+        //TODO: make sure the level is unlocked
+        // if not unlocked, Debug.Log("Level locked");
         SceneManager.LoadScene(levelNumber);
     }
 }
