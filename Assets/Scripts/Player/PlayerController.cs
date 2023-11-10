@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     GameObject pixie, nomad, titan;
 
 
+    // Titan-Specific
+    bool canBreakPlatform = false;
+    Renderer titanRenderer;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -51,8 +55,6 @@ public class PlayerController : MonoBehaviour
         CheckGround();
         Jump();
         CheckBottomBoundary();
-
-        Debug.Log("Current jump: " + maxJumpCount);
     }
 
     #region Movement
@@ -119,7 +121,23 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded())
         {
             jumpTimer = 0f;
-            jumpCount = 0;
+            jumpCount = 0; 
+        }
+    }
+
+    void GroundPounding(Collision2D collision)
+    {
+        if (canBreakPlatform)
+        {
+            if (collision.gameObject.CompareTag("Breakable"))
+            {
+                Destroy(collision.gameObject);
+            }
+            else
+            {
+                canBreakPlatform = false;
+                titanRenderer.sharedMaterial.color = Color.white;
+            }
         }
     }
 
@@ -163,6 +181,18 @@ public class PlayerController : MonoBehaviour
                 titan.SetActive(true);
 
                 maxJumpCount = 0;
+
+                // Check for ground pounding
+                if (jumpCount > 0)
+                {
+                    canBreakPlatform = true;
+
+                    titanRenderer.sharedMaterial.color = Color.red;
+                }
+                else
+                {
+                    titanRenderer.sharedMaterial.color = Color.white;
+                }
             }
         }
     }
@@ -224,6 +254,8 @@ public class PlayerController : MonoBehaviour
                         break;
                     case "Titan":
                         this.titan = currentForm.gameObject;
+
+                        titanRenderer = titan.transform.Find("Body").GetComponent<Renderer>();
                         break;
                 }
             }
@@ -232,7 +264,12 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        GroundPounding(collision);     
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Collectible"))
         {
