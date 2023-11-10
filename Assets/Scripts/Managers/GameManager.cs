@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
         {
             if (levelStatus[levelNumber])
             {
+                currentSceneIndex = levelNumber;
                 SceneManager.LoadScene(levelNumber);
                 Debug.Log($"Level {levelNumber} is successfully loaded.");
             }
