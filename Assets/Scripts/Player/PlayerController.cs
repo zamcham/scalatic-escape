@@ -11,8 +11,10 @@ public class PlayerController : MonoBehaviour
     [Header("Jumping")]
     BoxCollider2D groundChecker;
 
-    [SerializeField] int maxJumpCount = 1;
-    int jumpCount = 0;
+    [SerializeField] float jumpInterval = 0.25f;
+    int maxJumpCount = 1;
+    int jumpCount = 0, jumpsInQueue = 0;
+    float jumpTimer;
 
     Vector2 moveInput;
     Rigidbody2D rb;
@@ -28,7 +30,17 @@ public class PlayerController : MonoBehaviour
         energyManagement = GetComponent<EnergyManagement>();
 
         GetGroundChecker();
-        GetCharacters();
+        GetCharacters();        
+    }
+
+    void Start()
+    {
+        // Reset characters
+        nomad.SetActive(false);
+        titan.SetActive(false);
+        pixie.SetActive(false);
+
+        OnNomad();
     }
 
     void Update()
@@ -36,24 +48,17 @@ public class PlayerController : MonoBehaviour
         Run();
         FlipSprite();
 
+        CheckGround();
+        Jump();
         CheckBottomBoundary();
+
+        Debug.Log("Current jump: " + maxJumpCount);
     }
 
     #region Movement
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-    }
-
-    void OnJump(InputValue value)
-    {
-        CheckGround();
-
-        if (value.isPressed && jumpCount < maxJumpCount)
-        {
-            rb.velocity = new Vector2(rb.velocity.y, jumpForce);
-            jumpCount++;
-        }
     }
 
     void Run()
@@ -69,10 +74,51 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector2(Mathf.Sign(rb.velocity.x), 1f);
         }        
     }
+
+    void OnJump()
+    {
+        // Queue can only be 1 larger than maxJumpCount
+        // This is to prevent infinite queues
+        if (jumpsInQueue < maxJumpCount)
+        {
+            jumpsInQueue++;
+        }
+    }
+
+    void Jump()
+    {
+        if (jumpsInQueue > 0)
+        {
+            if (jumpTimer <= 0f)
+            {
+                if (jumpCount < maxJumpCount) 
+                {
+                    jumpTimer = jumpInterval;
+                    jumpsInQueue--;
+                    jumpCount++;
+
+                    rb.velocity = new Vector2(rb.velocity.y, jumpForce);
+                }           
+            }
+            else
+            {
+                jumpTimer -= Time.deltaTime;
+            }
+        }
+    }
+
+
+    bool IsGrounded()
+    {
+        bool grounded = groundChecker.IsTouchingLayers(LayerMask.GetMask("Jumpable")) && rb.velocity.y <= 0f;
+
+        return grounded;
+    }
     void CheckGround()
     {
-        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("Jumpable")) && rb.velocity.y <= 0f)
+        if (IsGrounded())
         {
+            jumpTimer = 0f;
             jumpCount = 0;
         }
     }
@@ -103,10 +149,8 @@ public class PlayerController : MonoBehaviour
 
     #region Size Shifting
 
-    void OnTitan(InputValue value)
+    void OnTitan()
     {
-        Debug.Log("Titan");
-
         if (!titan.activeSelf)
         {
             if (energyManagement.currentEnergy >= energyManagement.maxEnergy * (energyManagement.titanEnergyThreshold / 100f))
@@ -119,23 +163,12 @@ public class PlayerController : MonoBehaviour
                 titan.SetActive(true);
 
                 maxJumpCount = 0;
-
-                Debug.Log("Changed to Titan.");
             }
-            else
-            {
-                Debug.Log("Not enough energy left for Titan.");
-            }
-        }
-        else
-        {
-            Debug.Log("Titan is already active.");
         }
     }
 
-    void OnNomad(InputValue value)
+    void OnNomad()
     {
-
         if (!nomad.activeSelf)
         {
             energyManagement.AddEnergyPercent(-energyManagement.nomadEnergyCost);
@@ -146,16 +179,10 @@ public class PlayerController : MonoBehaviour
             nomad.SetActive(true);
 
             maxJumpCount = 1;
-
-            Debug.Log("Changed to Nomad.");
-        }
-        else
-        {
-            Debug.Log("Nomad is already active.");
         }
     }
 
-    void OnPixie(InputValue value)
+    void OnPixie()
     {       
         if (!pixie.activeSelf)
         {
@@ -169,17 +196,7 @@ public class PlayerController : MonoBehaviour
                 pixie.SetActive(true);
 
                 maxJumpCount = 2;
-
-                Debug.Log("Changed to Pixie.");
             }
-            else
-            {
-                Debug.Log("Not enough energy left for Pixie.");
-            }
-        }
-        else
-        {
-            Debug.Log("Pixie is already active.");
         }
     }
 
