@@ -2182,7 +2182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   jumpForce: 10
-  maxJumpCount: 1
+  jumpInterval: 0.05
 --- !u!114 &1797230393
 MonoBehaviour:
   m_ObjectHideFlags: 0
