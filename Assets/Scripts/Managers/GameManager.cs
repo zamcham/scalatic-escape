@@ -13,9 +13,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        DontDestroyOnLoad(this.gameObject);
+
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         totalSceneCount = SceneManager.sceneCountInBuildSettings;
-        DontDestroyOnLoad(this.gameObject);
     }
     void Start()
     {

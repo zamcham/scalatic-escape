@@ -10,10 +10,9 @@ public class AutoScroll : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
 
-
     void FixedUpdate()
     {
-        if (gameManager.currentSceneIndex != 0)
+        if (gameManager != null && gameManager.currentSceneIndex != 0)
         {
             transform.position += transform.right * speed * Time.fixedDeltaTime;
         }
