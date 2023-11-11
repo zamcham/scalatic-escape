@@ -27,9 +27,17 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        levelManager = GameManager.Instance.levelManager;
         GetGroundChecker();
-        GetCharacters();        
+        GetCharacters();     
+
+        if (GameManager.Instance != null && GameManager.Instance.levelManager != null)
+        {
+            levelManager = GameManager.Instance.levelManager;
+        }
+        else
+        {
+            Debug.LogError("GameManager or LevelManager is null.");
+        }   
     }
 
     void Start()
@@ -125,8 +133,10 @@ public class PlayerController : MonoBehaviour
 
     void CheckBottomBoundary()
     {
-        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary"))) 
+        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     #endregion
