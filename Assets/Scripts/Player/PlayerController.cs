@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            GameManager.Instance.RestartLevel();
         }
     }
 
