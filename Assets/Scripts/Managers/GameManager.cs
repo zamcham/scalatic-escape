@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviour
     {
         if (levelManager.checkpointReached)
         {
+            Debug.Log("Respawning on checkpoint");
             levelManager.RespawnOnCheckpoint();
         }
         else

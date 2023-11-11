@@ -29,7 +29,10 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         GetGroundChecker();
         GetCharacters();     
+    }
 
+    void Start()
+    {
         if (GameManager.Instance != null && GameManager.Instance.levelManager != null)
         {
             levelManager = GameManager.Instance.levelManager;
@@ -38,10 +41,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("GameManager or LevelManager is null.");
         }   
-    }
 
-    void Start()
-    {
         ResetCharacters();
         OnNomad();
     }
@@ -239,7 +239,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Checkpoint"))
         {
-            Debug.Log("Checkpoint reached");
+            levelManager.checkpointReached = true;
         }
     }
 
