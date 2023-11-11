@@ -47,19 +47,6 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    // Checkpoint system
-    Transform[] RetrieveEntities()
-    {
-        List<Transform> entities = new List<Transform>();
-
-        foreach (var item in GameObject.FindGameObjectsWithTag("SceneEntity"))
-        {
-            entities.Add(item.transform);
-        }
-
-        return entities.ToArray();
-    }
-
     public void RespawnOnCheckpoint()
     {
         if (checkpoint != null)
