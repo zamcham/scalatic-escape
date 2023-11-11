@@ -11,8 +11,10 @@ public class GameManager : MonoBehaviour
     int totalSceneCount;
     public LevelManager levelManager;
     
-    //Dictionary of levels and their completion status
+    // Dictionary of levels and their completion status
     public Dictionary<int, bool> levelStatus;
+
+    const string LevelsMapSceneName = "Levels Map";
 
     void Awake()
     {
@@ -29,8 +31,16 @@ public class GameManager : MonoBehaviour
 
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         totalSceneCount = SceneManager.sceneCountInBuildSettings;
+
+        InitializeLevelStatus();
     }
+
     void Start()
+    {
+        
+    }
+
+    private void InitializeLevelStatus()
     {
         levelStatus = new Dictionary<int, bool>
         {
@@ -42,10 +52,9 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevelsMap()
     {
-        SceneManager.LoadScene("Levels Map");
+        SceneManager.LoadScene(LevelsMapSceneName);
     }
 
-    
     #region Level Handling
     public void LoadLevel(int levelNumber)
     {
@@ -58,12 +67,12 @@ public class GameManager : MonoBehaviour
         {
             if (LevelExists(levelNumber))
             {
-                //TODO: Add level locked animation
+                // TODO: Add level locked animation
                 Debug.Log($"Level {levelNumber} is not unlocked yet.");
             }
             else
             {
-                //TODO: Handle error
+                // TODO: Handle error
                 Debug.Log($"There is no such level numbered {levelNumber}");
             }
         }
@@ -80,5 +89,4 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion  
-
 }
