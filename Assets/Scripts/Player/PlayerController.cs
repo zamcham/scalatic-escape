@@ -27,8 +27,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        levelManager = LevelManager.Instance;
-
+        levelManager = GameManager.Instance.levelManager;
         GetGroundChecker();
         GetCharacters();        
     }
@@ -45,7 +44,6 @@ public class PlayerController : MonoBehaviour
         FlipSprite();
         CheckGround();
         Jump();
-        CheckCheckpoint();
         CheckBottomBoundary();
     }
 
@@ -102,14 +100,6 @@ public class PlayerController : MonoBehaviour
         {
             jumpTimer = 0f;
             jumpCount = 0; 
-        }
-    }
-
-    void CheckCheckpoint()
-    {
-        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("Checkpoint")))
-        {
-            levelManager.onCheckpoint = true;
         }
     }
 

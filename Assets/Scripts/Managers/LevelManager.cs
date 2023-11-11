@@ -5,12 +5,9 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class LevelManager : MonoBehaviour
 {    
-    public static LevelManager Instance { get; private set; }
-    GameManager gameManager;
-
-    // Checkpoint
     PlayerController player;
     CameraController cam;
+    GameManager gameManager;
     public bool checkpointReached;
     Transform checkpoint;
 
@@ -32,22 +29,11 @@ public class LevelManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        AssignLevelManager();
 
-        gameManager = FindObjectOfType<GameManager>();
         player = FindObjectOfType<PlayerController>();
         cam = FindObjectOfType<CameraController>();
         checkpoint = GameObject.FindGameObjectWithTag("Checkpoint").transform;
-
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -58,17 +44,7 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        if (onCheckpoint)
-        {
-            currentCheckpoint = new Checkpoint(player.transform.position, cam.transform.position, currentEnergy, RetrieveEntities());
-            onCheckpoint = false;
-        }
 
-        // Quick testing
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            RespawnOnCheckpoint();
-        }
     }
 
     // Checkpoint system
@@ -86,12 +62,12 @@ public class LevelManager : MonoBehaviour
 
     public void RespawnOnCheckpoint()
     {
-        if (currentCheckpoint != null)
+        if (checkpoint != null)
         {
-            player.transform.position = currentCheckpoint.playerPosition;
-            cam.transform.position = currentCheckpoint.cameraPosition;
+            player.transform.position = checkpoint.position;
+            cam.transform.position = checkpoint.position + new Vector3(0f, 0f, -10f);
 
-            currentEnergy = currentCheckpoint.energy;
+            currentEnergy = 0;
 
             Debug.Log("Respawned on checkpoint");
         }
@@ -118,5 +94,19 @@ public class LevelManager : MonoBehaviour
         currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
 
         energyBar.SetValue(currentEnergy);
+    }
+
+    void AssignLevelManager()
+    {
+        gameManager = GameManager.Instance;
+
+        if (gameManager)
+        {
+            gameManager.levelManager = this;
+        }
+        else
+        {
+            Debug.LogError("No GameManager found in the scene");
+        }
     }
 }

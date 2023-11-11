@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 [DisallowMultipleComponent]
 public class GameManager : MonoBehaviour
 {
-    static GameManager Instance;
+    public static GameManager Instance;
 
     public int currentSceneIndex;
     int totalSceneCount;
+    public LevelManager levelManager;
     
     //Dictionary of levels and their completion status
     public Dictionary<int, bool> levelStatus;
@@ -44,6 +45,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Levels Map");
     }
 
+    
+    #region Level Handling
     public void LoadLevel(int levelNumber)
     {
         if (LevelIsUnlocked(levelNumber))
@@ -75,5 +78,7 @@ public class GameManager : MonoBehaviour
     {
         return levelStatus.ContainsKey(levelNumber);
     }
+
+    #endregion  
 
 }
