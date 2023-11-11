@@ -46,22 +46,34 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(int levelNumber)
     {
-        if (levelStatus.ContainsKey(levelNumber))
+        if (LevelIsUnlocked(levelNumber))
         {
-            if (levelStatus[levelNumber])
-            {
-                currentSceneIndex = levelNumber;
-                SceneManager.LoadScene(levelNumber);
-                Debug.Log($"Level {levelNumber} is successfully loaded.");
-            }
-            else
-            {
-                Debug.Log($"Level {levelNumber} is not unlocked yet.");
-            }
+            currentSceneIndex = levelNumber;
+            SceneManager.LoadScene(levelNumber);
         }
         else
         {
-            Debug.Log($"There is no such level numbered {levelNumber}");
+            if (LevelExists(levelNumber))
+            {
+                //TODO: Add level locked animation
+                Debug.Log($"Level {levelNumber} is not unlocked yet.");
+            }
+            else
+            {
+                //TODO: Handle error
+                Debug.Log($"There is no such level numbered {levelNumber}");
+            }
         }
     }
+
+    private bool LevelIsUnlocked(int levelNumber)
+    {
+        return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
+    }
+
+    private bool LevelExists(int levelNumber)
+    {
+        return levelStatus.ContainsKey(levelNumber);
+    }
+
 }
