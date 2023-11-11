@@ -236,6 +236,11 @@ public class PlayerController : MonoBehaviour
             ICollectible collectible = collision.gameObject.GetComponent<ICollectible>();
             collectible.OnCollect();
         }
+
+        if (collision.gameObject.CompareTag("Checkpoint"))
+        {
+            Debug.Log("Checkpoint reached");
+        }
     }
 
     void ResetCharacters()

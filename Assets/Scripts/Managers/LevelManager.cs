@@ -11,9 +11,8 @@ public class LevelManager : MonoBehaviour
     // Checkpoint
     PlayerController player;
     CameraController cam;
-
-    public bool onCheckpoint { get; set; }
-    Checkpoint currentCheckpoint;
+    public bool checkpointReached;
+    Transform checkpoint;
 
     // Stamina & Size Shifting
     public float currentEnergy { get; private set; }
@@ -46,6 +45,7 @@ public class LevelManager : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         player = FindObjectOfType<PlayerController>();
         cam = FindObjectOfType<CameraController>();
+        checkpoint = GameObject.FindGameObjectWithTag("Checkpoint").transform;
 
         DontDestroyOnLoad(gameObject);
     }
@@ -118,26 +118,5 @@ public class LevelManager : MonoBehaviour
         currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
 
         energyBar.SetValue(currentEnergy);
-    }
-}
-
-public class Checkpoint
-{
-    public Vector3 playerPosition { get; private set; }
-    public Vector3 cameraPosition { get; private set; }
-
-    public float energy { get; private set; }
-
-    public List<Transform> objects { get; private set; } = new List<Transform>();
-
-
-    public Checkpoint(Vector3 playerPosition, Vector3 cameraPosition, float energy, Transform[] objects) 
-    {
-        this.playerPosition = playerPosition;
-        this.cameraPosition = cameraPosition;
-
-        this.energy = energy;
-
-        this.objects.AddRange(objects);
     }
 }

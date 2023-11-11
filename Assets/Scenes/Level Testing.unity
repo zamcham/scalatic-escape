@@ -1510,8 +1510,8 @@ GameObject:
   - component: {fileID: 1153672229}
   - component: {fileID: 1153672231}
   m_Layer: 9
-  m_Name: CheckpointPlaceholder
-  m_TagString: Untagged
+  m_Name: Checkpoint
+  m_TagString: Checkpoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
