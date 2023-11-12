@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
 
     [Header("Size Shifting & Energy")]
-    EnergyManagement energyManagement;
+    LevelManager levelManager;
     GameObject pixie, nomad, titan;
     bool canBreakPlatform = false;
     Renderer titanRenderer;
@@ -27,13 +27,21 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        energyManagement = GetComponent<EnergyManagement>();
         GetGroundChecker();
-        GetCharacters();        
+        GetCharacters();     
     }
 
     void Start()
     {
+        if (GameManager.Instance != null && GameManager.Instance.levelManager != null)
+        {
+            levelManager = GameManager.Instance.levelManager;
+        }
+        else
+        {
+            Debug.LogError("GameManager or LevelManager is null.");
+        }   
+
         ResetCharacters();
         OnNomad();
     }
@@ -125,8 +133,10 @@ public class PlayerController : MonoBehaviour
 
     void CheckBottomBoundary()
     {
-        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary"))) 
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
+        {
+            GameManager.Instance.RestartLevel();
+        }
     }
 
     #endregion
@@ -135,9 +145,9 @@ public class PlayerController : MonoBehaviour
 
     void OnTitan()
     {
-        if (!titan.activeSelf && energyManagement.currentEnergy >= energyManagement.maxEnergy * (energyManagement.titanEnergyThreshold / 100f))
+        if (!titan.activeSelf && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.titanEnergyThreshold / 100f))
         {
-            energyManagement.AddEnergyPercent(-energyManagement.titanEnergyCost);
+            levelManager.AddEnergyPercent(-levelManager.titanEnergyCost);
             pixie.SetActive(false);
             nomad.SetActive(false);
             titan.SetActive(true);
@@ -160,7 +170,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!nomad.activeSelf)
         {
-            energyManagement.AddEnergyPercent(-energyManagement.nomadEnergyCost);
+            levelManager.AddEnergyPercent(-levelManager.nomadEnergyCost);
             pixie.SetActive(false);
             titan.SetActive(false);
             nomad.SetActive(true);
@@ -170,9 +180,9 @@ public class PlayerController : MonoBehaviour
 
     void OnPixie()
     {       
-        if (!pixie.activeSelf && energyManagement.currentEnergy >= energyManagement.maxEnergy * (energyManagement.pixieEnergyThreshold / 100f))
+        if (!pixie.activeSelf && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.pixieEnergyThreshold / 100f))
         {
-            energyManagement.AddEnergyPercent(-energyManagement.pixieEnergyCost);
+            levelManager.AddEnergyPercent(-levelManager.pixieEnergyCost);
             titan.SetActive(false);
             nomad.SetActive(false);
             pixie.SetActive(true);
@@ -224,7 +234,12 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Collectible"))
         {
             ICollectible collectible = collision.gameObject.GetComponent<ICollectible>();
-            collectible.OnCollect(gameObject);
+            collectible.OnCollect();
+        }
+
+        if (collision.gameObject.CompareTag("Checkpoint"))
+        {
+            levelManager.checkpointReached = true;
         }
     }
 

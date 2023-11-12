@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AutoScroll : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     [SerializeField] float speed = 10f;
     GameManager gameManager;
