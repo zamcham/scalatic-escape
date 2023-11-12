@@ -88,7 +88,6 @@ public class GameManager : MonoBehaviour
         return levelStatus.ContainsKey(levelNumber);
     }
 
-    //TODO: test this
     public void RestartLevel()
     {
         if (levelManager.checkpointReached)
