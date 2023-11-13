@@ -10,7 +10,8 @@ public class LevelManager : MonoBehaviour
     Transform checkpoint;
 
     [Header("Level Timer")]
-    public float levelTimeout = 360f, levelTimer;
+    [SerializeField] float levelTimeout = 10f;
+    public float levelTimer { get; private set; }
 
     // Stamina & Size Shifting
     public float currentEnergy { get; private set; }
@@ -37,6 +38,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         currentEnergy = startingEnergy;
+        levelTimer = levelTimeout;
     }
 
     void Update()
@@ -48,13 +50,13 @@ public class LevelManager : MonoBehaviour
     // Level Timer
     void LevelTimer()
     {
-        if (levelTimer >= levelTimeout)
+        if (levelTimer <= 0f)
         {
             GameManager.Instance.LoadLevelsMap();
             return;
         }
 
-        levelTimer += Time.deltaTime;
+        levelTimer -= Time.deltaTime;
     }
 
     // Checkpoint
@@ -66,6 +68,8 @@ public class LevelManager : MonoBehaviour
             cam.transform.position = checkpoint.position + new Vector3(0f, 0f, -10f);
 
             currentEnergy = 0;
+
+            levelTimer = levelTimeout;
 
             Debug.Log("Respawned on checkpoint");
         }

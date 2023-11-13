@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b1e22003a14d7844883f99e76e72fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkpointReached: 0
+  levelTimeout: 10
   maxEnergy: 100
   startingEnergy: 0
   pixieEnergyThreshold: 75
@@ -51,4 +53,3 @@ MonoBehaviour:
   nomadEnergyCost: 25
   pixieEnergyCost: 25
   titanEnergyCost: 25
-  energyBar: {fileID: 0}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] Transform levelsMapUI, inGameUI;
     [SerializeField] BarUI staminaBar;
+    [SerializeField] TMP_Text timerText;
 
     void Awake()
     {
@@ -24,8 +26,17 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+        UpdateUI();
+    }
+
+    void UpdateUI()
+    {
         switch (GameManager.Instance.gameStatus)
         {
+            case GameStatus.OnStartScreen:
+                inGameUI.gameObject.SetActive(false);
+                break;
+
             case GameStatus.OnLevelsMap:
                 inGameUI.gameObject.SetActive(false);
                 levelsMapUI.gameObject.SetActive(true);
@@ -39,8 +50,9 @@ public class UIManager : MonoBehaviour
                 if (GameManager.Instance.levelManager)
                 {
                     staminaBar.SetValue(GameManager.Instance.levelManager.currentEnergy);
+                    timerText.text = GameManager.Instance.levelManager.levelTimer.ToString("0");
                 }
                 break;
-        } 
+        }
     }
 }
