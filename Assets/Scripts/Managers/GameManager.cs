@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameStatus { OnStartScreen, OnLevelsMap, InGame }
+
 [DisallowMultipleComponent]
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +12,11 @@ public class GameManager : MonoBehaviour
     public int currentSceneIndex;
     int totalSceneCount;
     public LevelManager levelManager;
+
+    // Game Status
     
+    public GameStatus gameStatus = GameStatus.OnStartScreen;
+
     // Dictionary of levels and their completion status
     public Dictionary<int, bool> levelStatus;
 
@@ -35,11 +41,6 @@ public class GameManager : MonoBehaviour
         InitializeLevelStatus();
     }
 
-    void Start()
-    {
-        
-    }
-
     private void InitializeLevelStatus()
     {
         levelStatus = new Dictionary<int, bool>
@@ -53,6 +54,8 @@ public class GameManager : MonoBehaviour
     public void LoadLevelsMap()
     {
         SceneManager.LoadScene(LevelsMapSceneName);
+
+        gameStatus = GameStatus.OnLevelsMap;
     }
 
     #region Level Handling
@@ -62,6 +65,8 @@ public class GameManager : MonoBehaviour
         {
             currentSceneIndex = levelNumber;
             SceneManager.LoadScene(levelNumber);
+
+            gameStatus = GameStatus.InGame;
         }
         else
         {

@@ -1,15 +1,18 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 public class LevelManager : MonoBehaviour
-{    
+{       
     PlayerController player;
     CameraController cam;
     GameManager gameManager;
     public bool checkpointReached;
     Transform checkpoint;
+
+    [Header("Level Timer")]
+    [SerializeField] float levelTimeout = 10f;
+    public float levelTimer { get; private set; }
 
     // Stamina & Size Shifting
     public float currentEnergy { get; private set; }
@@ -24,8 +27,9 @@ public class LevelManager : MonoBehaviour
 
     [Tooltip("In percent.")] public float nomadEnergyCost, pixieEnergyCost, titanEnergyCost;
 
-    [Header("UI")]
-    [SerializeField] BarUI energyBar;
+    [Header("Game Over")]
+    [SerializeField] float returnToMenuDelay = 2f;
+    [SerializeField] float screenFadeDuration = 2f;
 
     void Awake()
     {
@@ -39,14 +43,43 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         currentEnergy = startingEnergy;
-        energyBar.SetValue(currentEnergy);
+        levelTimer = levelTimeout;
     }
 
     void Update()
     {
-
+        LevelTimer();
     }
 
+
+    // Level Timer
+    void LevelTimer()
+    {
+        if (levelTimer <= 0f)
+        {
+            StartCoroutine(LoadLevelsMap());
+            return;
+        }
+
+        levelTimer -= Time.deltaTime;
+    }
+
+    IEnumerator LoadLevelsMap()
+    {
+        UIManager.Instance.ShowTimerPopup();
+
+        yield return new WaitForSecondsRealtime(returnToMenuDelay);
+
+        yield return UIManager.Instance.SceneFadeIn(screenFadeDuration);
+
+        // Disable the overlay
+        StartCoroutine(UIManager.Instance.SceneFadeOut(0f));
+
+        UIManager.Instance.HideTimerPopup();
+        GameManager.Instance.LoadLevelsMap();
+    }
+
+    // Checkpoint
     public void RespawnOnCheckpoint()
     {
         if (checkpoint != null)
@@ -55,6 +88,8 @@ public class LevelManager : MonoBehaviour
             cam.transform.position = checkpoint.position + new Vector3(0f, 0f, -10f);
 
             currentEnergy = 0;
+
+            levelTimer = levelTimeout;
 
             Debug.Log("Respawned on checkpoint");
         }
@@ -69,8 +104,6 @@ public class LevelManager : MonoBehaviour
     {
         currentEnergy += energy;
         currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
-
-        energyBar.SetValue(currentEnergy);
     }
 
     public void AddEnergyPercent(float percent)
@@ -79,8 +112,6 @@ public class LevelManager : MonoBehaviour
 
         currentEnergy += energy;
         currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
-
-        energyBar.SetValue(currentEnergy);
     }
 
     void AssignLevelManager()
