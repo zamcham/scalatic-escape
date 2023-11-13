@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 public class LevelManager : MonoBehaviour
-{    
+{       
     PlayerController player;
     CameraController cam;
     GameManager gameManager;
@@ -24,9 +22,6 @@ public class LevelManager : MonoBehaviour
 
     [Tooltip("In percent.")] public float nomadEnergyCost, pixieEnergyCost, titanEnergyCost;
 
-    [Header("UI")]
-    [SerializeField] BarUI energyBar;
-
     void Awake()
     {
         AssignLevelManager();
@@ -39,7 +34,6 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         currentEnergy = startingEnergy;
-        energyBar.SetValue(currentEnergy);
     }
 
     void Update()
@@ -69,8 +63,6 @@ public class LevelManager : MonoBehaviour
     {
         currentEnergy += energy;
         currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
-
-        energyBar.SetValue(currentEnergy);
     }
 
     public void AddEnergyPercent(float percent)
@@ -79,8 +71,6 @@ public class LevelManager : MonoBehaviour
 
         currentEnergy += energy;
         currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
-
-        energyBar.SetValue(currentEnergy);
     }
 
     void AssignLevelManager()
