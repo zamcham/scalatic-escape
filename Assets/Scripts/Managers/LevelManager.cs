@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -10,6 +8,9 @@ public class LevelManager : MonoBehaviour
     GameManager gameManager;
     public bool checkpointReached;
     Transform checkpoint;
+
+    [Header("Level Timer")]
+    public float levelTimeout = 360f, levelTimer;
 
     // Stamina & Size Shifting
     public float currentEnergy { get; private set; }
@@ -44,9 +45,23 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-
+        LevelTimer();
     }
 
+
+    // Level Timer
+    void LevelTimer()
+    {
+        if (levelTimer >= levelTimeout)
+        {
+            GameManager.Instance.LoadLevelsMap();
+            return;
+        }
+
+        levelTimer += Time.deltaTime;
+    }
+
+    // Checkpoint
     public void RespawnOnCheckpoint()
     {
         if (checkpoint != null)
