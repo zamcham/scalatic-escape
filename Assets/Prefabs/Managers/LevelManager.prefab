@@ -53,3 +53,5 @@ MonoBehaviour:
   nomadEnergyCost: 25
   pixieEnergyCost: 25
   titanEnergyCost: 25
+  returnToMenuDelay: 1
+  screenFadeDuration: 1

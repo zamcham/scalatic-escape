@@ -1,11 +1,14 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [SerializeField] Transform levelsMapUI, inGameUI;
+    [SerializeField] RawImage fadeOverlay;
+    [SerializeField] Transform levelsMapUI, inGameUI, timerPopup;
     [SerializeField] BarUI staminaBar;
     [SerializeField] TMP_Text timerText;
 
@@ -53,6 +56,52 @@ public class UIManager : MonoBehaviour
                     timerText.text = GameManager.Instance.levelManager.levelTimer.ToString("0");
                 }
                 break;
+        }
+    }
+
+    public void ShowTimerPopup()
+    {
+        timerPopup.gameObject.SetActive(true);
+    }
+
+    public void HideTimerPopup()
+    {
+        timerPopup.gameObject.SetActive(false);
+    }
+
+    public IEnumerator SceneFadeIn(float duration)
+    {
+        float lerp = 0f;
+
+        Color initialColor = fadeOverlay.color;
+
+        Color targetColor = initialColor;
+        targetColor.a = 1f;
+
+        while (lerp < 1f)
+        {
+            lerp += Time.deltaTime / duration;
+            fadeOverlay.color = Color.Lerp(initialColor, targetColor, lerp);
+
+            yield return null;
+        }
+    }
+
+    public IEnumerator SceneFadeOut(float duration)
+    {
+        float lerp = 0f;
+
+        Color initialColor = fadeOverlay.color;
+
+        Color targetColor = initialColor;
+        targetColor.a = 0f;
+
+        while (lerp < 1f)
+        {
+            lerp += Time.deltaTime / duration;
+            fadeOverlay.color = Color.Lerp(initialColor, targetColor, lerp);
+
+            yield return null;
         }
     }
 }

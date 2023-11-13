@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -26,6 +27,10 @@ public class LevelManager : MonoBehaviour
 
     [Tooltip("In percent.")] public float nomadEnergyCost, pixieEnergyCost, titanEnergyCost;
 
+    [Header("Game Over")]
+    [SerializeField] float returnToMenuDelay = 2f;
+    [SerializeField] float screenFadeDuration = 2f;
+
     void Awake()
     {
         AssignLevelManager();
@@ -52,11 +57,26 @@ public class LevelManager : MonoBehaviour
     {
         if (levelTimer <= 0f)
         {
-            GameManager.Instance.LoadLevelsMap();
+            StartCoroutine(LoadLevelsMap());
             return;
         }
 
         levelTimer -= Time.deltaTime;
+    }
+
+    IEnumerator LoadLevelsMap()
+    {
+        UIManager.Instance.ShowTimerPopup();
+
+        yield return new WaitForSecondsRealtime(returnToMenuDelay);
+
+        yield return UIManager.Instance.SceneFadeIn(screenFadeDuration);
+
+        // Disable the overlay
+        StartCoroutine(UIManager.Instance.SceneFadeOut(0f));
+
+        UIManager.Instance.HideTimerPopup();
+        GameManager.Instance.LoadLevelsMap();
     }
 
     // Checkpoint
