@@ -883,6 +883,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+  levelManager: {fileID: 0}
 --- !u!1 &1070379862
 GameObject:
   m_ObjectHideFlags: 0
