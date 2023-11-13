@@ -22,6 +22,8 @@ public class BarUI : MonoBehaviour
 
     public void SetValue(float value)
     {
+        if (value == currentValue) { return; }
+
         currentValue = value;
         currentValue = Mathf.Clamp(currentValue, 0f, maxValue);
 

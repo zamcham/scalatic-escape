@@ -579,9 +579,9 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: -94.5, y: 86}
+      snapOffset: {x: 39.5, y: 86}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 1
+      snapCorner: 0
       id: Orientation
       index: 0
       layout: 4
@@ -832,9 +832,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 14.96, y: -0.9886668, z: 0}
+    m_Target: {x: 1.2900481, y: -0.39831838, z: -0.04351195}
     speed: 2
-    m_Value: {x: 14.96, y: -0.9886668, z: 0}
+    m_Value: {x: 1.2900481, y: -0.39831838, z: -0.04351195}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -884,9 +884,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 0.8660254
+    m_Target: 10.504811
     speed: 2
-    m_Value: 0.8660254
+    m_Value: 10.504811
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -966,7 +966,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Tiles
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: /Users/cristian/Local/scalatic escape
+  m_LastProjectPath: D:\Unity\Projects\scalatic-escape
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
@@ -1077,10 +1077,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 16
-    y: -345
-    width: 1472
-    height: 304
+    x: 8
+    y: 688
+    width: 1469
+    height: 303
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
