@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour, IEntity
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
+    bool hasArmor = false, fellDown = false;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -138,8 +140,8 @@ public class PlayerController : MonoBehaviour, IEntity
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
         {
+            fellDown = true;
             GetComponent<IEntity>().Kill();
-            //GameManager.Instance.RestartLevel();
         }
     }
 
@@ -258,7 +260,15 @@ public class PlayerController : MonoBehaviour, IEntity
     {
         if (!hasDied)
         {
-            GameManager.Instance.RestartLevel();
+            if (fellDown || (!hasArmor && !titan.activeSelf))
+            {
+                GameManager.Instance.RestartLevel();
+                fellDown = false;
+            }
+            else
+            {
+                Debug.Log("Player either has armor or is Titan. Can't kill!");
+            }
         }       
     }
 }

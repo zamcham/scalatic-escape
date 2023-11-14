@@ -1946,6 +1946,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnergyOrb
       objectReference: {fileID: 0}
+    - target: {fileID: 771735269308937509, guid: abdf1dd7655a52944a3201e269bd7e19, type: 3}
+      propertyPath: energyGain
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 4280946077880180730, guid: abdf1dd7655a52944a3201e269bd7e19, type: 3}
       propertyPath: m_RootOrder
       value: 4
