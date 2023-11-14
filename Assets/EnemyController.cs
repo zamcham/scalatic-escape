@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IEntity
 {
-    // Start is called before the first frame update
-    void Start()
+    IEntity entity;
+
+    public float health { get; set; } = 1f;
+    public bool hasDied { get; set; } = false;
+
+    public void OnDeath()
     {
-        
+        Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    void Awake()
     {
-        
+        entity = GetComponent<IEntity>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.root.CompareTag("Player"))
+        {
+            entity.Kill();
+        }
     }
 }
