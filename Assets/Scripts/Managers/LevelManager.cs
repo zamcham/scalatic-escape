@@ -76,14 +76,55 @@ public class LevelManager : MonoBehaviour
         }       
     }
 
+    public void ReloadLevel()
+    {
+        // Start the coroutine in GameManager so it continues when this script is destroyed during level transiion
+        GameManager.Instance.StartCoroutine(ReloadLevelIE(null, null));
+    }
+
+    IEnumerator ReloadLevelIE(UnityEvent preparationEvent = null, UnityEvent resetEvent = null)
+    {
+        // For readability
+        UIManager UIinstance = UIManager.Instance;
+        GameManager gameInstance = GameManager.Instance;
+
+        // Internal preparation
+        sceneLoading = true;
+        Time.timeScale = 0f; // Freeze the game
+
+        // Transition preperation 
+        if (preparationEvent != null)
+        {
+            preparationEvent.Invoke();
+        }
+
+        // First, wait for the screen fade-in to start. Then wait for it to end.
+        yield return new WaitForSecondsRealtime(returnToMenuDelay);
+        yield return UIinstance.SceneFadeIn(screenFadeDuration);
+
+        // Fade-In is done. Load the scene asynchronously and wait until it's done
+        AsyncOperation asyncLoad = gameInstance.ReloadLevelAsync();
+        yield return new WaitUntil(() => asyncLoad.isDone);
+
+        // The scene is fully loaded. Reset everything.
+        if (resetEvent != null)
+        {
+            resetEvent.Invoke();
+        }
+
+        // Internal reset. This must be done in all conditions.
+        yield return UIinstance.StartCoroutine(UIinstance.SceneFadeOut(screenFadeDuration));
+        Time.timeScale = 1f;
+        sceneLoading = false;
+    }
+
     public void LoadLevelSelection(UnityEvent preparationEvent, UnityEvent resetEvent)
     {
         // Start the coroutine in GameManager so it continues when this script is destroyed during level transiion
         GameManager.Instance.StartCoroutine(LoadLevelsMap(preparationEvent, resetEvent));
     }
-
     IEnumerator LoadLevelsMap(UnityEvent preparationEvent, UnityEvent resetEvent)
-    {
+    {        
         // For readability
         UIManager UIinstance = UIManager.Instance;
         GameManager gameInstance = GameManager.Instance;

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, IEntity
@@ -139,7 +138,8 @@ public class PlayerController : MonoBehaviour, IEntity
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
         {
-            GameManager.Instance.RestartLevel();
+            GetComponent<IEntity>().Kill();
+            //GameManager.Instance.RestartLevel();
         }
     }
 
@@ -256,13 +256,9 @@ public class PlayerController : MonoBehaviour, IEntity
 
     public void OnDeath()
     {
-        UnityEvent preparation = new UnityEvent(), reset = new UnityEvent();
-
-        if (GameManager.Instance.levelManager.checkpointReached)
+        if (!hasDied)
         {
-
-        }
-
-        GameManager.Instance.levelManager.LoadLevelSelection(preparation, reset);
+            GameManager.Instance.RestartLevel();
+        }       
     }
 }

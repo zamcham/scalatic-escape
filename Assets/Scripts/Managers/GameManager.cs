@@ -66,6 +66,13 @@ public class GameManager : MonoBehaviour
         return async;
     }
 
+    public AsyncOperation ReloadLevelAsync()
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync(currentSceneIndex);
+
+        return async;
+    }
+
     #region Level Handling
     public void LoadLevel(int levelNumber)
     {
@@ -91,6 +98,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public AsyncOperation LoadLevelAsync(int levelNumber)
+    {
+        if (LevelIsUnlocked(levelNumber))
+        {
+            gameStatus = GameStatus.InGame;
+
+            currentSceneIndex = levelNumber;
+            AsyncOperation async = SceneManager.LoadSceneAsync(levelNumber);
+
+            return async;
+        }
+        else
+        {
+            if (LevelExists(levelNumber))
+            {
+                // TODO: Add level locked animation
+                Debug.Log($"Level {levelNumber} is not unlocked yet.");
+            }
+            else
+            {
+                // TODO: Handle error
+                Debug.Log($"There is no such level numbered {levelNumber}");
+            }
+        }
+
+        return null;
+    }
+
     private bool LevelIsUnlocked(int levelNumber)
     {
         return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
@@ -107,12 +142,11 @@ public class GameManager : MonoBehaviour
         {
             if (levelManager.checkpointReached)
             {
-                Debug.Log("Respawning on checkpoint");
                 levelManager.RespawnOnCheckpoint();
             }
             else
             {
-                SceneManager.LoadScene(currentSceneIndex);
+                levelManager.ReloadLevel();
             }
         }        
     }
