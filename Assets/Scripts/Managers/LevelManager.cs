@@ -32,7 +32,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] float returnToMenuDelay = 2f;
     [SerializeField] float screenFadeDuration = 2f;
 
-    static bool sceneLoading = false;
+    public bool sceneLoading { get; private set; } = false;
+    public bool respawning { get; private set; } = false;
 
     void Awake()
     {
@@ -114,21 +115,48 @@ public class LevelManager : MonoBehaviour
     // Checkpoint
     public void RespawnOnCheckpoint()
     {
+        if (!respawning)
+        {
+            StartCoroutine(OnCheckpoint());      
+        }
+    }
+
+    IEnumerator OnCheckpoint()
+    {
         if (checkpoint != null)
         {
+            respawning = true;
+
+            // For readability
+            UIManager UIinstance = UIManager.Instance;
+
+            Time.timeScale = 0f; // Freeze the game
+
+            // First, wait for the screen fade-in to start. Then wait for it to end.
+            yield return new WaitForSecondsRealtime(returnToMenuDelay);
+            yield return UIinstance.SceneFadeIn(screenFadeDuration);
+
+            // Fade-In is done. Respawn from checkpoint
             player.transform.position = checkpoint.position;
             cam.transform.position = checkpoint.position + new Vector3(0f, 0f, -10f);
 
             currentEnergy = 0;
-
             levelTimer = levelTimeout;
 
+            // Fade out
+            yield return UIinstance.SceneFadeOut(screenFadeDuration);
+            Time.timeScale = 1f;            
+
             Debug.Log("Respawned on checkpoint");
-        }
-        else
-        {
-            Debug.Log("Have not reached a checkpoint yet");
-        }      
+
+            // This is a bit tricky issue to explain but the respawn method will run forever if I don't add this
+            for (int i = 0; i < 5; i++)
+            {
+                yield return null;
+            }
+
+            respawning = false;
+        }    
     }
 
     // Stamina

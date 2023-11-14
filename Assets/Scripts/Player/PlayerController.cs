@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, IEntity
@@ -255,6 +256,13 @@ public class PlayerController : MonoBehaviour, IEntity
 
     public void OnDeath()
     {
-        throw new System.NotImplementedException();
+        UnityEvent preparation = new UnityEvent(), reset = new UnityEvent();
+
+        if (GameManager.Instance.levelManager.checkpointReached)
+        {
+
+        }
+
+        GameManager.Instance.levelManager.LoadLevelSelection(preparation, reset);
     }
 }

@@ -103,15 +103,18 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        if (levelManager.checkpointReached)
+        if (!levelManager.sceneLoading && !levelManager.respawning)
         {
-            Debug.Log("Respawning on checkpoint");
-            levelManager.RespawnOnCheckpoint();
-        }
-        else
-        {
-            SceneManager.LoadScene(currentSceneIndex);
-        }
+            if (levelManager.checkpointReached)
+            {
+                Debug.Log("Respawning on checkpoint");
+                levelManager.RespawnOnCheckpoint();
+            }
+            else
+            {
+                SceneManager.LoadScene(currentSceneIndex);
+            }
+        }        
     }
 
     #endregion  
