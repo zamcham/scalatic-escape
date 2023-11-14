@@ -67,13 +67,18 @@ public class LevelManager : MonoBehaviour
                 preparation.AddListener(() => UIManager.Instance.ShowTimerPopup());
                 reset.AddListener(() => UIManager.Instance.HideTimerPopup());
 
-                // Start the coroutine in GameManager so it continues when this script is destroyed during level transiion
-                GameManager.Instance.StartCoroutine(LoadLevelsMap(preparation, reset));
+                LoadLevelSelection(preparation, reset);
                 return;
             }
 
             levelTimer -= Time.deltaTime;
         }       
+    }
+
+    public void LoadLevelSelection(UnityEvent preparationEvent, UnityEvent resetEvent)
+    {
+        // Start the coroutine in GameManager so it continues when this script is destroyed during level transiion
+        GameManager.Instance.StartCoroutine(LoadLevelsMap(preparationEvent, resetEvent));
     }
 
     IEnumerator LoadLevelsMap(UnityEvent preparationEvent, UnityEvent resetEvent)

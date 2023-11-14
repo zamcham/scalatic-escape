@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IEntity
 {
     [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
@@ -23,6 +22,10 @@ public class PlayerController : MonoBehaviour
     GameObject pixie, nomad, titan;
     bool canBreakPlatform = false;
     Renderer titanRenderer;
+
+    // Entity
+    public float health { get; set; } = 1f;
+    public bool hasDied { get; set; } = false;
 
     void Awake()
     {
@@ -248,5 +251,10 @@ public class PlayerController : MonoBehaviour
         nomad.SetActive(false);
         titan.SetActive(false);
         pixie.SetActive(false);
+    }
+
+    public void OnDeath()
+    {
+        throw new System.NotImplementedException();
     }
 }
