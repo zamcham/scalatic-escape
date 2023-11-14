@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [DisallowMultipleComponent]
 public class LevelManager : MonoBehaviour
@@ -31,6 +32,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] float returnToMenuDelay = 2f;
     [SerializeField] float screenFadeDuration = 2f;
 
+    static bool sceneLoading = false;
+
     void Awake()
     {
         AssignLevelManager();
@@ -55,28 +58,52 @@ public class LevelManager : MonoBehaviour
     // Level Timer
     void LevelTimer()
     {
-        if (levelTimer <= 0f)
+        if (!sceneLoading)
         {
-            StartCoroutine(LoadLevelsMap());
-            return;
-        }
+            if (levelTimer <= 0f)
+            {
+                UnityEvent preparation = new UnityEvent(), reset = new UnityEvent();
 
-        levelTimer -= Time.deltaTime;
+                preparation.AddListener(() => UIManager.Instance.ShowTimerPopup());
+                reset.AddListener(() => UIManager.Instance.HideTimerPopup());
+
+                // Start the coroutine in GameManager so it continues when this script is destroyed during level transiion
+                GameManager.Instance.StartCoroutine(LoadLevelsMap(preparation, reset));
+                return;
+            }
+
+            levelTimer -= Time.deltaTime;
+        }       
     }
 
-    IEnumerator LoadLevelsMap()
+    IEnumerator LoadLevelsMap(UnityEvent preparationEvent, UnityEvent resetEvent)
     {
-        UIManager.Instance.ShowTimerPopup();
+        // For readability
+        UIManager UIinstance = UIManager.Instance;
+        GameManager gameInstance = GameManager.Instance;
 
+        // Internal preparation
+        sceneLoading = true;
+        Time.timeScale = 0f; // Freeze the game
+
+        // Transition preperation 
+        preparationEvent.Invoke();
+
+        // First, wait for the screen fade-in to start. Then wait for it to end.
         yield return new WaitForSecondsRealtime(returnToMenuDelay);
+        yield return UIinstance.SceneFadeIn(screenFadeDuration);
 
-        yield return UIManager.Instance.SceneFadeIn(screenFadeDuration);
+        // Fade-In is done. Load the scene asynchronously and wait until it's done
+        AsyncOperation asyncLoad = gameInstance.LoadLevelsMapAsync();
+        yield return new WaitUntil(() => asyncLoad.isDone);
 
-        // Disable the overlay
-        StartCoroutine(UIManager.Instance.SceneFadeOut(0f));
+        // The scene is fully loaded. Reset everything.
+        resetEvent.Invoke();
 
-        UIManager.Instance.HideTimerPopup();
-        GameManager.Instance.LoadLevelsMap();
+        // Internal reset. This must be done in all conditions.
+        UIinstance.StartCoroutine(UIinstance.SceneFadeOut(screenFadeDuration));
+        Time.timeScale = 1f;
+        sceneLoading = false;
     }
 
     // Checkpoint

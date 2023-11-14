@@ -58,6 +58,14 @@ public class GameManager : MonoBehaviour
         gameStatus = GameStatus.OnLevelsMap;
     }
 
+    public AsyncOperation LoadLevelsMapAsync()
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync(LevelsMapSceneName);
+        gameStatus = GameStatus.OnLevelsMap;
+
+        return async;
+    }
+
     #region Level Handling
     public void LoadLevel(int levelNumber)
     {
