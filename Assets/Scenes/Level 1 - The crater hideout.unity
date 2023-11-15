@@ -2080,28 +2080,16 @@ GameObject:
   m_Component:
   - component: {fileID: 1504118142}
   - component: {fileID: 1504118141}
-  - component: {fileID: 1504118140}
   - component: {fileID: 1504118144}
   - component: {fileID: 1504118143}
+  - component: {fileID: 1504118145}
   m_Layer: 0
-  m_Name: enemy1
+  m_Name: Lumiflute
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1504118140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1504118139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efdca338548a4384ca7274ab02720e36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &1504118141
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2249,6 +2237,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.9557693}
   m_EdgeRadius: 0
+--- !u!114 &1504118145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504118139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e413d5563a5436f9e3cb744bd3ba1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1524754468 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 595912102182661161, guid: cbb793929af3d4840abd4eb51bcfd87b, type: 3}
