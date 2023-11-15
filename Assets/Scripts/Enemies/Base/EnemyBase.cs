@@ -6,6 +6,9 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
 
+    // Note: This is a base class for all enemies
+    // Box Collider 2D is used for the enemy's body and area that hurts the player
+    // Capsule Collider 2D is used for the enemy's head and area that kills the enemy
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if collision.otherCollider (enemy collider) is not null
