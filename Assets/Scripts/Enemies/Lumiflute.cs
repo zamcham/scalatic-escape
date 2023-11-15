@@ -12,6 +12,6 @@ public class Lumiflute : EnemyBase
     }
 
     void Move() {
-        transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);
+        transform.Translate(Vector2.left * moveSpeed * Time.fixedDeltaTime);
     }
 }
