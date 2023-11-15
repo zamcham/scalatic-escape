@@ -9,7 +9,7 @@ public class EnemyBase : MonoBehaviour
     // Note: This is a base class for all enemies
     // Box Collider 2D is used for the enemy's body and area that hurts the player
     // Capsule Collider 2D is used for the enemy's head and area that kills the enemy
-    
+
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if collision.otherCollider (enemy collider) is not null
@@ -21,9 +21,8 @@ public class EnemyBase : MonoBehaviour
             // Check the type and perform actions accordingly
             if (colliderType == typeof(BoxCollider2D))
             {
-                // Handle collision with BoxCollider2D
-                Debug.Log("Collided with BoxCollider2D");
-                PlayerHurt();
+                
+                PlayerHurt(collision.gameObject.GetComponent<PlayerController>());
             }
             else if (colliderType == typeof(CapsuleCollider2D))
             {
@@ -45,11 +44,9 @@ public class EnemyBase : MonoBehaviour
         Destroy(gameObject);
     }
 
-    protected virtual void PlayerHurt()
+    protected virtual void PlayerHurt(PlayerController player)
     {
-        // Common logic for when the player touches the sides of the enemy
-        // This might include reducing player health or triggering a hurt animation
-        Debug.Log("Player hurt");
+        player.hurtPlayer();
     }
 
 }

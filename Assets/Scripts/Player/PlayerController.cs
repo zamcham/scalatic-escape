@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
-    bool hasArmor = false, fellDown = false;
+    [SerializeField] bool hasArmor = false;
+    bool fellDown = false;
 
     void Awake()
     {
