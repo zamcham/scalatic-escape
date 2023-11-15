@@ -5,25 +5,10 @@ using UnityEngine;
 
 public class EnemyBase : MonoBehaviour
 {
-    protected BoxCollider2D hurtPlayerCollider;
-    protected CapsuleCollider2D killEnemyCollider;
-
-    protected virtual void Start()
-    {
-        // Find and assign colliders during initialization
-        FindColliders();
-        Debug.Log("EnemyBase Start");
-    }
-
-    protected virtual void FindColliders()
-    {
-        hurtPlayerCollider = GetComponent<BoxCollider2D>();
-        killEnemyCollider = GetComponent<CapsuleCollider2D>();
-    }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if collision.otherCollider is not null
+        // Check if collision.otherCollider (enemy collider) is not null
         if (collision.otherCollider != null)
         {
             // Get the type of the collider
