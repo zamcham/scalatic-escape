@@ -22,7 +22,7 @@ public class EnemyBase : MonoBehaviour
             if (colliderType == typeof(BoxCollider2D))
             {
                 
-                PlayerHurt(collision.gameObject.GetComponent<PlayerController>());
+                HurtPlayer(collision.gameObject.GetComponent<PlayerController>());
             }
             else if (colliderType == typeof(CapsuleCollider2D))
             {
@@ -44,9 +44,9 @@ public class EnemyBase : MonoBehaviour
         Destroy(gameObject);
     }
 
-    protected virtual void PlayerHurt(PlayerController player)
+    protected virtual void HurtPlayer(PlayerController player)
     {
-        player.hurtPlayer();
+        player.Hurt();
     }
 
 }

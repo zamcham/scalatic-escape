@@ -256,7 +256,7 @@ public class PlayerController : MonoBehaviour
         pixie.SetActive(false);
     }
 
-    public void hurtPlayer()
+    public void Hurt()
     {
         if (hasArmor || titan.activeSelf)
         {
