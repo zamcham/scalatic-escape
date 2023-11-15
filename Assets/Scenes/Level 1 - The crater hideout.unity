@@ -727,7 +727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26621570e756e4b1c9974e6c531e1a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 3
 --- !u!1 &548756319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,6 +1860,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1395804417}
   - component: {fileID: 1395804416}
+  - component: {fileID: 1395804418}
   m_Layer: 0
   m_Name: Mushroom
   m_TagString: Untagged
@@ -1934,6 +1935,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1395804418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395804415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9abab26a2a22114180f632e77b4b494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sporePrefab: {fileID: 6370043683968304063, guid: 961996a7da9badc4291af8a9b6156a48, type: 3}
+  sporeCreateInterval: 1
+  sporeFadeDistance: 5
+  sporeFadeDuration: 1
 --- !u!1001 &1404108952
 PrefabInstance:
   m_ObjectHideFlags: 0
