@@ -154,15 +154,15 @@ public class LevelManager : MonoBehaviour
     }
 
     // Checkpoint
-    public void RespawnOnCheckpoint()
+    public void RespawnOnCheckpoint(UnityEvent customReset)
     {
         if (!respawning)
         {
-            StartCoroutine(OnCheckpoint());      
+            StartCoroutine(OnCheckpoint(customReset));      
         }
     }
 
-    IEnumerator OnCheckpoint()
+    IEnumerator OnCheckpoint(UnityEvent customReset)
     {
         if (checkpoint != null)
         {
@@ -186,15 +186,15 @@ public class LevelManager : MonoBehaviour
 
             // Fade out
             yield return UIinstance.SceneFadeOut(screenFadeDuration);
-            Time.timeScale = 1f;            
+            Time.timeScale = 1f;
+
+            // Reset
+            if (customReset != null)
+            {
+                customReset.Invoke();
+            }
 
             Debug.Log("Respawned on checkpoint");
-
-            // This is a bit tricky issue to explain but the respawn method will run forever if I don't add this
-            for (int i = 0; i < 5; i++)
-            {
-                yield return null;
-            }
 
             respawning = false;
         }    

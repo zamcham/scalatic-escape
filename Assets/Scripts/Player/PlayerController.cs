@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -142,6 +143,8 @@ public class PlayerController : MonoBehaviour
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
         {
             fellDown = true;
+            groundChecker.enabled = false;
+            OnDeath();
         }
     }
 
@@ -275,7 +278,13 @@ public class PlayerController : MonoBehaviour
         {
             if (fellDown || (!hasArmor && !titan.activeSelf))
             {
-                GameManager.Instance.RestartLevel();
+                UnityEvent reset = new UnityEvent();
+
+                // Reset everything back to normal after the respawning is complete
+                reset.AddListener(() => groundChecker.enabled = true);
+                reset.AddListener(() => rb.velocity = Vector3.zero);
+
+                GameManager.Instance.RestartLevel(reset);
                 fellDown = false;
             }
             else

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public enum GameStatus { OnStartScreen, OnLevelsMap, InGame }
@@ -136,13 +137,13 @@ public class GameManager : MonoBehaviour
         return levelStatus.ContainsKey(levelNumber);
     }
 
-    public void RestartLevel()
+    public void RestartLevel(UnityEvent customReset = null)
     {
         if (!levelManager.sceneLoading && !levelManager.respawning)
         {
             if (levelManager.checkpointReached)
             {
-                levelManager.RespawnOnCheckpoint();
+                levelManager.RespawnOnCheckpoint(customReset);
             }
             else
             {
