@@ -246,9 +246,17 @@ public class PlayerController : MonoBehaviour
             collectible.OnCollect();
         }
 
-        if (collision.gameObject.CompareTag("Checkpoint"))
+        SetCheckpoint(collision.gameObject);
+    }
+
+    void SetCheckpoint(GameObject checkpoint)
+    {
+        if (checkpoint.CompareTag("Checkpoint") && !levelManager.checkpointReached)
         {
             levelManager.checkpointReached = true;
+
+            SpriteRenderer checkpointRenderer = checkpoint.GetComponent<SpriteRenderer>();
+            checkpointRenderer.material.color = Color.green;
         }
     }
 
