@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour, IEntity
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
@@ -141,7 +141,6 @@ public class PlayerController : MonoBehaviour, IEntity
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
         {
             fellDown = true;
-            GetComponent<IEntity>().Kill();
         }
     }
 

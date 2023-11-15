@@ -11,12 +11,13 @@ public class EnemyBase : MonoBehaviour
     {
         // Find and assign colliders during initialization
         FindColliders();
+        Debug.Log("EnemyBase Start");
     }
 
         protected virtual void FindColliders()
     {
-        hurtPlayerCollider = transform.Find("hurtPlayerCollider").GetComponent<Collider2D>();
-        killEnemyCollider = transform.Find("killEnemyCollider").GetComponent<Collider2D>();
+        hurtPlayerCollider = transform.Find("hurtPlayerCollider").GetComponent<BoxCollider2D>();
+        killEnemyCollider = transform.Find("killEnemyCollider").GetComponent<CapsuleCollider2D>();
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
@@ -24,12 +25,12 @@ public class EnemyBase : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             // Check which collider was hit
-            if (collision.collider == hurtCollider)
+            if (collision.collider == hurtPlayerCollider)
             {
                 // Handle player touching the sides of the enemy
                 PlayerHurt();
             }
-            else if (collision.collider == deathCollider)
+            else if (collision.collider == killEnemyCollider)
             {
                 // Handle player jumping on the top of the enemy
                 Die();
