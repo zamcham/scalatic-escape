@@ -255,6 +255,19 @@ public class PlayerController : MonoBehaviour
         pixie.SetActive(false);
     }
 
+    public void hurtPlayer()
+    {
+        if (hasArmor || titan.activeSelf)
+        {
+            hasArmor = false;
+            OnNomad();
+        }
+        else
+        {
+            OnDeath();
+        }
+    }
+
     public void OnDeath()
     {
         if (!hasDied)
