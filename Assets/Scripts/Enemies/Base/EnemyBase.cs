@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,26 +15,37 @@ public class EnemyBase : MonoBehaviour
         Debug.Log("EnemyBase Start");
     }
 
-        protected virtual void FindColliders()
+    protected virtual void FindColliders()
     {
-        hurtPlayerCollider = transform.Find("hurtPlayerCollider").GetComponent<BoxCollider2D>();
-        killEnemyCollider = transform.Find("killEnemyCollider").GetComponent<CapsuleCollider2D>();
+        hurtPlayerCollider = GetComponent<BoxCollider2D>();
+        killEnemyCollider = GetComponent<CapsuleCollider2D>();
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        // Check if collision.otherCollider is not null
+        if (collision.otherCollider != null)
         {
-            // Check which collider was hit
-            if (collision.collider == hurtPlayerCollider)
+            // Get the type of the collider
+            Type colliderType = collision.otherCollider.GetType();
+
+            // Check the type and perform actions accordingly
+            if (colliderType == typeof(BoxCollider2D))
             {
-                // Handle player touching the sides of the enemy
+                // Handle collision with BoxCollider2D
+                Debug.Log("Collided with BoxCollider2D");
                 PlayerHurt();
             }
-            else if (collision.collider == killEnemyCollider)
+            else if (colliderType == typeof(CapsuleCollider2D))
             {
-                // Handle player jumping on the top of the enemy
+                // Handle collision with CapsuleCollider2D
+                Debug.Log("Collided with CapsuleCollider2D");
                 Die();
+            }
+            else
+            {
+                // Handle other collider types if needed
+                Debug.Log($"Collided with a collider of type {colliderType}");
             }
         }
     }
