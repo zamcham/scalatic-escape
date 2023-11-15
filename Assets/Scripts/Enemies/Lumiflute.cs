@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lumiflute : MonoBehaviour, EnemyBase
+public class Lumiflute : EnemyBase
 {
     [SerializeField] float moveSpeed = 5f;
 
