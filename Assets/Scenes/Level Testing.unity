@@ -422,6 +422,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2050358640604523960, guid: 8fa2e4cb0cc3f964d8bc073330dcb80d, type: 3}
+      propertyPath: rayMaxDistance
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 2391570302835883578, guid: 8fa2e4cb0cc3f964d8bc073330dcb80d, type: 3}
       propertyPath: m_Name
       value: Enemy

@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class MushroomEnemy : MonoBehaviour
 {
-    [SerializeField] GameObject sporePrefab;
+    [Header("General")]
+    [SerializeField] Transform sideSpawnPoints;
+    [SerializeField] Transform upperSpawnPoints;
 
     [Header("Spore Settings")]
+    [SerializeField] GameObject sporePrefab;
     [SerializeField] float sporeCreateInterval = 1f;
-
-    [SerializeField] float sporeFadeDistance;
-    [SerializeField] float sporeFadeDuration;
 
     // Turn it into a coroutine for now
     void Start()
@@ -24,6 +21,4 @@ public class MushroomEnemy : MonoBehaviour
     {
         
     }
-
-   
 }
