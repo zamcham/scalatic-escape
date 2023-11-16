@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -13,7 +14,7 @@ public class Spore : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Init(SporeMode mode, float force)
+    public void Init(SporeMode mode, float force, float destroyDelay = 5.5f)
     {
         switch (mode)
         {
@@ -28,6 +29,11 @@ public class Spore : MonoBehaviour
         }
 
         rb.AddForce(transform.parent.up * force);
+
+        if (destroyDelay > 0f) // Make it zero to disable fading
+        {
+            Destroy(gameObject, destroyDelay);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
