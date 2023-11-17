@@ -154,3 +154,37 @@ public class GameManager : MonoBehaviour
 
     #endregion  
 }
+
+public class Level
+{
+    public int levelNumber;
+    public bool levelUnlocked;
+    public bool levelCompleted;
+
+    private int _collectedBonuses;
+    public int collectedBonuses
+    {
+        get
+        {
+            return _collectedBonuses;
+        }
+
+        set
+        {
+            _collectedBonuses = value;
+
+            // All bonuses are collected
+            if (_collectedBonuses >= 3)
+            {
+                bonusesCompleted = true;
+            }
+
+            // Not collected
+            else
+            {
+                bonusesCompleted = false;
+            }
+        }
+    }
+    public bool bonusesCompleted;
+}
