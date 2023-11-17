@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     // Levels
     public List<Level> levels = new List<Level>();
+    public Level currentLevel {  get; private set; }
 
     // Dictionary of levels and their completion status - OLD SYSTEM
     //public Dictionary<int, bool> levelStatus;
@@ -91,9 +92,12 @@ public class GameManager : MonoBehaviour
     #region Level Handling
     public void LoadLevel(int levelNumber)
     {
-        if (LevelIsUnlocked(levelNumber))
+        if (LevelIsUnlocked(levelNumber, out Level level))
         {
             currentSceneIndex = levelNumber;
+
+            currentLevel = level;
+
             SceneManager.LoadScene(levelNumber);
 
             gameStatus = GameStatus.InGame;
@@ -147,6 +151,21 @@ public class GameManager : MonoBehaviour
         //return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
 
         return LevelExists(levelNumber, out Level level) && level.levelUnlocked;
+    }
+
+    private bool LevelIsUnlocked(int levelNumber, out Level level)
+    {
+        // Old system
+        //return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
+
+        if (LevelExists(levelNumber, out Level _level) && _level.levelUnlocked)
+        {
+            level = _level;
+            return true;
+        }
+
+        level = null;
+        return false;
     }
 
     private bool LevelExists(int levelNumber)
