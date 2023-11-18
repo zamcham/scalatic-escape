@@ -1,18 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager Instance;
+
+    AudioSource audioSource;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        Initialize();
     }
 
-    // Update is called once per frame
-    void Update()
+    void Initialize()
     {
-        
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            Destroy(gameObject);
+
+            return;
+        }
+
+        audioSource = GetComponent<AudioSource>();
     }
+
+    // For interrupting the current playing sound
+    public void Play(AudioClip clip, float volume = 1f, float pitch = 1f)
+    {
+        audioSource.clip = clip;
+
+        audioSource.volume = volume;
+        audioSource.pitch = pitch;
+
+        audioSource.Play();
+    }
+
+    // For playing without interruption: Two sounds will exist at the same time
+    public void PlayOneShot(AudioClip clip, float volume = 1f, float pitch = 1f)
+    {
+        audioSource.volume = volume;
+        audioSource.pitch = pitch;
+
+        audioSource.PlayOneShot(clip);
+    }  
 }
