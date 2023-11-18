@@ -118,7 +118,7 @@ Transform:
   - {fileID: 5028535963113684016}
   - {fileID: 4457687619247073837}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2143381311991893291
 Rigidbody2D:
@@ -162,7 +162,9 @@ MonoBehaviour:
   sprite: {fileID: 5028535963113684016}
   moveSpeed: 4
   rollDegreePerUnit: 90
-  rayMaxDistance: 1
+  collider: {fileID: 4012416081040052991}
+  horizontalRayDistance: 1
+  verticalRayDistance: 0.5
   changeDirectionDuration: 0.5
   rayMask:
     serializedVersion: 2
