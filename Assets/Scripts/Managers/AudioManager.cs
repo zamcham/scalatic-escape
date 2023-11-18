@@ -4,7 +4,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
-    AudioSource audioSource;
+    [SerializeField] AudioSource audioSource, musicSource;
 
     // Start is called before the first frame update
     void Awake()
@@ -26,8 +26,6 @@ public class AudioManager : MonoBehaviour
 
             return;
         }
-
-        audioSource = GetComponent<AudioSource>();
     }
 
     // For interrupting the current playing sound
@@ -48,5 +46,21 @@ public class AudioManager : MonoBehaviour
         audioSource.pitch = pitch;
 
         audioSource.PlayOneShot(clip);
-    }  
+    }
+
+    public void PlayMusic()
+    {
+        audioSource.Play();
+    }
+
+    public void PlayMusic(AudioClip music)
+    {
+        musicSource.clip = music;
+        audioSource.Play();
+    }
+
+    public void StopMusic()
+    {
+        audioSource.Stop();
+    }
 }
