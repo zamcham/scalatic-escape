@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     const string LevelsMapSceneName = "Levels Map";
 
+    [SerializeField] AudioClip levelLockedAudio, levelClickAudio;
+
     void Awake()
     {
         if (Instance == null)
@@ -101,6 +103,8 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(levelNumber);
 
             gameStatus = GameStatus.InGame;
+
+            AudioManager.Instance.PlayOneShot(levelClickAudio);
         }
         else
         {
@@ -114,6 +118,8 @@ public class GameManager : MonoBehaviour
                 // TODO: Handle error
                 Debug.Log($"There is no such level numbered {levelNumber}");
             }
+
+            AudioManager.Instance.PlayOneShot(levelLockedAudio);
         }
     }
 

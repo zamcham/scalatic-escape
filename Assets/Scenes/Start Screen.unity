@@ -731,6 +731,8 @@ MonoBehaviour:
   currentSceneIndex: 0
   levelManager: {fileID: 0}
   gameStatus: 0
+  levelLockedAudio: {fileID: 8300000, guid: 9f7be12f1b5d8d14096abb351f71157e, type: 3}
+  levelClickAudio: {fileID: 8300000, guid: 5c871355c453bdc4181c91e6e0d5cf84, type: 3}
 --- !u!1 &715852951
 GameObject:
   m_ObjectHideFlags: 0
