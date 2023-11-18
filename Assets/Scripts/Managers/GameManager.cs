@@ -18,8 +18,12 @@ public class GameManager : MonoBehaviour
     
     public GameStatus gameStatus = GameStatus.OnStartScreen;
 
-    // Dictionary of levels and their completion status
-    public Dictionary<int, bool> levelStatus;
+    // Levels
+    public List<Level> levels = new List<Level>();
+    public Level currentLevel {  get; private set; }
+
+    // Dictionary of levels and their completion status - OLD SYSTEM
+    //public Dictionary<int, bool> levelStatus;
 
     const string LevelsMapSceneName = "Levels Map";
 
@@ -39,18 +43,29 @@ public class GameManager : MonoBehaviour
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         totalSceneCount = SceneManager.sceneCountInBuildSettings;
 
-        InitializeLevelStatus();
+        InitializeLevels();
+        //InitializeLevelStatus();
     }
 
-    private void InitializeLevelStatus()
+    void InitializeLevels()
     {
-        levelStatus = new Dictionary<int, bool>
-        {
-            {1, true},
-            {2, false},
-            {3, false}
-        };
+        // TO-DO: Implement save system to fetch data about each level
+
+        levels.Add(new Level(1, true));
+        levels.Add(new Level(2, false));
+        levels.Add(new Level(3, false));
     }
+
+    // OLD LEVEL SYSTEM
+    //private void InitializeLevelStatus()
+    //{
+    //    levelStatus = new Dictionary<int, bool>
+    //    {
+    //        {1, true},
+    //        {2, false},
+    //        {3, false}
+    //    };
+    //}
 
     public void LoadLevelsMap()
     {
@@ -77,9 +92,12 @@ public class GameManager : MonoBehaviour
     #region Level Handling
     public void LoadLevel(int levelNumber)
     {
-        if (LevelIsUnlocked(levelNumber))
+        if (LevelIsUnlocked(levelNumber, out Level level))
         {
             currentSceneIndex = levelNumber;
+
+            currentLevel = level;
+
             SceneManager.LoadScene(levelNumber);
 
             gameStatus = GameStatus.InGame;
@@ -129,12 +147,56 @@ public class GameManager : MonoBehaviour
 
     private bool LevelIsUnlocked(int levelNumber)
     {
-        return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
+        // Old system
+        //return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
+
+        return LevelExists(levelNumber, out Level level) && level.levelUnlocked;
+    }
+
+    private bool LevelIsUnlocked(int levelNumber, out Level level)
+    {
+        // Old system
+        //return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
+
+        if (LevelExists(levelNumber, out Level _level) && _level.levelUnlocked)
+        {
+            level = _level;
+            return true;
+        }
+
+        level = null;
+        return false;
     }
 
     private bool LevelExists(int levelNumber)
     {
-        return levelStatus.ContainsKey(levelNumber);
+        // Old system
+        //return levelStatus.ContainsKey(levelNumber);
+
+        foreach (Level level in levels)
+        {
+            if (level.levelNumber == levelNumber)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool LevelExists(int levelNumber, out Level level)
+    {
+        foreach (Level l in levels)
+        {
+            if (l.levelNumber == levelNumber)
+            {
+                level = l;
+                return true;
+            }
+        }
+
+        level = null;
+        return false;
     }
 
     public void RestartLevel(UnityEvent customReset = null)
@@ -153,4 +215,47 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion  
+}
+
+public class Level
+{
+    public int levelNumber;
+    public bool levelUnlocked;
+    public bool levelCompleted;
+
+    public bool bonusesCompleted { get; private set; }
+
+    private int _collectedBonuses;
+    public int collectedBonuses
+    {
+        get
+        {
+            return _collectedBonuses;
+        }
+
+        set
+        {
+            _collectedBonuses = value;
+
+            // All bonuses are collected
+            if (_collectedBonuses >= 3)
+            {
+                bonusesCompleted = true;
+            }
+
+            // Not collected
+            else
+            {
+                bonusesCompleted = false;
+            }
+        }
+    }
+
+    public Level(int levelNumber, bool levelUnlocked = false, bool levelCompleted = false, int collectedBonuses = 0)
+    {
+        this.levelNumber = levelNumber;
+        this.levelUnlocked = levelUnlocked;
+        this.levelCompleted = levelCompleted;
+        this.collectedBonuses = collectedBonuses;
+    }
 }
