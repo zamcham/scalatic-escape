@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657682832291000969}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0.212, z: 0.000085033476}
+  m_LocalPosition: {x: 0.25, y: 0, z: 0.000085033476}
   m_LocalScale: {x: 0.30737814, y: 0.30737814, z: 0.30737814}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -94,9 +94,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2589603066115978739}
   - component: {fileID: 2143381311991893291}
-  - component: {fileID: 4036707810484861764}
+  - component: {fileID: 2050358640604523960}
   m_Layer: 0
-  m_Name: JumpingEnemy
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,7 +146,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &4036707810484861764
+--- !u!114 &2050358640604523960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,11 +155,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2391570302835883578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5396557d2e038824d9a919030d43dec4, type: 3}
+  m_Script: {fileID: 11500000, guid: efdca338548a4384ca7274ab02720e36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 15
-  jumpInterval: 3
 --- !u!1 &4533112848781602834
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +246,7 @@ GameObject:
   - component: {fileID: 5028535963113684016}
   - component: {fileID: 2113529516065422345}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Nomad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6545011685837601928}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.25, y: 0.21200001, z: 0.000085033476}
+  m_LocalPosition: {x: -0.25, y: 0, z: 0.000085033476}
   m_LocalScale: {x: 0.30737814, y: 0.30737814, z: 0.30737814}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -453,7 +451,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a74325e09c8e66840962eb18b1c48361, type: 2}
+  - {fileID: 2100000, guid: 7dead1ed7783e6142a2e54c37fb2aacb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
