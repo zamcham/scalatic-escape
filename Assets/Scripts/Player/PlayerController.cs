@@ -1,6 +1,6 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,6 +23,13 @@ public class PlayerController : MonoBehaviour
     GameObject pixie, nomad, titan;
     bool canBreakPlatform = false;
     Renderer titanRenderer;
+
+    // Entity
+    public float health { get; set; } = 1f;
+    public bool hasDied { get; set; } = false;
+
+    [SerializeField] bool hasArmor = false;
+    bool fellDown = false;
 
     void Awake()
     {
@@ -135,7 +142,9 @@ public class PlayerController : MonoBehaviour
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
         {
-            GameManager.Instance.RestartLevel();
+            fellDown = true;
+            groundChecker.enabled = false;
+            OnDeath();
         }
     }
 
@@ -237,9 +246,17 @@ public class PlayerController : MonoBehaviour
             collectible.OnCollect();
         }
 
-        if (collision.gameObject.CompareTag("Checkpoint"))
+        SetCheckpoint(collision.gameObject);
+    }
+
+    void SetCheckpoint(GameObject checkpoint)
+    {
+        if (checkpoint.CompareTag("Checkpoint") && !levelManager.checkpointReached)
         {
             levelManager.checkpointReached = true;
+
+            SpriteRenderer checkpointRenderer = checkpoint.GetComponent<SpriteRenderer>();
+            checkpointRenderer.material.color = Color.green;
         }
     }
 
@@ -248,5 +265,40 @@ public class PlayerController : MonoBehaviour
         nomad.SetActive(false);
         titan.SetActive(false);
         pixie.SetActive(false);
+    }
+
+    public void Hurt()
+    {
+        if (hasArmor || titan.activeSelf)
+        {
+            hasArmor = false;
+            OnNomad();
+        }
+        else
+        {
+            OnDeath();
+        }
+    }
+
+    public void OnDeath()
+    {
+        if (!hasDied)
+        {
+            if (fellDown || (!hasArmor && !titan.activeSelf))
+            {
+                UnityEvent reset = new UnityEvent();
+
+                // Reset everything back to normal after the respawning is complete
+                reset.AddListener(() => groundChecker.enabled = true);
+                reset.AddListener(() => rb.velocity = Vector3.zero);
+
+                GameManager.Instance.RestartLevel(reset);
+                fellDown = false;
+            }
+            else
+            {
+                Debug.Log("Player either has armor or is Titan. Can't kill!");
+            }
+        }       
     }
 }

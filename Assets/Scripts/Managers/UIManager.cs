@@ -80,7 +80,8 @@ public class UIManager : MonoBehaviour
 
         while (lerp < 1f)
         {
-            lerp += Time.deltaTime / duration;
+            // Use unscaled delta time because we need this operation during level transitions
+            lerp += Time.unscaledDeltaTime / duration;
             fadeOverlay.color = Color.Lerp(initialColor, targetColor, lerp);
 
             yield return null;
@@ -98,7 +99,8 @@ public class UIManager : MonoBehaviour
 
         while (lerp < 1f)
         {
-            lerp += Time.deltaTime / duration;
+            // Use unscaled delta time because we need this operation during level transitions
+            lerp += Time.unscaledDeltaTime / duration;
             fadeOverlay.color = Color.Lerp(initialColor, targetColor, lerp);
 
             yield return null;

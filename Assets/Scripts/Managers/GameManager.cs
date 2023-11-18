@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public enum GameStatus { OnStartScreen, OnLevelsMap, InGame }
@@ -58,6 +59,21 @@ public class GameManager : MonoBehaviour
         gameStatus = GameStatus.OnLevelsMap;
     }
 
+    public AsyncOperation LoadLevelsMapAsync()
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync(LevelsMapSceneName);
+        gameStatus = GameStatus.OnLevelsMap;
+
+        return async;
+    }
+
+    public AsyncOperation ReloadLevelAsync()
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync(currentSceneIndex);
+
+        return async;
+    }
+
     #region Level Handling
     public void LoadLevel(int levelNumber)
     {
@@ -83,6 +99,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public AsyncOperation LoadLevelAsync(int levelNumber)
+    {
+        if (LevelIsUnlocked(levelNumber))
+        {
+            gameStatus = GameStatus.InGame;
+
+            currentSceneIndex = levelNumber;
+            AsyncOperation async = SceneManager.LoadSceneAsync(levelNumber);
+
+            return async;
+        }
+        else
+        {
+            if (LevelExists(levelNumber))
+            {
+                // TODO: Add level locked animation
+                Debug.Log($"Level {levelNumber} is not unlocked yet.");
+            }
+            else
+            {
+                // TODO: Handle error
+                Debug.Log($"There is no such level numbered {levelNumber}");
+            }
+        }
+
+        return null;
+    }
+
     private bool LevelIsUnlocked(int levelNumber)
     {
         return levelStatus.TryGetValue(levelNumber, out bool isUnlocked) && isUnlocked;
@@ -93,17 +137,19 @@ public class GameManager : MonoBehaviour
         return levelStatus.ContainsKey(levelNumber);
     }
 
-    public void RestartLevel()
+    public void RestartLevel(UnityEvent customReset = null)
     {
-        if (levelManager.checkpointReached)
+        if (!levelManager.sceneLoading && !levelManager.respawning)
         {
-            Debug.Log("Respawning on checkpoint");
-            levelManager.RespawnOnCheckpoint();
-        }
-        else
-        {
-            SceneManager.LoadScene(currentSceneIndex);
-        }
+            if (levelManager.checkpointReached)
+            {
+                levelManager.RespawnOnCheckpoint(customReset);
+            }
+            else
+            {
+                levelManager.ReloadLevel();
+            }
+        }        
     }
 
     #endregion  

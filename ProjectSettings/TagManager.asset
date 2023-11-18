@@ -18,9 +18,9 @@ TagManager:
   - BottomBoundary
   - Collectible
   - Checkpoint
-  - 
-  - 
-  - 
+  - CameraBoundary
+  - Player
+  - Spore
   - 
   - 
   - 
