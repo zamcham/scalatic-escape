@@ -3632,6 +3632,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 601d9dc0061c02746aea1be2d2f84303, type: 3}
     - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: gameOverSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a047844672d69b749959e77af729abd7, type: 3}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: speedBoostCooldown
       value: 5
       objectReference: {fileID: 0}

@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] bool hasArmor = false;
-    [SerializeField] AudioClip landingSound;
+    [SerializeField] AudioClip landingSound, gameOverSound;
     bool fellDown = false;
 
     void Awake()
@@ -309,7 +309,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            OnDeath();
+            OnDeath();            
         }
     }
 
@@ -327,6 +327,8 @@ public class PlayerController : MonoBehaviour
 
                 GameManager.Instance.RestartLevel(reset);
                 fellDown = false;
+
+                AudioManager.Instance.PlayOneShot(gameOverSound);
             }
             else
             {
