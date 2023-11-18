@@ -49,10 +49,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip gameOverSound;
     [SerializeField] AudioClip jumpingSound, landingSound;
     [SerializeField] AudioClip pixieSound, nomadSound, titanSound;
+    [SerializeField] AudioClip checkpointSound;
 
     [Header("Other")]
     [SerializeField] bool hasArmor = false;
     bool fellDown = false;
+
+    
 
     void Awake()
     {
@@ -302,6 +305,8 @@ public class PlayerController : MonoBehaviour
 
             SpriteRenderer checkpointRenderer = checkpoint.GetComponent<SpriteRenderer>();
             checkpointRenderer.material.color = Color.green;
+
+            AudioManager.Instance.PlayOneShot(checkpointSound);
         }
     }
 

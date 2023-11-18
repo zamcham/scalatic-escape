@@ -3073,6 +3073,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: a047844672d69b749959e77af729abd7, type: 3}
     - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: checkpointSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 15d49b2477c2a844b9d6ce56d048e4d1, type: 3}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: speedBoostCooldown
       value: 5
       objectReference: {fileID: 0}
