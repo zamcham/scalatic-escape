@@ -50,17 +50,17 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic()
     {
-        audioSource.Play();
+        musicSource.Play();
     }
 
     public void PlayMusic(AudioClip music)
     {
         musicSource.clip = music;
-        audioSource.Play();
+        musicSource.Play();
     }
 
     public void StopMusic()
     {
-        audioSource.Stop();
+        musicSource.Stop();
     }
 }
