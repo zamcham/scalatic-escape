@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels Map.unity
     guid: 906485c48b5c64f2bb99a882268eccd7
+  - enabled: 1
+    path: Assets/Scenes/Blockout/Lvl1.unity
+    guid: aaeb448d4a1639241a05b6a82af28811
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 94c572e831e3f4156bbd6afa89faaac3, type: 2}
