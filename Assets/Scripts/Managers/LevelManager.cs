@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [DisallowMultipleComponent]
 public class LevelManager : MonoBehaviour
@@ -31,6 +32,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] float returnToMenuDelay = 2f;
     [SerializeField] float screenFadeDuration = 2f;
 
+    public bool sceneLoading { get; private set; } = false;
+    public bool respawning { get; private set; } = false;
+
     void Awake()
     {
         AssignLevelManager();
@@ -55,48 +59,145 @@ public class LevelManager : MonoBehaviour
     // Level Timer
     void LevelTimer()
     {
-        if (levelTimer <= 0f)
+        if (!sceneLoading)
         {
-            StartCoroutine(LoadLevelsMap());
-            return;
-        }
+            if (levelTimer <= 0f)
+            {
+                UnityEvent preparation = new UnityEvent(), reset = new UnityEvent();
 
-        levelTimer -= Time.deltaTime;
+                preparation.AddListener(() => UIManager.Instance.ShowTimerPopup());
+                reset.AddListener(() => UIManager.Instance.HideTimerPopup());
+
+                LoadLevelSelection(preparation, reset);
+                return;
+            }
+
+            levelTimer -= Time.deltaTime;
+        }       
     }
 
-    IEnumerator LoadLevelsMap()
+    public void ReloadLevel()
     {
-        UIManager.Instance.ShowTimerPopup();
+        // Start the coroutine in GameManager so it continues when this script is destroyed during level transiion
+        GameManager.Instance.StartCoroutine(ReloadLevelIE(null, null));
+    }
 
+    IEnumerator ReloadLevelIE(UnityEvent preparationEvent = null, UnityEvent resetEvent = null)
+    {
+        // For readability
+        UIManager UIinstance = UIManager.Instance;
+        GameManager gameInstance = GameManager.Instance;
+
+        // Internal preparation
+        sceneLoading = true;
+        Time.timeScale = 0f; // Freeze the game
+
+        // Transition preperation 
+        if (preparationEvent != null)
+        {
+            preparationEvent.Invoke();
+        }
+
+        // First, wait for the screen fade-in to start. Then wait for it to end.
         yield return new WaitForSecondsRealtime(returnToMenuDelay);
+        yield return UIinstance.SceneFadeIn(screenFadeDuration);
 
-        yield return UIManager.Instance.SceneFadeIn(screenFadeDuration);
+        // Fade-In is done. Load the scene asynchronously and wait until it's done
+        AsyncOperation asyncLoad = gameInstance.ReloadLevelAsync();
+        yield return new WaitUntil(() => asyncLoad.isDone);
 
-        // Disable the overlay
-        StartCoroutine(UIManager.Instance.SceneFadeOut(0f));
+        // The scene is fully loaded. Reset everything.
+        if (resetEvent != null)
+        {
+            resetEvent.Invoke();
+        }
 
-        UIManager.Instance.HideTimerPopup();
-        GameManager.Instance.LoadLevelsMap();
+        // Internal reset. This must be done in all conditions.
+        yield return UIinstance.StartCoroutine(UIinstance.SceneFadeOut(screenFadeDuration));
+        Time.timeScale = 1f;
+        sceneLoading = false;
+    }
+
+    public void LoadLevelSelection(UnityEvent preparationEvent, UnityEvent resetEvent)
+    {
+        // Start the coroutine in GameManager so it continues when this script is destroyed during level transiion
+        GameManager.Instance.StartCoroutine(LoadLevelsMap(preparationEvent, resetEvent));
+    }
+    IEnumerator LoadLevelsMap(UnityEvent preparationEvent, UnityEvent resetEvent)
+    {        
+        // For readability
+        UIManager UIinstance = UIManager.Instance;
+        GameManager gameInstance = GameManager.Instance;
+
+        // Internal preparation
+        sceneLoading = true;
+        Time.timeScale = 0f; // Freeze the game
+
+        // Transition preperation 
+        preparationEvent.Invoke();
+
+        // First, wait for the screen fade-in to start. Then wait for it to end.
+        yield return new WaitForSecondsRealtime(returnToMenuDelay);
+        yield return UIinstance.SceneFadeIn(screenFadeDuration);
+
+        // Fade-In is done. Load the scene asynchronously and wait until it's done
+        AsyncOperation asyncLoad = gameInstance.LoadLevelsMapAsync();
+        yield return new WaitUntil(() => asyncLoad.isDone);
+
+        // The scene is fully loaded. Reset everything.
+        resetEvent.Invoke();
+
+        // Internal reset. This must be done in all conditions.
+        UIinstance.StartCoroutine(UIinstance.SceneFadeOut(screenFadeDuration));
+        Time.timeScale = 1f;
+        sceneLoading = false;
     }
 
     // Checkpoint
-    public void RespawnOnCheckpoint()
+    public void RespawnOnCheckpoint(UnityEvent customReset)
+    {
+        if (!respawning)
+        {
+            StartCoroutine(OnCheckpoint(customReset));      
+        }
+    }
+
+    IEnumerator OnCheckpoint(UnityEvent customReset)
     {
         if (checkpoint != null)
         {
+            respawning = true;
+
+            // For readability
+            UIManager UIinstance = UIManager.Instance;
+
+            Time.timeScale = 0f; // Freeze the game
+
+            // First, wait for the screen fade-in to start. Then wait for it to end.
+            yield return new WaitForSecondsRealtime(returnToMenuDelay);
+            yield return UIinstance.SceneFadeIn(screenFadeDuration);
+
+            // Fade-In is done. Respawn from checkpoint
             player.transform.position = checkpoint.position;
             cam.transform.position = checkpoint.position + new Vector3(0f, 0f, -10f);
 
             currentEnergy = 0;
-
             levelTimer = levelTimeout;
 
+            // Fade out
+            yield return UIinstance.SceneFadeOut(screenFadeDuration);
+            Time.timeScale = 1f;
+
+            // Reset
+            if (customReset != null)
+            {
+                customReset.Invoke();
+            }
+
             Debug.Log("Respawned on checkpoint");
-        }
-        else
-        {
-            Debug.Log("Have not reached a checkpoint yet");
-        }      
+
+            respawning = false;
+        }    
     }
 
     // Stamina
@@ -125,6 +226,16 @@ public class LevelManager : MonoBehaviour
         else
         {
             Debug.LogError("No GameManager found in the scene");
+        }
+    }
+
+    public void AddBonus()
+    {
+        gameManager.currentLevel.collectedBonuses++;
+
+        if (gameManager.currentLevel.bonusesCompleted)
+        {
+            Debug.Log("All bonuses are collected!");
         }
     }
 }
