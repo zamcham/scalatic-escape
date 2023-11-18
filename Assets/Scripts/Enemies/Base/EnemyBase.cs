@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour
@@ -9,6 +7,8 @@ public class EnemyBase : MonoBehaviour
     // Note: This is a base class for all enemies
     // Box Collider 2D is used for the enemy's body and area that hurts the player
     // Capsule Collider 2D is used for the enemy's head and area that kills the enemy
+
+    public virtual AudioClip deathSound { get; set; }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
@@ -45,6 +45,7 @@ public class EnemyBase : MonoBehaviour
     {
         // Common logic for enemy death
         Destroy(gameObject);
+        AudioManager.Instance.PlayOneShot(deathSound);
     }
 
     protected virtual void HurtPlayer(PlayerController player)

@@ -45,9 +45,13 @@ public class PlayerController : MonoBehaviour
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip gameOverSound;
+    [SerializeField] AudioClip jumpingSound, landingSound;
+    [SerializeField] AudioClip pixieSound, nomadSound, titanSound;
+
     [Header("Other")]
     [SerializeField] bool hasArmor = false;
-    [SerializeField] AudioClip landingSound, gameOverSound;
     bool fellDown = false;
 
     void Awake()
@@ -123,6 +127,8 @@ public class PlayerController : MonoBehaviour
                 jumpsInQueue--;
                 jumpCount++;
                 rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
+
+                AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
             }
         }
         else
@@ -188,6 +194,8 @@ public class PlayerController : MonoBehaviour
             nomad.SetActive(false);
             titan.SetActive(true);
 
+            AudioManager.Instance.PlayOneShot(titanSound, 0.8f);
+
             maxJumpCount = 0;
 
             if (jumpCount > 0)
@@ -211,6 +219,8 @@ public class PlayerController : MonoBehaviour
             titan.SetActive(false);
             nomad.SetActive(true);
             maxJumpCount = 1;
+
+            AudioManager.Instance.PlayOneShot(nomadSound, 0.8f);
         }
     }
 
@@ -223,6 +233,8 @@ public class PlayerController : MonoBehaviour
             nomad.SetActive(false);
             pixie.SetActive(true);
             maxJumpCount = 2;
+
+            AudioManager.Instance.PlayOneShot(pixieSound, 0.8f);
         }
     }
 
@@ -362,9 +374,6 @@ public class PlayerController : MonoBehaviour
         {
             boostCooldown -= Time.deltaTime;          
         }
-
-        Debug.Log("Current Speed: " + currentSpeed);
-        Debug.Log("Current Jump: " + currentJumpForce);
     }
 
     void OnNomadSpeedBoost()

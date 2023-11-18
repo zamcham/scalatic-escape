@@ -3628,6 +3628,22 @@ PrefabInstance:
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: nomadSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3f72cea4096099041b3ffc8f9b0bf1ff, type: 3}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: pixieSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e3b86d240bc58b947a1df7ba5f6080d2, type: 3}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: titanSound
+      value: 
+      objectReference: {fileID: 8300000, guid: bedf5d95b159ee341ac3c33446ff0393, type: 3}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: jumpingSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 37dbdf0e0be0ee64c89a8b45cfd8665d, type: 3}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: landingSound
       value: 
       objectReference: {fileID: 8300000, guid: 601d9dc0061c02746aea1be2d2f84303, type: 3}
