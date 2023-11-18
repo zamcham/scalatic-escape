@@ -67,6 +67,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "NomadSpeedBoost",
+                    "type": "Button",
+                    "id": "b5f53b84-8f62-4a4b-9d6b-c9b46fa626f3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PixieSpeedBoostCombo1",
+                    "type": "Button",
+                    "id": "1608796c-ecfa-4b71-a1e0-f4c118f16bfc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PixieSpeedBoostCombo2",
+                    "type": "Button",
+                    "id": "e80bddea-3e8b-4d98-bde6-6c2dc0213713",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PixieSpeedBoostCombo3",
+                    "type": "Button",
+                    "id": "e50cb04b-330b-42aa-a134-f933c5475a70",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -331,6 +367,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Nomad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7cacc560-3703-4b65-82bc-7a58b6480bfa",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NomadSpeedBoost",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "239ba613-f5fe-4e3f-8693-624844fba792",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PixieSpeedBoostCombo1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f9a2b33-262c-4417-b87d-3eae86a6035e",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PixieSpeedBoostCombo2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3770677b-a8ae-4fda-993f-b01b0b5c47c9",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PixieSpeedBoostCombo3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
