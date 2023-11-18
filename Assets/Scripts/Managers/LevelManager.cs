@@ -228,4 +228,14 @@ public class LevelManager : MonoBehaviour
             Debug.LogError("No GameManager found in the scene");
         }
     }
+
+    public void AddBonus()
+    {
+        gameManager.currentLevel.collectedBonuses++;
+
+        if (gameManager.currentLevel.bonusesCompleted)
+        {
+            Debug.Log("All bonuses are collected!");
+        }
+    }
 }

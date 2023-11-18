@@ -23,13 +23,13 @@ public class EnemyBase : MonoBehaviour
                 // Check the type and perform actions accordingly
                 if (colliderType == typeof(BoxCollider2D))
                 {
-
+                    Debug.Log($"Enemy {gameObject.name} collided with the player and hurt it");
                     HurtPlayer(collision.gameObject.GetComponent<PlayerController>());
                 }
                 else if (colliderType == typeof(CapsuleCollider2D))
                 {
                     // Handle collision with CapsuleCollider2D
-                    Debug.Log("Collided with CapsuleCollider2D");
+                    Debug.Log($"Enemy {gameObject.name} collided with the player and died");
                     Die();
                 }
                 else

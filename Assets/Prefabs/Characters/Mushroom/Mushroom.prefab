@@ -138,6 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 336320467185123655}
   - component: {fileID: 2360224144912351846}
+  - component: {fileID: 6196414790638234193}
   m_Layer: 0
   m_Name: Mushroom
   m_TagString: Untagged
@@ -160,7 +161,7 @@ Transform:
   - {fileID: 2178718608901166810}
   - {fileID: 8747320716525958023}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2360224144912351846
 MonoBehaviour:
@@ -182,6 +183,33 @@ MonoBehaviour:
   - {fileID: 3700208751986696349}
   sporePrefab: {fileID: 6370043683968304063, guid: 961996a7da9badc4291af8a9b6156a48, type: 3}
   sporeCreateInterval: 5
+--- !u!50 &6196414790638234193
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7388480198815999855}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &8393317156166163985
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,7 +220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8747320716525958023}
   - component: {fileID: 3865129488839018366}
-  - component: {fileID: 349370585853592595}
+  - component: {fileID: 5623814382558173048}
   m_Layer: 1
   m_Name: Sprite
   m_TagString: Untagged
@@ -267,7 +295,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &349370585853592595
+--- !u!61 &5623814382558173048
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
