@@ -3439,6 +3439,30 @@ PrefabInstance:
       propertyPath: moveSpeed
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: speedBoostCooldown
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: speedBoostDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: nomadJumpBoostMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: pixieJumpBoostMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: nomadSpeedBoostMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734992756464308382, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: pixieSpeedBoostMultiplier
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
