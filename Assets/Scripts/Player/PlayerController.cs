@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] bool hasArmor = false;
+    [SerializeField] AudioClip landingSound;
     bool fellDown = false;
 
     void Awake()
@@ -261,7 +262,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GroundPounding(collision);     
+        GroundPounding(collision);
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
+        {
+            float randomPitch = Random.Range(0.75f, 1.25f);
+            AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
