@@ -92,6 +92,8 @@ public class LevelManager : MonoBehaviour
         sceneLoading = true;
         Time.timeScale = 0f; // Freeze the game
 
+        AudioManager.Instance.StopMusic();
+
         // Transition preperation 
         if (preparationEvent != null)
         {
@@ -115,6 +117,7 @@ public class LevelManager : MonoBehaviour
         // Internal reset. This must be done in all conditions.
         yield return UIinstance.StartCoroutine(UIinstance.SceneFadeOut(screenFadeDuration));
         Time.timeScale = 1f;
+        AudioManager.Instance.PlayMusic();
         sceneLoading = false;
     }
 
@@ -173,6 +176,8 @@ public class LevelManager : MonoBehaviour
 
             Time.timeScale = 0f; // Freeze the game
 
+            AudioManager.Instance.StopMusic();
+
             // First, wait for the screen fade-in to start. Then wait for it to end.
             yield return new WaitForSecondsRealtime(returnToMenuDelay);
             yield return UIinstance.SceneFadeIn(screenFadeDuration);
@@ -193,6 +198,8 @@ public class LevelManager : MonoBehaviour
             {
                 customReset.Invoke();
             }
+
+            AudioManager.Instance.PlayMusic();
 
             Debug.Log("Respawned on checkpoint");
 

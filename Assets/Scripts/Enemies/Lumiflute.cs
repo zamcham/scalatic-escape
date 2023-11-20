@@ -1,10 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Lumiflute : EnemyBase
 {
     [SerializeField] float moveSpeed = 5f;
+
+    [SerializeField] AudioClip _deathSound;
+
+    private void Awake()
+    {
+        base.deathSound = _deathSound;
+    }
 
     void FixedUpdate()
     {

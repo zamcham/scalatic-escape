@@ -160,6 +160,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpForce: 15
   jumpInterval: 3
+  _deathSound: {fileID: 8300000, guid: 6c9cbdbd4b583974ab263966505f4b6a, type: 3}
+  jumpingSound: {fileID: 8300000, guid: b545534c673917b4da76fbe62daeb7de, type: 3}
+  landingSound: {fileID: 8300000, guid: 601d9dc0061c02746aea1be2d2f84303, type: 3}
 --- !u!1 &4533112848781602834
 GameObject:
   m_ObjectHideFlags: 0

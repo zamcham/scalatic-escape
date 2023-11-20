@@ -45,9 +45,17 @@ public class PlayerController : MonoBehaviour
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip gameOverSound;
+    [SerializeField] AudioClip jumpingSound, landingSound;
+    [SerializeField] AudioClip pixieSound, nomadSound, titanSound;
+    [SerializeField] AudioClip checkpointSound;
+
     [Header("Other")]
     [SerializeField] bool hasArmor = false;
     bool fellDown = false;
+
+    
 
     void Awake()
     {
@@ -122,6 +130,8 @@ public class PlayerController : MonoBehaviour
                 jumpsInQueue--;
                 jumpCount++;
                 rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
+
+                AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
             }
         }
         else
@@ -187,6 +197,8 @@ public class PlayerController : MonoBehaviour
             nomad.SetActive(false);
             titan.SetActive(true);
 
+            AudioManager.Instance.PlayOneShot(titanSound, 0.8f);
+
             maxJumpCount = 0;
 
             if (jumpCount > 0)
@@ -210,6 +222,8 @@ public class PlayerController : MonoBehaviour
             titan.SetActive(false);
             nomad.SetActive(true);
             maxJumpCount = 1;
+
+            AudioManager.Instance.PlayOneShot(nomadSound, 0.8f);
         }
     }
 
@@ -222,6 +236,8 @@ public class PlayerController : MonoBehaviour
             nomad.SetActive(false);
             pixie.SetActive(true);
             maxJumpCount = 2;
+
+            AudioManager.Instance.PlayOneShot(pixieSound, 0.8f);
         }
     }
 
@@ -261,7 +277,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GroundPounding(collision);     
+        GroundPounding(collision);
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
+        {
+            float randomPitch = Random.Range(0.75f, 1.25f);
+            AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -283,6 +305,8 @@ public class PlayerController : MonoBehaviour
 
             SpriteRenderer checkpointRenderer = checkpoint.GetComponent<SpriteRenderer>();
             checkpointRenderer.material.color = Color.green;
+
+            AudioManager.Instance.PlayOneShot(checkpointSound);
         }
     }
 
@@ -302,7 +326,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            OnDeath();
+            OnDeath();            
         }
     }
 
@@ -320,6 +344,8 @@ public class PlayerController : MonoBehaviour
 
                 GameManager.Instance.RestartLevel(reset);
                 fellDown = false;
+
+                AudioManager.Instance.PlayOneShot(gameOverSound);
             }
             else
             {
@@ -353,9 +379,6 @@ public class PlayerController : MonoBehaviour
         {
             boostCooldown -= Time.deltaTime;          
         }
-
-        Debug.Log("Current Speed: " + currentSpeed);
-        Debug.Log("Current Jump: " + currentJumpForce);
     }
 
     void OnNomadSpeedBoost()
