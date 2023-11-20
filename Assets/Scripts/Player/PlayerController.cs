@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
 
+    float currentSpeed, currentJumpForce;
+
     [Header("Jumping")]
     BoxCollider2D groundChecker;
     [SerializeField] float jumpInterval = 0.25f;
@@ -24,10 +26,26 @@ public class PlayerController : MonoBehaviour
     bool canBreakPlatform = false;
     Renderer titanRenderer;
 
+    [Header("Speed Boost")]
+    [SerializeField] float nomadSpeedBoostMultiplier;
+    [SerializeField] float nomadJumpBoostMultiplier;
+
+    [SerializeField] float pixieSpeedBoostMultiplier;
+    [SerializeField] float pixieJumpBoostMultiplier;
+
+    [SerializeField] float speedBoostDuration, speedBoostCooldown;
+
+    float boostDuration, boostCooldown;
+
+    // Pixie speed combo
+    int pixieCurrentCombo = 0;
+    float pixieComboCooldown = 0.5f, pixieComboTimer = 0f;
+
     // Entity
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
+    [Header("Other")]
     [SerializeField] bool hasArmor = false;
     bool fellDown = false;
 
@@ -51,14 +69,22 @@ public class PlayerController : MonoBehaviour
 
         ResetCharacters();
         OnNomad();
+
+        currentSpeed = moveSpeed;
+        currentJumpForce = jumpForce;
     }
 
     void Update()
     {
+        PixieComboUpdate();
+        SpeedBoostUpdate();
+
         Run();
         FlipSprite();
+
         CheckGround();
         Jump();
+
         CheckBottomBoundary();
     }
 
@@ -71,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
     void Run()
     {
-        rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
+        rb.velocity = new Vector2(moveInput.x * currentSpeed, rb.velocity.y);
     }
 
     void FlipSprite()
@@ -95,7 +121,7 @@ public class PlayerController : MonoBehaviour
                 jumpTimer = jumpInterval;
                 jumpsInQueue--;
                 jumpCount++;
-                rb.velocity = new Vector2(rb.velocity.y, jumpForce);
+                rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
             }
         }
         else
@@ -301,4 +327,106 @@ public class PlayerController : MonoBehaviour
             }
         }       
     }
+
+    #region Speed Boost
+
+    void SpeedBoostUpdate()
+    {
+        if (boostCooldown <= 0f)
+        {
+            if (boostDuration > 0f)
+            {
+                boostDuration -= Time.deltaTime;
+            }
+            else if (boostDuration > -1f)
+            {
+                boostDuration = -1f;
+                boostCooldown = speedBoostCooldown;
+
+                currentSpeed = moveSpeed;
+                currentJumpForce = jumpForce;
+
+                Debug.Log("Speed boost is done.");
+            }
+        }
+        else
+        {
+            boostCooldown -= Time.deltaTime;          
+        }
+
+        Debug.Log("Current Speed: " + currentSpeed);
+        Debug.Log("Current Jump: " + currentJumpForce);
+    }
+
+    void OnNomadSpeedBoost()
+    {
+        if (boostCooldown > 0f)
+        {
+            Debug.Log("Nomad speed boost couldn't be activated! Cooldown is ongoing.");
+        }
+        else if (nomad.activeSelf && boostDuration <= 0f)
+        {
+            Debug.Log("Nomad speed boost is  activated!");
+
+            currentSpeed = moveSpeed * nomadSpeedBoostMultiplier;
+            currentJumpForce = jumpForce * nomadJumpBoostMultiplier;
+
+            boostDuration = speedBoostDuration;
+        }
+    }
+
+    void PixieComboUpdate()
+    {
+        if (pixieComboTimer >= 0f)
+        {
+            pixieComboTimer -= Time.deltaTime;
+        }
+        else if (pixieComboTimer > -1f)
+        {
+            pixieCurrentCombo = 0;
+            pixieComboTimer = -1f;
+        }
+    }
+
+    void OnPixieSpeedBoostCombo1()
+    {
+        if (pixieCurrentCombo == 0)
+        {
+            pixieCurrentCombo = 1;
+            pixieComboTimer = pixieComboCooldown;
+        }
+    }
+
+    void OnPixieSpeedBoostCombo2()
+    {
+        if (pixieCurrentCombo == 1)
+        {
+            pixieCurrentCombo = 2;
+            pixieComboTimer = pixieComboCooldown;
+        }
+    }
+
+    void OnPixieSpeedBoostCombo3()
+    {
+        if (pixie.activeSelf && pixieCurrentCombo == 2)
+        {
+            if (boostCooldown > 0f)
+            {
+                Debug.Log("Pixie speed boost couldn't be activated! Cooldown is ongoing.");
+            }
+            else if(boostDuration <= 0f)
+            {
+                Debug.Log("Pixie speed boost is  activated!");
+
+                currentSpeed = moveSpeed * pixieSpeedBoostMultiplier;
+                currentJumpForce = jumpForce * pixieJumpBoostMultiplier;
+
+                boostDuration = speedBoostDuration;
+            }            
+        }
+
+        pixieComboTimer = 0f;
+    }
+
+    #endregion
 }
