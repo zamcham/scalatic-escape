@@ -194,86 +194,44 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Size Shifting
-
-    void OnTitan()
+    void ChangeForm(PlayerForm targetForm, float energyThreshold, float energyCost, int maxJumps, AudioClip transformationSound)
     {
-        if (currentForm != PlayerForm.Titan && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.titanEnergyThreshold / 100f))
+        if (currentForm != targetForm && levelManager.currentEnergy >= levelManager.maxEnergy * (energyThreshold / 100f))
         {
-            levelManager.AddEnergyPercent(-levelManager.titanEnergyCost);
-            currentForm = PlayerForm.Titan;
-            // TODO: Change scale of the player
-            
-            AudioManager.Instance.PlayOneShot(titanSound, 0.8f);
+            levelManager.AddEnergyPercent(-energyCost);
+            currentForm = targetForm;
 
-            maxJumpCount = 0;
+            // TODO: Change scale of the player based on the form
 
-            if (jumpCount > 0)
+            AudioManager.Instance.PlayOneShot(transformationSound, 0.8f);
+
+            maxJumpCount = maxJumps;
+
+            if (jumpCount > 0 && targetForm == PlayerForm.Titan)
             {
                 canBreakPlatform = true;
-                //TODO: Play ground pound animation
+                // TODO: Play ground pound animation
             }
             else
             {
-                //TODO: handle back to regular animation
+                // TODO: Handle back to regular animation
             }
         }
+    }
+
+    void OnTitan()
+    {
+        ChangeForm(PlayerForm.Titan, levelManager.titanEnergyThreshold, levelManager.titanEnergyCost, 0, titanSound);
     }
 
     void OnNomad()
     {
-        if (currentForm != PlayerForm.Nomad)
-        {
-            levelManager.AddEnergyPercent(-levelManager.nomadEnergyCost);
-            currentForm = PlayerForm.Nomad;
-            //TODO: Change scale of the player to nomad
-            maxJumpCount = 1;
-
-            AudioManager.Instance.PlayOneShot(nomadSound, 0.8f);
-        }
+        ChangeForm(PlayerForm.Nomad, levelManager.nomadEnergyThreshold, levelManager.nomadEnergyCost, 1, nomadSound);
     }
 
     void OnPixie()
-    {       
-        if (currentForm !=  PlayerForm.Pixie && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.pixieEnergyThreshold / 100f))
-        {
-            levelManager.AddEnergyPercent(-levelManager.pixieEnergyCost);
-            currentForm = PlayerForm.Pixie;
-            //TODO: Change scale of the player to pixie
-            maxJumpCount = 2;
-            AudioManager.Instance.PlayOneShot(pixieSound, 0.8f);
-        }
-    }
-
-    void GetCharacters()
     {
-        string[] forms = { "Pixie", "Nomad", "Titan" };
-
-        foreach (string form in forms)
-        {
-            Transform currentForm = transform.Find(form);
-
-            if (currentForm == null)
-                Debug.LogError($"{form} mesh not found!");
-            else
-                AssignCharacter(form, currentForm.gameObject);
-        }
-    }
-
-    void AssignCharacter(string form, GameObject character)
-    {
-        switch (form)
-        {
-            case "Pixie":
-                pixie = character;
-                break;
-            case "Nomad":
-                nomad = character;
-                break;
-            case "Titan":
-                titan = character;
-                titanRenderer = titan.transform.Find("Body").GetComponent<Renderer>();
-                break;
-        }
+        ChangeForm(PlayerForm.Pixie, levelManager.pixieEnergyThreshold, levelManager.pixieEnergyCost, 2, pixieSound);
     }
 
     #endregion
