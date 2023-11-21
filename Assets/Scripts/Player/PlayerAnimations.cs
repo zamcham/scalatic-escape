@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine;
+using Spine.Unity;
 
 public class PlayerAnimations : MonoBehaviour
 {
     SkeletonAnimation skeletonAnimation;
     string currentAnimation;
-    // Start is called before the first frame update
+
     void Start()
     {
+        // Need to dynamically update
+        skeletonAnimation = FindObjectOfType<SkeletonAnimation>();
+        currentAnimation = "Idle";
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
