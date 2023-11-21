@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     {
         { PlayerForm.Titan, new Vector2(0.3f, 0.3f) },
         { PlayerForm.Nomad, new Vector2(0.2f, 0.2f) },
-        { PlayerForm.Pixie, new Vector2(0.15f, 0.15f) }
+        { PlayerForm.Pixie, new Vector2(0.1f, 0.1f) }
     };
 
     #endregion
@@ -202,11 +202,16 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Size Shifting
-    void ChangeForm(PlayerForm targetForm, 
-                    float energyCost,
-                    int maxJumps,
-                    AudioClip transformationSound,
-                    float energyThreshold = 0f)
+
+    void ChangeForm
+        //Parameters
+        (   
+            PlayerForm targetForm, 
+            float energyCost,
+            int maxJumps,
+            AudioClip transformationSound,
+            float energyThreshold = 0f
+        )
     {
         if (currentForm != targetForm && levelManager.currentEnergy >= levelManager.maxEnergy * (energyThreshold / 100f))
         {
@@ -216,7 +221,7 @@ public class PlayerController : MonoBehaviour
             // Change scale of the player based on the form
             if (formScaleMapping.TryGetValue(targetForm, out Vector2 targetScale))
             {
-                transform.localScale = targetScale;
+                transform.GetChild(0).transform.localScale = targetScale;
             }
 
             AudioManager.Instance.PlayOneShot(transformationSound, 0.8f);
