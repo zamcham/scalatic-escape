@@ -7,16 +7,24 @@ using Spine.Unity;
 public class PlayerAnimations : MonoBehaviour
 {
     SkeletonAnimation skeletonAnimation;
+
+    public enum PlayerAnimationState
+    {
+        Idle,
+        Run,
+        Jump
+    }
     string currentAnimation;
+
+    void Awake()
+    {
+        skeletonAnimation = FindObjectOfType<SkeletonAnimation>();
+        currentAnimation = PlayerAnimationState.Idle.ToString();
+    }
 
     void Start()
     {
-        // Need to dynamically update
-        skeletonAnimation = FindObjectOfType<SkeletonAnimation>();
-        currentAnimation = "Idle";
-
-        SetAnimation("Idle", true, 1f);
-        
+        SetAnimation("Idle", true, 1f);   
     }
 
     void Update()
