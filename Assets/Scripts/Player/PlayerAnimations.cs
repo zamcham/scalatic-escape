@@ -14,6 +14,8 @@ public class PlayerAnimations : MonoBehaviour
         // Need to dynamically update
         skeletonAnimation = FindObjectOfType<SkeletonAnimation>();
         currentAnimation = "Idle";
+
+        SetAnimation("Idle", true, 1f);
         
     }
 
@@ -22,13 +24,13 @@ public class PlayerAnimations : MonoBehaviour
         
     }
 
-        void SetAnimation(AnimationReferenceAsset animationName, bool loop, float timeScale)
+        void SetAnimation(string animationName, bool loop, float timeScale)
     {
-        if (animationName.name.Equals(currentAnimation))
+        if (animationName == currentAnimation)
         {
             return;
         }
         skeletonAnimation.state.SetAnimation(0, animationName, loop).TimeScale = timeScale;
-        currentAnimation = animationName.name;
+        currentAnimation = animationName;
     }
 }
