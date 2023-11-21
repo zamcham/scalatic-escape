@@ -20,9 +20,13 @@ public class PlayerController : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D rb;
 
-    [Header("Size Shifting & Energy")]
+    #region Characters 
+    enum PlayerForm { Pixie, Nomad, Titan }
+    PlayerForm currentForm = PlayerForm.Nomad;
+    #endregion
+
     LevelManager levelManager;
-    GameObject pixie, nomad, titan;
+
     bool canBreakPlatform = false;
     Renderer titanRenderer;
 
@@ -167,12 +171,15 @@ public class PlayerController : MonoBehaviour
 
     void GetGroundChecker()
     {
-        Transform groundCheckerTransform = transform.Find("GroundChecker");
+        Transform firstChild = transform.GetChild(0); // Get the first child
+        Transform groundCheckerTransform = firstChild.Find("GroundChecker");
+
         if (groundCheckerTransform != null)
             groundChecker = groundCheckerTransform.GetComponent<BoxCollider2D>();
         else
             Debug.LogError("GroundChecker not found!");
     }
+
 
     void CheckBottomBoundary()
     {
@@ -190,13 +197,12 @@ public class PlayerController : MonoBehaviour
 
     void OnTitan()
     {
-        if (!titan.activeSelf && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.titanEnergyThreshold / 100f))
+        if (currentForm != PlayerForm.Titan && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.titanEnergyThreshold / 100f))
         {
             levelManager.AddEnergyPercent(-levelManager.titanEnergyCost);
-            pixie.SetActive(false);
-            nomad.SetActive(false);
-            titan.SetActive(true);
-
+            currentForm = PlayerForm.Titan;
+            // TODO: Change scale of the player
+            
             AudioManager.Instance.PlayOneShot(titanSound, 0.8f);
 
             maxJumpCount = 0;
@@ -204,23 +210,22 @@ public class PlayerController : MonoBehaviour
             if (jumpCount > 0)
             {
                 canBreakPlatform = true;
-                titanRenderer.sharedMaterial.color = Color.red;
+                //TODO: Play ground pound animation
             }
             else
             {
-                titanRenderer.sharedMaterial.color = Color.white;
+                //TODO: handle back to regular animation
             }
         }
     }
 
     void OnNomad()
     {
-        if (!nomad.activeSelf)
+        if (currentForm != PlayerForm.Nomad)
         {
             levelManager.AddEnergyPercent(-levelManager.nomadEnergyCost);
-            pixie.SetActive(false);
-            titan.SetActive(false);
-            nomad.SetActive(true);
+            currentForm = PlayerForm.Nomad;
+            //TODO: Change scale of the player to nomad
             maxJumpCount = 1;
 
             AudioManager.Instance.PlayOneShot(nomadSound, 0.8f);
@@ -229,14 +234,12 @@ public class PlayerController : MonoBehaviour
 
     void OnPixie()
     {       
-        if (!pixie.activeSelf && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.pixieEnergyThreshold / 100f))
+        if (currentForm !=  PlayerForm.Pixie && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.pixieEnergyThreshold / 100f))
         {
             levelManager.AddEnergyPercent(-levelManager.pixieEnergyCost);
-            titan.SetActive(false);
-            nomad.SetActive(false);
-            pixie.SetActive(true);
+            currentForm = PlayerForm.Pixie;
+            //TODO: Change scale of the player to pixie
             maxJumpCount = 2;
-
             AudioManager.Instance.PlayOneShot(pixieSound, 0.8f);
         }
     }
