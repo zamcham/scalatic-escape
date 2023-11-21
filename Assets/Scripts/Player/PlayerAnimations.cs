@@ -24,7 +24,7 @@ public class PlayerAnimations : MonoBehaviour
 
     void Start()
     {
-        SetAnimation("Idle", true, 1f);   
+        SetAnimation(PlayerAnimationState.Idle.ToString(), true, 1f);   
     }
 
     void Update()
@@ -32,12 +32,13 @@ public class PlayerAnimations : MonoBehaviour
         
     }
 
-        void SetAnimation(string animationName, bool loop, float timeScale)
+    void SetAnimation(string animationName, bool loop, float timeScale)
     {
         if (animationName == currentAnimation)
         {
             return;
         }
+
         skeletonAnimation.state.SetAnimation(0, animationName, loop).TimeScale = timeScale;
         currentAnimation = animationName;
     }
