@@ -21,8 +21,17 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
 
     #region Characters 
+
     enum PlayerForm { Pixie, Nomad, Titan }
     PlayerForm currentForm = PlayerForm.Nomad;
+
+    Dictionary<PlayerForm, Vector2> formScaleMapping = new Dictionary<PlayerForm, Vector2>
+    {
+        { PlayerForm.Titan, new Vector2(0.3f, 0.3f) },
+        { PlayerForm.Nomad, new Vector2(0.2f, 0.2f) },
+        { PlayerForm.Pixie, new Vector2(0.15f, 0.15f) }
+    };
+
     #endregion
 
     LevelManager levelManager;
@@ -201,8 +210,11 @@ public class PlayerController : MonoBehaviour
             levelManager.AddEnergyPercent(-energyCost);
             currentForm = targetForm;
 
-            // TODO: Change scale of the player based on the form
-
+            // Change scale of the player based on the form
+            if (formScaleMapping.TryGetValue(targetForm, out Vector2 targetScale))
+            {
+                transform.localScale = targetScale;
+            }
             AudioManager.Instance.PlayOneShot(transformationSound, 0.8f);
 
             maxJumpCount = maxJumps;
@@ -271,13 +283,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ResetCharacters()
-    {
-        nomad.SetActive(false);
-        titan.SetActive(false);
-        pixie.SetActive(false);
-    }
-
     public void Hurt()
     {
         if (hasArmor || titan.activeSelf)
@@ -295,7 +300,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!hasDied)
         {
-            if (fellDown || (!hasArmor && !titan.activeSelf))
+            if (fellDown || (!hasArmor && currentForm != PlayerForm.Titan))
             {
                 UnityEvent reset = new UnityEvent();
 
