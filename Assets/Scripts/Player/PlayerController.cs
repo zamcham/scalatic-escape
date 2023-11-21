@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -74,7 +75,6 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         GetGroundChecker();
-        GetCharacters();     
     }
 
     void Start()
@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("GameManager or LevelManager is null.");
         }   
 
-        ResetCharacters();
         OnNomad();
 
         currentSpeed = moveSpeed;
@@ -203,7 +202,11 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Size Shifting
-    void ChangeForm(PlayerForm targetForm, float energyThreshold, float energyCost, int maxJumps, AudioClip transformationSound)
+    void ChangeForm(PlayerForm targetForm, 
+                    float energyCost,
+                    int maxJumps,
+                    AudioClip transformationSound,
+                    float energyThreshold = 0f)
     {
         if (currentForm != targetForm && levelManager.currentEnergy >= levelManager.maxEnergy * (energyThreshold / 100f))
         {
@@ -215,6 +218,7 @@ public class PlayerController : MonoBehaviour
             {
                 transform.localScale = targetScale;
             }
+
             AudioManager.Instance.PlayOneShot(transformationSound, 0.8f);
 
             maxJumpCount = maxJumps;
@@ -233,17 +237,17 @@ public class PlayerController : MonoBehaviour
 
     void OnTitan()
     {
-        ChangeForm(PlayerForm.Titan, levelManager.titanEnergyThreshold, levelManager.titanEnergyCost, 0, titanSound);
+        ChangeForm(PlayerForm.Titan, levelManager.titanEnergyCost, 0, titanSound, levelManager.titanEnergyThreshold);
     }
 
     void OnNomad()
     {
-        ChangeForm(PlayerForm.Nomad, levelManager.nomadEnergyThreshold, levelManager.nomadEnergyCost, 1, nomadSound);
+        ChangeForm(PlayerForm.Nomad, levelManager.nomadEnergyCost, 1, nomadSound);
     }
 
     void OnPixie()
     {
-        ChangeForm(PlayerForm.Pixie, levelManager.pixieEnergyThreshold, levelManager.pixieEnergyCost, 2, pixieSound);
+        ChangeForm(PlayerForm.Pixie, levelManager.pixieEnergyCost, 2, pixieSound, levelManager.pixieEnergyThreshold);
     }
 
     #endregion
@@ -285,7 +289,7 @@ public class PlayerController : MonoBehaviour
 
     public void Hurt()
     {
-        if (hasArmor || titan.activeSelf)
+        if (hasArmor || currentForm == PlayerForm.Titan)
         {
             hasArmor = false;
             OnNomad();
@@ -353,7 +357,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Nomad speed boost couldn't be activated! Cooldown is ongoing.");
         }
-        else if (nomad.activeSelf && boostDuration <= 0f)
+        else if (currentForm == PlayerForm.Nomad && boostDuration <= 0f)
         {
             Debug.Log("Nomad speed boost is  activated!");
 
@@ -397,7 +401,7 @@ public class PlayerController : MonoBehaviour
 
     void OnPixieSpeedBoostCombo3()
     {
-        if (pixie.activeSelf && pixieCurrentCombo == 2)
+        if (currentForm == PlayerForm.Pixie && pixieCurrentCombo == 2)
         {
             if (boostCooldown > 0f)
             {
