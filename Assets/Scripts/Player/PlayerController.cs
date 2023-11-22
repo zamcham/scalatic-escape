@@ -69,6 +69,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool hasArmor = false;
     bool fellDown = false;
 
+    float baseGravity;
+    float currentGravity;
+    float gravityAdjustmentSpeed = 2.0f;
+
+    //Momentum
+    [SerializeField] float acceleration = 5f;
+    [SerializeField] float deceleration = 5f;
     
 
     void Awake()
@@ -92,6 +99,8 @@ public class PlayerController : MonoBehaviour
 
         currentSpeed = moveSpeed;
         currentJumpForce = jumpForce;
+        baseGravity = rb.gravityScale;
+        currentGravity = baseGravity;
     }
 
     void Update()
@@ -117,7 +126,16 @@ public class PlayerController : MonoBehaviour
 
     void Run()
     {
-        rb.velocity = new Vector2(moveInput.x * currentSpeed, rb.velocity.y);
+        float targetVelocityX = moveInput.x * moveSpeed;
+
+        // Apply acceleration
+        rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, targetVelocityX, acceleration * Time.deltaTime), rb.velocity.y);
+
+
+        if (Mathf.Approximately(moveInput.x, 0f))
+        {
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, deceleration * Time.deltaTime), rb.velocity.y);
+        }
     }
 
     void FlipSprite()
@@ -134,20 +152,24 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (jumpsInQueue > 0 && jumpTimer <= 0f)
+        if (jumpsInQueue > 0 && jumpTimer <= 0f && jumpCount < maxJumpCount)
         {
-            if (jumpCount < maxJumpCount) 
-            {
-                jumpTimer = jumpInterval;
-                jumpsInQueue--;
-                jumpCount++;
-                rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
+            // Gradually increase gravity when jumping
+            currentGravity += gravityAdjustmentSpeed * Time.deltaTime;
+            rb.gravityScale = currentGravity;
 
-                AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
-            }
+            jumpTimer = jumpInterval;
+            jumpsInQueue--;
+            jumpCount++;
+            rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
+
+            AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
         }
         else
         {
+            // Gradually reset gravity when not jumping
+            currentGravity = Mathf.Lerp(currentGravity, baseGravity, gravityAdjustmentSpeed * Time.deltaTime);
+            rb.gravityScale = currentGravity;
             jumpTimer -= Time.deltaTime;
         }
     }
