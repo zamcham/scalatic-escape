@@ -169,6 +169,7 @@ MonoBehaviour:
   rayMask:
     serializedVersion: 2
     m_Bits: 65
+  _deathSound: {fileID: 8300000, guid: 6c9cbdbd4b583974ab263966505f4b6a, type: 3}
 --- !u!1 &4533112848781602834
 GameObject:
   m_ObjectHideFlags: 0

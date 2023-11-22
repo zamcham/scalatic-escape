@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,9 +21,22 @@ public class PlayerController : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D rb;
 
-    [Header("Size Shifting & Energy")]
+    #region Characters 
+
+    enum PlayerForm { Pixie, Nomad, Titan }
+    PlayerForm currentForm = PlayerForm.Nomad;
+
+    Dictionary<PlayerForm, Vector2> formScaleMapping = new Dictionary<PlayerForm, Vector2>
+    {
+        { PlayerForm.Titan, new Vector2(0.3f, 0.3f) },
+        { PlayerForm.Nomad, new Vector2(0.2f, 0.2f) },
+        { PlayerForm.Pixie, new Vector2(0.1f, 0.1f) }
+    };
+
+    #endregion
+
     LevelManager levelManager;
-    GameObject pixie, nomad, titan;
+
     bool canBreakPlatform = false;
     Renderer titanRenderer;
 
@@ -45,15 +59,29 @@ public class PlayerController : MonoBehaviour
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip gameOverSound;
+    [SerializeField] AudioClip jumpingSound, landingSound;
+    [SerializeField] AudioClip pixieSound, nomadSound, titanSound;
+    [SerializeField] AudioClip checkpointSound;
+
     [Header("Other")]
     [SerializeField] bool hasArmor = false;
     bool fellDown = false;
+
+    float baseGravity;
+    float currentGravity;
+    float gravityAdjustmentSpeed = 2.0f;
+
+    //Momentum
+    [SerializeField] float acceleration = 5f;
+    [SerializeField] float deceleration = 5f;
+    
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         GetGroundChecker();
-        GetCharacters();     
     }
 
     void Start()
@@ -67,11 +95,12 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("GameManager or LevelManager is null.");
         }   
 
-        ResetCharacters();
         OnNomad();
 
         currentSpeed = moveSpeed;
         currentJumpForce = jumpForce;
+        baseGravity = rb.gravityScale;
+        currentGravity = baseGravity;
     }
 
     void Update()
@@ -97,7 +126,16 @@ public class PlayerController : MonoBehaviour
 
     void Run()
     {
-        rb.velocity = new Vector2(moveInput.x * currentSpeed, rb.velocity.y);
+        float targetVelocityX = moveInput.x * moveSpeed;
+
+        // Apply acceleration
+        rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, targetVelocityX, acceleration * Time.deltaTime), rb.velocity.y);
+
+
+        if (Mathf.Approximately(moveInput.x, 0f))
+        {
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, deceleration * Time.deltaTime), rb.velocity.y);
+        }
     }
 
     void FlipSprite()
@@ -114,18 +152,24 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (jumpsInQueue > 0 && jumpTimer <= 0f)
+        if (jumpsInQueue > 0 && jumpTimer <= 0f && jumpCount < maxJumpCount)
         {
-            if (jumpCount < maxJumpCount) 
-            {
-                jumpTimer = jumpInterval;
-                jumpsInQueue--;
-                jumpCount++;
-                rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
-            }
+            // Gradually increase gravity when jumping
+            currentGravity += gravityAdjustmentSpeed * Time.deltaTime;
+            rb.gravityScale = currentGravity;
+
+            jumpTimer = jumpInterval;
+            jumpsInQueue--;
+            jumpCount++;
+            rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
+
+            AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
         }
         else
         {
+            // Gradually reset gravity when not jumping
+            currentGravity = Mathf.Lerp(currentGravity, baseGravity, gravityAdjustmentSpeed * Time.deltaTime);
+            rb.gravityScale = currentGravity;
             jumpTimer -= Time.deltaTime;
         }
     }
@@ -157,12 +201,15 @@ public class PlayerController : MonoBehaviour
 
     void GetGroundChecker()
     {
-        Transform groundCheckerTransform = transform.Find("GroundChecker");
+        Transform firstChild = transform.GetChild(0); // Get the first child
+        Transform groundCheckerTransform = firstChild.Find("GroundChecker");
+
         if (groundCheckerTransform != null)
             groundChecker = groundCheckerTransform.GetComponent<BoxCollider2D>();
         else
             Debug.LogError("GroundChecker not found!");
     }
+
 
     void CheckBottomBoundary()
     {
@@ -178,90 +225,69 @@ public class PlayerController : MonoBehaviour
 
     #region Size Shifting
 
-    void OnTitan()
+    void ChangeForm
+        //Parameters
+        (   
+            PlayerForm targetForm, 
+            float energyCost,
+            int maxJumps,
+            AudioClip transformationSound,
+            float energyThreshold = 0f
+        )
     {
-        if (!titan.activeSelf && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.titanEnergyThreshold / 100f))
+        if (currentForm != targetForm && levelManager.currentEnergy >= levelManager.maxEnergy * (energyThreshold / 100f))
         {
-            levelManager.AddEnergyPercent(-levelManager.titanEnergyCost);
-            pixie.SetActive(false);
-            nomad.SetActive(false);
-            titan.SetActive(true);
+            levelManager.AddEnergyPercent(-energyCost);
+            currentForm = targetForm;
 
-            maxJumpCount = 0;
+            // Change scale of the player based on the form
+            if (formScaleMapping.TryGetValue(targetForm, out Vector2 targetScale))
+            {
+                transform.GetChild(0).transform.localScale = targetScale;
+            }
 
-            if (jumpCount > 0)
+            AudioManager.Instance.PlayOneShot(transformationSound, 0.8f);
+
+            maxJumpCount = maxJumps;
+
+            if (jumpCount > 0 && targetForm == PlayerForm.Titan)
             {
                 canBreakPlatform = true;
-                titanRenderer.sharedMaterial.color = Color.red;
+                // TODO: Play ground pound animation
             }
             else
             {
-                titanRenderer.sharedMaterial.color = Color.white;
+                // TODO: Handle back to regular animation
             }
         }
+    }
+
+    void OnTitan()
+    {
+        ChangeForm(PlayerForm.Titan, levelManager.titanEnergyCost, 0, titanSound, levelManager.titanEnergyThreshold);
     }
 
     void OnNomad()
     {
-        if (!nomad.activeSelf)
-        {
-            levelManager.AddEnergyPercent(-levelManager.nomadEnergyCost);
-            pixie.SetActive(false);
-            titan.SetActive(false);
-            nomad.SetActive(true);
-            maxJumpCount = 1;
-        }
+        ChangeForm(PlayerForm.Nomad, levelManager.nomadEnergyCost, 1, nomadSound);
     }
 
     void OnPixie()
-    {       
-        if (!pixie.activeSelf && levelManager.currentEnergy >= levelManager.maxEnergy * (levelManager.pixieEnergyThreshold / 100f))
-        {
-            levelManager.AddEnergyPercent(-levelManager.pixieEnergyCost);
-            titan.SetActive(false);
-            nomad.SetActive(false);
-            pixie.SetActive(true);
-            maxJumpCount = 2;
-        }
-    }
-
-    void GetCharacters()
     {
-        string[] forms = { "Pixie", "Nomad", "Titan" };
-
-        foreach (string form in forms)
-        {
-            Transform currentForm = transform.Find(form);
-
-            if (currentForm == null)
-                Debug.LogError($"{form} mesh not found!");
-            else
-                AssignCharacter(form, currentForm.gameObject);
-        }
-    }
-
-    void AssignCharacter(string form, GameObject character)
-    {
-        switch (form)
-        {
-            case "Pixie":
-                pixie = character;
-                break;
-            case "Nomad":
-                nomad = character;
-                break;
-            case "Titan":
-                titan = character;
-                titanRenderer = titan.transform.Find("Body").GetComponent<Renderer>();
-                break;
-        }
+        ChangeForm(PlayerForm.Pixie, levelManager.pixieEnergyCost, 2, pixieSound, levelManager.pixieEnergyThreshold);
     }
 
     #endregion
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GroundPounding(collision);     
+        GroundPounding(collision);
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
+        {
+            float randomPitch = Random.Range(0.75f, 1.25f);
+            AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -283,26 +309,21 @@ public class PlayerController : MonoBehaviour
 
             SpriteRenderer checkpointRenderer = checkpoint.GetComponent<SpriteRenderer>();
             checkpointRenderer.material.color = Color.green;
-        }
-    }
 
-    void ResetCharacters()
-    {
-        nomad.SetActive(false);
-        titan.SetActive(false);
-        pixie.SetActive(false);
+            AudioManager.Instance.PlayOneShot(checkpointSound);
+        }
     }
 
     public void Hurt()
     {
-        if (hasArmor || titan.activeSelf)
+        if (hasArmor || currentForm == PlayerForm.Titan)
         {
             hasArmor = false;
             OnNomad();
         }
         else
         {
-            OnDeath();
+            OnDeath();            
         }
     }
 
@@ -310,7 +331,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!hasDied)
         {
-            if (fellDown || (!hasArmor && !titan.activeSelf))
+            if (fellDown || (!hasArmor && currentForm != PlayerForm.Titan))
             {
                 UnityEvent reset = new UnityEvent();
 
@@ -320,6 +341,8 @@ public class PlayerController : MonoBehaviour
 
                 GameManager.Instance.RestartLevel(reset);
                 fellDown = false;
+
+                AudioManager.Instance.PlayOneShot(gameOverSound);
             }
             else
             {
@@ -353,9 +376,6 @@ public class PlayerController : MonoBehaviour
         {
             boostCooldown -= Time.deltaTime;          
         }
-
-        Debug.Log("Current Speed: " + currentSpeed);
-        Debug.Log("Current Jump: " + currentJumpForce);
     }
 
     void OnNomadSpeedBoost()
@@ -364,7 +384,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Nomad speed boost couldn't be activated! Cooldown is ongoing.");
         }
-        else if (nomad.activeSelf && boostDuration <= 0f)
+        else if (currentForm == PlayerForm.Nomad && boostDuration <= 0f)
         {
             Debug.Log("Nomad speed boost is  activated!");
 
@@ -408,7 +428,7 @@ public class PlayerController : MonoBehaviour
 
     void OnPixieSpeedBoostCombo3()
     {
-        if (pixie.activeSelf && pixieCurrentCombo == 2)
+        if (currentForm == PlayerForm.Pixie && pixieCurrentCombo == 2)
         {
             if (boostCooldown > 0f)
             {

@@ -12,6 +12,8 @@ public class RollingEnemy : EnemyBase
     [SerializeField] float horizontalRayDistance = 0.5f, verticalRayDistance = 0.5f, changeDirectionDuration = 0.5f;
     [SerializeField] LayerMask rayMask;
 
+    [SerializeField] AudioClip _deathSound;
+
     float currentSpeed, currentDirection;
 
     bool changingDirection = false;
@@ -20,6 +22,8 @@ public class RollingEnemy : EnemyBase
 
     private void Start()
     {
+        base.deathSound = _deathSound;
+
         currentDirection = 1f;
         currentSpeed = moveSpeed;
     }
