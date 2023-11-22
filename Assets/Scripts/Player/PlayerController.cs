@@ -146,8 +146,11 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if (jumpsInQueue < maxJumpCount)
+        if (currentForm != PlayerForm.Titan && jumpsInQueue < maxJumpCount)
+        {
             jumpsInQueue++;
+        }
+
     }
 
     void Jump()
