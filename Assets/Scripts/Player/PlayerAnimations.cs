@@ -26,7 +26,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void SetAnimation(string animationName, bool loop, float timeScale)
     {
-        Debug.Log("SetAnimation: " + animationName);
+        Debug.Log("Called SetAnimation");
 
         if (animationName == currentAnimation)
         {
