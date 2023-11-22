@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "g0L7YKRLPZg",
+	"hash": "DAoEKBonDw4",
 	"spine": "4.1.24",
 	"x": -212.03,
 	"y": -0.27,
@@ -92,6 +92,92 @@
 	}
 ],
 "animations": {
+	"GroundPound": {
+		"bones": {
+			"Torso": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": 23.72 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.3333, "y": -58.78 }
+				]
+			},
+			"Head": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -22.34 }
+				]
+			},
+			"Front Shoulder": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": 0.79 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.3333, "x": 21.86 }
+				]
+			},
+			"Front Forearm": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": 29.7 }
+				]
+			},
+			"Back Shoulder": {
+				"translate": [
+					{},
+					{ "time": 0.3333, "x": -7.81 }
+				]
+			},
+			"Back Forearm": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -4.38 }
+				]
+			},
+			"Back Fist": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": 17.88 }
+				]
+			},
+			"Front Leg": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": 112.65 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.3333, "x": 49.98, "y": -68.15 }
+				]
+			},
+			"Front Boot": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -67.23 }
+				]
+			},
+			"Back Leg": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": 111.64 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.3333, "x": 15.62, "y": -68.15 }
+				]
+			},
+			"Back Boot": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -60.37 }
+				]
+			}
+		}
+	},
 	"Idle": {
 		"bones": {
 			"Torso": {
@@ -133,6 +219,105 @@
 				"rotate": [
 					{},
 					{ "time": 0.3333, "value": 4.59 },
+					{ "time": 0.6667 }
+				]
+			}
+		}
+	},
+	"Jump": {
+		"bones": {
+			"Torso": {
+				"rotate": [
+					{ "value": -19.26 },
+					{ "time": 0.3333 },
+					{ "time": 0.6667, "value": -19.26 }
+				],
+				"translate": [
+					{ "x": 34.17, "y": -33.36 },
+					{ "time": 0.3333, "x": 34.17, "y": 43.4 },
+					{ "time": 0.6667, "x": 34.17, "y": -33.36 }
+				]
+			},
+			"Back Leg": {
+				"rotate": [
+					{ "value": 29.44 },
+					{ "time": 0.3333, "value": 0.51 },
+					{ "time": 0.6667, "value": 29.44 }
+				],
+				"translate": [
+					{ "y": -10.51 },
+					{ "time": 0.3333, "x": 18.86, "y": 21.55 },
+					{ "time": 0.6667, "y": -10.51 }
+				]
+			},
+			"Back Boot": {
+				"rotate": [
+					{ "value": -29.33 },
+					{ "time": 0.3333, "value": -27.27 },
+					{ "time": 0.6667, "value": -29.33 }
+				]
+			},
+			"Front Leg": {
+				"rotate": [
+					{ "value": 30.87 },
+					{ "time": 0.3333, "value": -1.99 },
+					{ "time": 0.6667, "value": 30.87 }
+				],
+				"translate": [
+					{ "y": -10.51 },
+					{ "time": 0.3333, "x": 60.63, "y": 28.29 },
+					{ "time": 0.6667, "y": -10.51 }
+				]
+			},
+			"Front Boot": {
+				"rotate": [
+					{ "value": -32.53 },
+					{ "time": 0.3333, "value": -17.35 },
+					{ "time": 0.6667, "value": -32.53 }
+				]
+			},
+			"Front Bicep": {
+				"rotate": [
+					{ "value": 20.95 },
+					{ "time": 0.3333, "value": -1.35 }
+				],
+				"translate": [
+					{ "x": -9.09 },
+					{ "time": 0.3333, "x": -1.21 }
+				]
+			},
+			"Head": {
+				"rotate": [
+					{ "value": 8.75 },
+					{ "time": 0.3333, "value": 0.3 }
+				],
+				"translate": [
+					{ "y": -6.37 },
+					{ "time": 0.3333, "y": -0.05 }
+				]
+			},
+			"Back Bicep": {
+				"translate": [
+					{ "x": -3.92 }
+				]
+			},
+			"Front Forearm": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -32.93 }
+				]
+			},
+			"Front Fist": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -11.26 },
+					{ "time": 0.6667 }
+				]
+			},
+			"Back Forearm": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -33.09 },
 					{ "time": 0.6667 }
 				]
 			}

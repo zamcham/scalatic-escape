@@ -76,12 +76,16 @@ public class PlayerController : MonoBehaviour
     //Momentum
     [SerializeField] float acceleration = 5f;
     [SerializeField] float deceleration = 5f;
+
+    //Animation
+    PlayerAnimations playerAnimations;
     
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         GetGroundChecker();
+        playerAnimations = GetComponent<PlayerAnimations>();
     }
 
     void Start()
