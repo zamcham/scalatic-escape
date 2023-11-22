@@ -1,0 +1,35 @@
+AlienNomad.png
+size:1024,512
+filter:Linear,Linear
+pma:true
+Back Bicep
+bounds:187,13,62,88
+rotate:90
+Back Boot
+bounds:426,110,117,106
+Back Fist
+bounds:849,404,97,98
+Back Forearm
+bounds:545,121,86,95
+Back Leg
+bounds:636,221,66,95
+rotate:90
+Back Shoulder
+bounds:277,8,79,67
+Front Bicep
+bounds:2,9,66,96
+rotate:90
+Front Boot
+bounds:636,396,116,106
+Front Fist
+bounds:636,289,105,105
+Front Forearm
+bounds:754,399,93,103
+Front Leg
+bounds:948,407,66,95
+Front Shoulder
+bounds:100,2,85,73
+Head
+bounds:2,77,422,425
+Torso
+bounds:426,218,208,284

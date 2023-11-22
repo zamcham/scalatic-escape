@@ -6,6 +6,7 @@ public class JumpingEnemy : EnemyBase
 {
     Rigidbody2D rb;
     [SerializeField] float jumpForce = 100f, jumpInterval = 3f;
+    [SerializeField] AudioClip _deathSound, jumpingSound, landingSound;
 
     bool isGrounded;
 
@@ -16,6 +17,8 @@ public class JumpingEnemy : EnemyBase
 
         float timer = 0f;
 
+        base.deathSound = _deathSound;
+
         while (true)
         {
             if (isGrounded)
@@ -23,6 +26,8 @@ public class JumpingEnemy : EnemyBase
                 if (timer > jumpInterval)
                 {
                     rb.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+                    AudioSource.PlayClipAtPoint(jumpingSound, transform.position + (Vector3.forward * -10f), 2f);
+
 
                     timer = 0f;
                 }
@@ -38,6 +43,11 @@ public class JumpingEnemy : EnemyBase
 
     private void OnCollisionStay2D()
     {
+        if (isGrounded == false)
+        {
+            // 3D Audio for this
+            AudioSource.PlayClipAtPoint(landingSound, transform.position + (Vector3.forward * -10f), 2f);
+        }
         isGrounded = true;
     }
 

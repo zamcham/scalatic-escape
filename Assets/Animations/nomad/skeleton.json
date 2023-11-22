@@ -1,0 +1,9 @@
+{
+"skeleton": { "hash": "6o65redYWak", "spine": "4.1.24", "images": "", "audio": "" },
+"bones": [
+	{ "name": "root" }
+],
+"animations": {
+	"animation": {}
+}
+}

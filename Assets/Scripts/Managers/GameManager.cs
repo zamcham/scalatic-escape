@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
 
     const string LevelsMapSceneName = "Levels Map";
 
+    [SerializeField] AudioClip levelLockedAudio, levelClickAudio;
+    [SerializeField] AudioClip levelOneMusic;
+
     void Awake()
     {
         if (Instance == null)
@@ -51,7 +54,7 @@ public class GameManager : MonoBehaviour
     {
         // TO-DO: Implement save system to fetch data about each level
 
-        levels.Add(new Level(1, true));
+        levels.Add(new Level(1, true, false, 0, levelOneMusic));
         levels.Add(new Level(2, false));
         levels.Add(new Level(3, false));
     }
@@ -101,6 +104,10 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(levelNumber);
 
             gameStatus = GameStatus.InGame;
+
+            AudioManager.Instance.PlayOneShot(levelClickAudio);
+
+            AudioManager.Instance.PlayMusic(level.levelMusic);
         }
         else
         {
@@ -114,6 +121,8 @@ public class GameManager : MonoBehaviour
                 // TODO: Handle error
                 Debug.Log($"There is no such level numbered {levelNumber}");
             }
+
+            AudioManager.Instance.PlayOneShot(levelLockedAudio);
         }
     }
 
@@ -251,11 +260,14 @@ public class Level
         }
     }
 
-    public Level(int levelNumber, bool levelUnlocked = false, bool levelCompleted = false, int collectedBonuses = 0)
+    public AudioClip levelMusic;
+
+    public Level(int levelNumber, bool levelUnlocked = false, bool levelCompleted = false, int collectedBonuses = 0, AudioClip levelMusic = null)
     {
         this.levelNumber = levelNumber;
         this.levelUnlocked = levelUnlocked;
         this.levelCompleted = levelCompleted;
         this.collectedBonuses = collectedBonuses;
+        this.levelMusic = levelMusic;
     }
 }
