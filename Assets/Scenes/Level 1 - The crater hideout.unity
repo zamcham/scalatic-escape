@@ -985,6 +985,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  leftBorder: {fileID: 2115169987}
+  playerKillDistance: 3
   _ArmTransform: {fileID: 0}
   _ArmLimits: {x: 0, y: 0, z: 0}
   _ArmTarget: {fileID: 0}

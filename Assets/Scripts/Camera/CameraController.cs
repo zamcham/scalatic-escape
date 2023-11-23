@@ -10,36 +10,44 @@ public class CameraController : MonoBehaviour
         
         if (Instance != null && Instance != this) 
         { 
-            Destroy(this); 
+            Destroy(gameObject);
+            return;
         } 
         else 
         { 
             Instance = this; 
         } 
     }
-#endregion
-    
+    #endregion
+
     //Serialized Values
+    [Header("General")]
     [SerializeField] float speed = 10f;
+
+    [SerializeField] Transform leftBorder;
+    [SerializeField] float playerKillDistance = 3f;
     [Space]
     [Header("Camera Arm Settings")]
     [SerializeField] private Transform _ArmTransform;
     [SerializeField] private Vector3 _ArmLimits;
     [SerializeField] private Transform _ArmTarget;
 
-    public  float _speedModifier = 1;
-    //private variables
+    public float _speedModifier = 1;
+
+    // Private Variables
     GameManager gameManager;
-    
+    PlayerController player;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        player = FindObjectOfType<PlayerController>();
     }
 
     void Update()
     {
         //UpdateCameraArmPosition();
+        CheckPlayer();
     }
 
     void FixedUpdate()
@@ -47,6 +55,14 @@ public class CameraController : MonoBehaviour
         if (gameManager.currentSceneIndex != 0)
         {
             this.transform.position += transform.right * (speed * _speedModifier) * Time.fixedDeltaTime;
+        }
+    }
+
+    void CheckPlayer()
+    {
+        if (leftBorder.position.x - playerKillDistance > player.transform.position.x)
+        {
+            player.Hurt(true);
         }
     }
  

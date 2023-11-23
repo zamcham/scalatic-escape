@@ -343,9 +343,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Hurt()
+    public void Hurt(bool force = false)
     {
-        if (hasArmor || currentForm == PlayerForm.Titan)
+        if (!force && (hasArmor || currentForm == PlayerForm.Titan))
         {
             hasArmor = false;
             OnNomad();
