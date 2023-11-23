@@ -41,6 +41,7 @@ public class Spore : MonoBehaviour
         if (collision.transform.root.CompareTag("Player"))
         {
             collision.transform.root.GetComponent<PlayerController>().Hurt();
+            Destroy(gameObject);
         }
     }
 }

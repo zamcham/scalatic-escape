@@ -10,6 +10,8 @@ public class EnemyBase : MonoBehaviour
 
     public virtual AudioClip deathSound { get; set; }
 
+    bool canHurt = true;
+
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.root.CompareTag("Player"))
@@ -21,7 +23,7 @@ public class EnemyBase : MonoBehaviour
                 Type colliderType = collision.otherCollider.GetType();
 
                 // Check the type and perform actions accordingly
-                if (colliderType == typeof(BoxCollider2D))
+                if (canHurt && colliderType == typeof(BoxCollider2D))
                 {
                     Debug.Log($"Enemy {gameObject.name} collided with the player and hurt it");
                     HurtPlayer(collision.gameObject.GetComponent<PlayerController>());
@@ -30,6 +32,7 @@ public class EnemyBase : MonoBehaviour
                 {
                     // Handle collision with CapsuleCollider2D
                     Debug.Log($"Enemy {gameObject.name} collided with the player and died");
+                    canHurt = false;
                     Die();
                 }
                 else
