@@ -128,8 +128,11 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        playerAnimations.StartAnimation("Run", true, 2f);
-        inputKeyPressed = true;
+        if (IsGrounded())
+        {
+            playerAnimations.StartAnimation("Run", true, 2f);
+            inputKeyPressed = true;
+        }
     }
 
     void Run()
