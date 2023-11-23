@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "DAoEKBonDw4",
+	"hash": "Htgf8HbjnsA",
 	"spine": "4.1.24",
 	"x": -212.03,
 	"y": -0.27,
@@ -94,86 +94,60 @@
 "animations": {
 	"GroundPound": {
 		"bones": {
-			"Torso": {
+			"Back Bicep": {
 				"rotate": [
-					{},
-					{ "time": 0.3333, "value": 23.72 }
+					{ "value": 92.17 },
+					{ "time": 0.3333, "value": -62.32 }
 				],
 				"translate": [
-					{},
-					{ "time": 0.3333, "y": -58.78 }
-				]
-			},
-			"Head": {
-				"rotate": [
-					{},
-					{ "time": 0.3333, "value": -22.34 }
-				]
-			},
-			"Front Shoulder": {
-				"rotate": [
-					{},
-					{ "time": 0.3333, "value": 0.79 }
-				],
-				"translate": [
-					{},
-					{ "time": 0.3333, "x": 21.86 }
-				]
-			},
-			"Front Forearm": {
-				"rotate": [
-					{},
-					{ "time": 0.3333, "value": 29.7 }
-				]
-			},
-			"Back Shoulder": {
-				"translate": [
-					{},
-					{ "time": 0.3333, "x": -7.81 }
-				]
-			},
-			"Back Forearm": {
-				"rotate": [
-					{},
-					{ "time": 0.3333, "value": -4.38 }
-				]
-			},
-			"Back Fist": {
-				"rotate": [
-					{},
-					{ "time": 0.3333, "value": 17.88 }
+					{ "time": 0.3333, "x": -122.21 }
 				]
 			},
 			"Front Leg": {
 				"rotate": [
-					{},
-					{ "time": 0.3333, "value": 112.65 }
+					{ "value": 42.44 },
+					{ "time": 0.3333, "value": -41.13 }
 				],
 				"translate": [
-					{},
-					{ "time": 0.3333, "x": 49.98, "y": -68.15 }
+					{ "x": 76.29, "y": -20.19 },
+					{ "time": 0.3333, "x": 67.71, "y": -5.19 }
 				]
 			},
 			"Front Boot": {
 				"rotate": [
-					{},
-					{ "time": 0.3333, "value": -67.23 }
+					{ "value": -71.96 },
+					{ "time": 0.3333, "value": -35.49 }
 				]
 			},
 			"Back Leg": {
 				"rotate": [
-					{},
-					{ "time": 0.3333, "value": 111.64 }
+					{ "value": -49.66 },
+					{ "time": 0.3333, "value": 39.33 }
 				],
 				"translate": [
-					{},
-					{ "time": 0.3333, "x": 15.62, "y": -68.15 }
+					{ "x": -24.68, "y": -11.22 },
+					{ "time": 0.3333, "x": -33.26, "y": 3.79 }
 				]
 			},
 			"Back Boot": {
 				"rotate": [
+					{ "value": -21.31 },
+					{ "time": 0.3333, "value": -28.83 }
+				]
+			},
+			"Front Shoulder": {
+				"rotate": [
+					{ "value": -65.87 },
+					{ "time": 0.3333, "value": 45.09 }
+				],
+				"translate": [
 					{},
-					{ "time": 0.3333, "value": -60.37 }
+					{ "time": 0.3333, "x": 57.89 }
+				]
+			},
+			"Front Forearm": {
+				"rotate": [
+					{ "value": 23.87 }
 				]
 			}
 		}
