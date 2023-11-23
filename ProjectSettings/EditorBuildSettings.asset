@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Start Screen.unity
     guid: 724df1038dcae4c7aa9525b3a1de5f58
   - enabled: 1
-    path: Assets/Scenes/Blockout/BLOCKOUT Level 1 - The crater hideout.unity
-    guid: 858615017743b44489d78b7f899838cd
-  - enabled: 1
     path: Assets/Scenes/Level 1 - The crater hideout.unity
     guid: 213a1c79cf83f475fbdbecd5c99750eb
+  - enabled: 1
+    path: Assets/Scenes/Blockout/BLOCKOUT Level 1 - The crater hideout.unity
+    guid: 858615017743b44489d78b7f899838cd
   - enabled: 1
     path: Assets/Scenes/Level Testing.unity
     guid: 2cda990e2423bbf4892e6590ba056729

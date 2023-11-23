@@ -21,12 +21,17 @@ public class PlayerAnimations : MonoBehaviour
     {
         skeletonAnimation = FindObjectOfType<SkeletonAnimation>();
         currentAnimation = PlayerAnimationState.Idle.ToString();
-        SetAnimation("Run", true, 1f);   
+        
     }
 
-    public void SetAnimation(string animationName, bool loop, float timeScale)
+    void Start()
     {
-        Debug.Log("Called SetAnimation");
+        StartAnimation(PlayerAnimationState.Idle.ToString(), true, 1f);   
+    }
+
+    public void StartAnimation(string animationName, bool loop, float timeScale)
+    {
+        Debug.Log($"Called SetAnimation: {animationName}");
 
         if (animationName == currentAnimation)
         {

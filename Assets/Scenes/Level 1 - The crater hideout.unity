@@ -3073,6 +3073,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7358730913875140973, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: _animationName
+      value: Idle
+      objectReference: {fileID: 0}
     - target: {fileID: 7477863497346258877, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: m_RootOrder
       value: 0

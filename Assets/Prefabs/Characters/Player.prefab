@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3793279006272040895}
   - component: {fileID: 1959764380284114677}
   - component: {fileID: 3548139991080166883}
+  - component: {fileID: 650111599552172714}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -123,6 +124,19 @@ MonoBehaviour:
   hasArmor: 0
   acceleration: 5
   deceleration: 2
+--- !u!114 &650111599552172714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2267404610411978519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d10045e3097dc445ea564489b2e196cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentAnimation: 
 --- !u!1 &2626337003435580725
 GameObject:
   m_ObjectHideFlags: 0

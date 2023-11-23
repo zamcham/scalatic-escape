@@ -1110,7 +1110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  _ArmTransform: {fileID: 0}
+  _ArmTransform: {fileID: 2074251309}
   _ArmLimits: {x: 0, y: 0, z: 0}
   _ArmTarget: {fileID: 0}
   _speedModifier: 1
@@ -3316,6 +3316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
+  _deathSound: {fileID: 0}
 --- !u!4 &1524754468 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 595912102182661161, guid: cbb793929af3d4840abd4eb51bcfd87b, type: 3}
@@ -3697,7 +3698,7 @@ PrefabInstance:
     - target: {fileID: 6507455741146306327, guid: 10c2e55d6deba35419c0e4e0062387b1, type: 3}
       propertyPath: _ArmTarget
       value: 
-      objectReference: {fileID: 4826002114702472079}
+      objectReference: {fileID: 0}
     - target: {fileID: 6507455741146306327, guid: 10c2e55d6deba35419c0e4e0062387b1, type: 3}
       propertyPath: _ArmLimits.y
       value: 5
@@ -5015,6 +5016,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5589222749991940671, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6097713284835835939, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -5064,11 +5069,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
---- !u!4 &4826002114702472079 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2589603066115978739, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
-  m_PrefabInstance: {fileID: 4826002114702472078}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5007042563205886811
 PrefabInstance:
   m_ObjectHideFlags: 0

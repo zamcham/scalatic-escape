@@ -126,6 +126,7 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+        playerAnimations.StartAnimation("Run", true, 1f);
     }
 
     void Run()
@@ -140,6 +141,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, deceleration * Time.deltaTime), rb.velocity.y);
         }
+
     }
 
     void FlipSprite()
