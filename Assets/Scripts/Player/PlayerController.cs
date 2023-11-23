@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
 
     //Animation
     PlayerAnimations playerAnimations;
+    bool inputKeyPressed;
     
 
     void Awake()
@@ -127,6 +128,7 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = value.Get<Vector2>();
         playerAnimations.StartAnimation("Run", true, 1f);
+        inputKeyPressed = true;
     }
 
     void Run()
@@ -140,6 +142,13 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Approximately(moveInput.x, 0f))
         {
             rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, deceleration * Time.deltaTime), rb.velocity.y);
+
+            if (inputKeyPressed)
+            {
+                inputKeyPressed = false;
+                Debug.Log("switching to Idle");
+                playerAnimations.StartAnimation("Idle", true, 1f);
+            }
         }
 
     }
