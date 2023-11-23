@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        playerAnimations.StartAnimation("Run", true, 1f);
+        playerAnimations.StartAnimation("Run", true, 2f);
         inputKeyPressed = true;
     }
 
@@ -279,6 +279,7 @@ public class PlayerController : MonoBehaviour
             {
                 canBreakPlatform = true;
                 // TODO: Play ground pound animation
+                playerAnimations.StartAnimation("GroundPound", false, 1f);
             }
             else
             {
