@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
     //Animation
     PlayerAnimations playerAnimations;
     bool inputKeyPressed;
+    bool jumping;
     
 
     void Awake()
@@ -143,7 +144,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, deceleration * Time.deltaTime), rb.velocity.y);
 
-            if (inputKeyPressed)
+            if (inputKeyPressed && IsGrounded())
             {
                 inputKeyPressed = false;
                 Debug.Log("switching to Idle");
@@ -164,6 +165,7 @@ public class PlayerController : MonoBehaviour
         if (currentForm != PlayerForm.Titan && jumpsInQueue < maxJumpCount)
         {
             jumpsInQueue++;
+            jumping = true;
         }
 
     }
@@ -172,6 +174,11 @@ public class PlayerController : MonoBehaviour
     {
         if (jumpsInQueue > 0 && jumpTimer <= 0f && jumpCount < maxJumpCount)
         {
+            if (jumping)
+            {
+                jumping = false;
+                playerAnimations.StartAnimation("Jump", false, 1f);
+            }
             // Gradually increase gravity when jumping
             currentGravity += gravityAdjustmentSpeed * Time.deltaTime;
             rb.gravityScale = currentGravity;
