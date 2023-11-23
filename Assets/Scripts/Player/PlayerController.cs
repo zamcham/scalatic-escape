@@ -76,12 +76,18 @@ public class PlayerController : MonoBehaviour
     //Momentum
     [SerializeField] float acceleration = 5f;
     [SerializeField] float deceleration = 5f;
+
+    //Animation
+    PlayerAnimations playerAnimations;
+    bool inputKeyPressed;
+    bool jumping;
     
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         GetGroundChecker();
+        playerAnimations = GetComponent<PlayerAnimations>();
     }
 
     void Start()
@@ -122,6 +128,11 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+        if (IsGrounded())
+        {
+            playerAnimations.StartAnimation("Run", true, 2f);
+            inputKeyPressed = true;
+        }
     }
 
     void Run()
@@ -135,7 +146,15 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Approximately(moveInput.x, 0f))
         {
             rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, deceleration * Time.deltaTime), rb.velocity.y);
+
+            if (inputKeyPressed && IsGrounded())
+            {
+                inputKeyPressed = false;
+                Debug.Log("switching to Idle");
+                playerAnimations.StartAnimation("Idle", true, 1f);
+            }
         }
+
     }
 
     void FlipSprite()
@@ -149,6 +168,7 @@ public class PlayerController : MonoBehaviour
         if (currentForm != PlayerForm.Titan && jumpsInQueue < maxJumpCount)
         {
             jumpsInQueue++;
+            jumping = true;
         }
 
     }
@@ -157,6 +177,11 @@ public class PlayerController : MonoBehaviour
     {
         if (jumpsInQueue > 0 && jumpTimer <= 0f && jumpCount < maxJumpCount)
         {
+            if (jumping)
+            {
+                jumping = false;
+                playerAnimations.StartAnimation("Jump", false, 1f);
+            }
             // Gradually increase gravity when jumping
             currentGravity += gravityAdjustmentSpeed * Time.deltaTime;
             rb.gravityScale = currentGravity;
@@ -257,6 +282,7 @@ public class PlayerController : MonoBehaviour
             {
                 canBreakPlatform = true;
                 // TODO: Play ground pound animation
+                playerAnimations.StartAnimation("GroundPound", false, 1f);
             }
             else
             {

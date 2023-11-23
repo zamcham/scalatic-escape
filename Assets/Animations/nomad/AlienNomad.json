@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "g0L7YKRLPZg",
+	"hash": "w/FfdQYbB04",
 	"spine": "4.1.24",
 	"x": -212.03,
 	"y": -0.27,
@@ -92,6 +92,75 @@
 	}
 ],
 "animations": {
+	"GroundPound": {
+		"bones": {
+			"Torso": {
+				"rotate": [
+					{ "value": 23.72 }
+				]
+			},
+			"Head": {
+				"rotate": [
+					{},
+					{ "time": 0.3333, "value": -22.34 }
+				]
+			},
+			"Front Shoulder": {
+				"rotate": [
+					{ "value": 0.79 }
+				],
+				"translate": [
+					{ "x": 21.86 }
+				]
+			},
+			"Front Forearm": {
+				"rotate": [
+					{ "value": 29.7 }
+				]
+			},
+			"Back Shoulder": {
+				"translate": [
+					{ "x": -7.81 }
+				]
+			},
+			"Back Forearm": {
+				"rotate": [
+					{ "value": -4.38 }
+				]
+			},
+			"Back Fist": {
+				"rotate": [
+					{ "value": 17.88 }
+				]
+			},
+			"Front Leg": {
+				"rotate": [
+					{ "value": 112.65 }
+				],
+				"translate": [
+					{ "x": 49.98, "y": -9.37 }
+				]
+			},
+			"Front Boot": {
+				"rotate": [
+					{ "value": -67.23 }
+				]
+			},
+			"Back Leg": {
+				"rotate": [
+					{ "value": 111.64 }
+				],
+				"translate": [
+					{ "x": 15.62, "y": -9.37 }
+				]
+			},
+			"Back Boot": {
+				"rotate": [
+					{ "value": -60.37 }
+				]
+			}
+		}
+	},
 	"Idle": {
 		"bones": {
 			"Torso": {
@@ -134,6 +203,80 @@
 					{},
 					{ "time": 0.3333, "value": 4.59 },
 					{ "time": 0.6667 }
+				]
+			}
+		}
+	},
+	"Jump": {
+		"bones": {
+			"Back Shoulder": {
+				"rotate": [
+					{ "value": 49.56 },
+					{ "time": 0.1667, "value": -103.78 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.1667, "x": -128.93, "y": -26.78 }
+				]
+			},
+			"Back Forearm": {
+				"rotate": [
+					{ "value": 54.22 }
+				]
+			},
+			"Front Shoulder": {
+				"rotate": [
+					{ "value": -82.13 },
+					{ "time": 0.1667, "value": 48.33 }
+				],
+				"translate": [
+					{},
+					{ "time": 0.1667, "x": 89.34 }
+				]
+			},
+			"Front Forearm": {
+				"rotate": [
+					{ "value": 33.6 }
+				]
+			},
+			"Head": {
+				"translate": [
+					{ "y": -4.18 }
+				]
+			},
+			"Front Leg": {
+				"rotate": [
+					{ "value": 56.65 },
+					{ "time": 0.1667, "value": -31.99 }
+				],
+				"translate": [
+					{ "x": 56.97, "y": -0.04 }
+				]
+			},
+			"Front Boot": {
+				"rotate": [
+					{ "value": -74.89 },
+					{ "time": 0.1667, "value": -11.43 }
+				]
+			},
+			"Back Leg": {
+				"rotate": [
+					{ "value": -13.14 },
+					{ "time": 0.1667, "value": 51.42 }
+				],
+				"translate": [
+					{ "x": -54.29, "y": 19.68 }
+				]
+			},
+			"Back Boot": {
+				"rotate": [
+					{ "value": -39.92 },
+					{ "time": 0.1667, "value": -53.76 }
+				]
+			},
+			"Torso": {
+				"translate": [
+					{ "y": 19.68 }
 				]
 			}
 		}

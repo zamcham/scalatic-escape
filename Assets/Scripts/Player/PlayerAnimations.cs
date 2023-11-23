@@ -12,28 +12,27 @@ public class PlayerAnimations : MonoBehaviour
     {
         Idle,
         Run,
-        Jump
+        Jump,
+        GroundPound
     }
-    string currentAnimation;
+    public string currentAnimation;
 
     void Awake()
     {
         skeletonAnimation = FindObjectOfType<SkeletonAnimation>();
         currentAnimation = PlayerAnimationState.Idle.ToString();
+        
     }
 
     void Start()
     {
-        SetAnimation(PlayerAnimationState.Idle.ToString(), true, 1f);   
+        StartAnimation(PlayerAnimationState.Idle.ToString(), true, 1f);   
     }
 
-    void Update()
+    public void StartAnimation(string animationName, bool loop, float timeScale)
     {
-        
-    }
+        Debug.Log($"Called SetAnimation: {animationName}");
 
-    void SetAnimation(string animationName, bool loop, float timeScale)
-    {
         if (animationName == currentAnimation)
         {
             return;
