@@ -101,8 +101,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
-
         Run();
         Jump();
         FlipSprite();
@@ -138,11 +136,9 @@ public class PlayerController : MonoBehaviour
             if (inputKeyPressed && IsGrounded())
             {
                 inputKeyPressed = false;
-                Debug.Log("switching to Idle");
                 playerAnimations.StartAnimation("Idle", true, 1f);
             }
         }
-
     }
 
     #endregion
@@ -207,17 +203,6 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-    
-    void GroundPounding(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Breakable"))
-        {
-            Destroy(collision.gameObject);
-        }
-        else {
-            playerAnimations.StartAnimation("Idle", true, 1f);
-        }
-    }
 
     void GetGroundChecker()
     {
@@ -230,7 +215,6 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("GroundChecker not found!");
     }
 
-
     void CheckBottomBoundary()
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
@@ -240,8 +224,6 @@ public class PlayerController : MonoBehaviour
             OnDeath();
         }
     }
-
-
 
     #region Size Shifting
 
@@ -300,8 +282,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GroundPounding(collision);
+        string animationName = moveInput.x == 0 ? "Idle" : "Run";
+        float animationSpeed = moveInput.x == 0 ? 1f : 2f;
+        playerAnimations.StartAnimation(animationName, true, animationSpeed);
 
+        if (collision.gameObject.CompareTag("Breakable") && currentForm == PlayerForm.Titan)
+        {
+            Destroy(collision.gameObject);
+            return; // Early exit
+        }
         if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
         {
             float randomPitch = Random.Range(0.75f, 1.25f);

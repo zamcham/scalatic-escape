@@ -109,12 +109,6 @@ MonoBehaviour:
   jumpForce: 20
   timeToLastChanceJump: 0.15
   jumpAirForce: 1.2
-  nomadSpeedBoostMultiplier: 2
-  nomadJumpBoostMultiplier: 2
-  pixieSpeedBoostMultiplier: 2
-  pixieJumpBoostMultiplier: 2
-  speedBoostDuration: 5
-  speedBoostCooldown: 5
   gameOverSound: {fileID: 8300000, guid: a047844672d69b749959e77af729abd7, type: 3}
   jumpingSound: {fileID: 8300000, guid: 37dbdf0e0be0ee64c89a8b45cfd8665d, type: 3}
   landingSound: {fileID: 8300000, guid: 601d9dc0061c02746aea1be2d2f84303, type: 3}
@@ -152,7 +146,7 @@ GameObject:
   - component: {fileID: 7358730913875140973}
   - component: {fileID: 7502012776775613622}
   m_Layer: 0
-  m_Name: Nomad
+  m_Name: Animations
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,7 +255,7 @@ MonoBehaviour:
   disableRenderingOnOverride: 1
   updateTiming: 1
   unscaledTime: 0
-  _animationName: Run
+  _animationName: Idle
   loop: 1
   timeScale: 1
 --- !u!70 &7502012776775613622
