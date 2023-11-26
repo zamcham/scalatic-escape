@@ -43,22 +43,6 @@ public class PlayerController : MonoBehaviour
         { PlayerForm.Pixie, new Vector2(0.1f, 0.1f) }
     };
 
-    //================== Speed Boost Components ==================
-    [Header("Speed Boost")]
-    [SerializeField] float nomadSpeedBoostMultiplier;
-    [SerializeField] float nomadJumpBoostMultiplier;
-
-    [SerializeField] float pixieSpeedBoostMultiplier;
-    [SerializeField] float pixieJumpBoostMultiplier;
-
-    [SerializeField] float speedBoostDuration, speedBoostCooldown;
-
-    float boostDuration, boostCooldown;
-
-    // Pixie speed combo
-    int pixieCurrentCombo = 0;
-    float pixieComboCooldown = 0.5f, pixieComboTimer = 0f;
-
     // Entity
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
@@ -117,15 +101,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        PixieComboUpdate();
-        SpeedBoostUpdate();
+
 
         Run();
-        FlipSprite();
-
-        CheckGround();
         Jump();
-
+        FlipSprite();
+        MonitorGroundedState();
         CheckBottomBoundary();
     }
 
@@ -164,6 +145,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    #endregion
+
+    #region Jumping
     void FlipSprite()
     {
         if (Mathf.Abs(rb.velocity.x) > Mathf.Epsilon)
@@ -205,7 +189,8 @@ public class PlayerController : MonoBehaviour
         return groundChecker.IsTouchingLayers(LayerMask.GetMask("Jumpable")) && rb.velocity.y <= 0f;
     }
 
-    void CheckGround()
+    // Updates the player's grounded status and manages the time window for last-chance jumps when falling.
+    void MonitorGroundedState()
     {
         if (IsGrounded())
         {
@@ -221,6 +206,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #endregion
+    
     void GroundPounding(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Breakable"))
@@ -254,7 +241,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    #endregion
+
 
     #region Size Shifting
 
@@ -382,103 +369,4 @@ public class PlayerController : MonoBehaviour
             }
         }       
     }
-
-    #region Speed Boost
-
-    void SpeedBoostUpdate()
-    {
-        if (boostCooldown <= 0f)
-        {
-            if (boostDuration > 0f)
-            {
-                boostDuration -= Time.deltaTime;
-            }
-            else if (boostDuration > -1f)
-            {
-                boostDuration = -1f;
-                boostCooldown = speedBoostCooldown;
-
-                currentSpeed = moveSpeed;
-                currentJumpForce = jumpForce;
-
-                Debug.Log("Speed boost is done.");
-            }
-        }
-        else
-        {
-            boostCooldown -= Time.deltaTime;          
-        }
-    }
-
-    void OnNomadSpeedBoost()
-    {
-        if (boostCooldown > 0f)
-        {
-            Debug.Log("Nomad speed boost couldn't be activated! Cooldown is ongoing.");
-        }
-        else if (currentForm == PlayerForm.Nomad && boostDuration <= 0f)
-        {
-            Debug.Log("Nomad speed boost is  activated!");
-
-            currentSpeed = moveSpeed * nomadSpeedBoostMultiplier;
-            currentJumpForce = jumpForce * nomadJumpBoostMultiplier;
-
-            boostDuration = speedBoostDuration;
-        }
-    }
-
-    void PixieComboUpdate()
-    {
-        if (pixieComboTimer >= 0f)
-        {
-            pixieComboTimer -= Time.deltaTime;
-        }
-        else if (pixieComboTimer > -1f)
-        {
-            pixieCurrentCombo = 0;
-            pixieComboTimer = -1f;
-        }
-    }
-
-    void OnPixieSpeedBoostCombo1()
-    {
-        if (pixieCurrentCombo == 0)
-        {
-            pixieCurrentCombo = 1;
-            pixieComboTimer = pixieComboCooldown;
-        }
-    }
-
-    void OnPixieSpeedBoostCombo2()
-    {
-        if (pixieCurrentCombo == 1)
-        {
-            pixieCurrentCombo = 2;
-            pixieComboTimer = pixieComboCooldown;
-        }
-    }
-
-    void OnPixieSpeedBoostCombo3()
-    {
-        if (currentForm == PlayerForm.Pixie && pixieCurrentCombo == 2)
-        {
-            if (boostCooldown > 0f)
-            {
-                Debug.Log("Pixie speed boost couldn't be activated! Cooldown is ongoing.");
-            }
-            else if(boostDuration <= 0f)
-            {
-                Debug.Log("Pixie speed boost is  activated!");
-
-                currentSpeed = moveSpeed * pixieSpeedBoostMultiplier;
-                currentJumpForce = jumpForce * pixieJumpBoostMultiplier;
-
-                boostDuration = speedBoostDuration;
-            }            
-        }
-
-        pixieComboTimer = 0f;
-    }
-
-    #endregion
 }
