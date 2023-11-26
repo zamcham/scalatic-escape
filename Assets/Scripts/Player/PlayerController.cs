@@ -5,14 +5,19 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
+    //================== Physics and Game Components ==================
+    Rigidbody2D rb;
+    LevelManager levelManager;
+
+    //================== Movement Variables ==================
     [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
     Vector2 moveInput;
     float currentSpeed, currentJumpForce;
 
+    //================== Jumping Variables ==================  
     [Header("Jumping")]
-
     [SerializeField] 
     [Tooltip("The time for the last chance to jump after falling off a platform.")]
     float timeToLastChanceJump = 0f;
@@ -25,15 +30,9 @@ public class PlayerController : MonoBehaviour
     int jumpCount = 0;
     BoxCollider2D groundChecker;
 
-
-    [Header("References")] 
-    Rigidbody2D rb;
-    LevelManager levelManager;
-
-    #region Characters 
+    //================== Shape Shifting Components ==================  
 
     enum PlayerForm { Pixie, Nomad, Titan }
-
     PlayerForm currentForm = PlayerForm.Nomad;
 
     Dictionary<PlayerForm, Vector2> formScaleMapping = new Dictionary<PlayerForm, Vector2>
@@ -43,10 +42,7 @@ public class PlayerController : MonoBehaviour
         { PlayerForm.Pixie, new Vector2(0.1f, 0.1f) }
     };
 
-    #endregion
-
-    Renderer titanRenderer;
-
+    //================== Speed Boost Components ==================
     [Header("Speed Boost")]
     [SerializeField] float nomadSpeedBoostMultiplier;
     [SerializeField] float nomadJumpBoostMultiplier;
