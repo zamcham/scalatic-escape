@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     [Tooltip("The force applied when jumping in the air after falling off a platform.")]
     float jumpAirForce = 1.2f;
+    private float originalJumpForce;
 
     int maxJumpCount = 1;
     int jumpCount = 0;
@@ -78,6 +79,7 @@ public class PlayerController : MonoBehaviour
         GetGroundChecker();
         playerAnimations = GetComponent<PlayerAnimations>();
         originalJumpDelay = timeToLastChanceJump;
+        originalJumpForce = jumpForce;
     }
 
     void Start()
@@ -110,7 +112,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision, moveInput is: " + moveInput.x + " now ");
         string animationName = moveInput.x == 0 ? "Idle" : "Run";
         float animationSpeed = moveInput.x == 0 ? 1f : 2f;
         playerAnimations.StartAnimation(animationName, true, animationSpeed);
@@ -125,6 +126,8 @@ public class PlayerController : MonoBehaviour
             float randomPitch = Random.Range(0.75f, 1.25f);
             AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
         }
+
+        jumpCount = 0;
     }
 
     #region Movement
@@ -171,8 +174,9 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if (currentForm != PlayerForm.Titan && jumpCount < maxJumpCount && timeToLastChanceJump > 0f)
+        if (currentForm != PlayerForm.Titan && jumpCount <= maxJumpCount && timeToLastChanceJump > 0f)
         {
+            Debug.Log("Jumping!");
             jumping = true;
         }
 
@@ -180,8 +184,9 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (jumping && jumpCount < maxJumpCount)
+        if (jumping && jumpCount <= maxJumpCount)
         {
+            jumpCount+= 1;
             jumping = false;
             playerAnimations.StartAnimation("Jump", false, 1f);
 
@@ -193,8 +198,6 @@ public class PlayerController : MonoBehaviour
             {
                 rb.AddForce(new Vector2(0f, jumpForce * jumpAirForce), ForceMode2D.Impulse);
             }
-
-            jumpCount++;
             AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
         }
     }
@@ -210,7 +213,15 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded())
         {
             jumpCount = 0;
-            timeToLastChanceJump = originalJumpDelay;
+
+            if (currentForm != PlayerForm.Pixie)
+            {
+                timeToLastChanceJump = originalJumpDelay;
+            }
+            else 
+            {
+                timeToLastChanceJump = 5f;
+            }
         }
         else
         {
@@ -284,16 +295,24 @@ public class PlayerController : MonoBehaviour
 
     void OnTitan()
     {
+        maxJumpCount = 0;
         ChangeForm(PlayerForm.Titan, levelManager.titanEnergyCost, 0, titanSound, levelManager.titanEnergyThreshold);
     }
 
     void OnNomad()
     {
+
+        maxJumpCount = 1;
+        timeToLastChanceJump = originalJumpDelay;
+        jumpForce = originalJumpForce;
         ChangeForm(PlayerForm.Nomad, levelManager.nomadEnergyCost, 1, nomadSound);
     }
 
     void OnPixie()
     {
+        maxJumpCount = 2;
+        timeToLastChanceJump = 5f;
+        jumpAirForce = 0.75f;
         ChangeForm(PlayerForm.Pixie, levelManager.pixieEnergyCost, 2, pixieSound, levelManager.pixieEnergyThreshold);
     }
 
