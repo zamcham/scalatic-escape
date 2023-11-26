@@ -12,7 +12,6 @@ public class CameraChangeCollider : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(col.transform.name);
         if(col.CompareTag("Player"))
         {
             _vc.enabled = true;

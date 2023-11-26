@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
-    Vector2 moveInput;
+    public Vector2 moveInput;
     float currentSpeed, currentJumpForce;
 
     //================== Jumping Variables ==================  
@@ -106,6 +106,25 @@ public class PlayerController : MonoBehaviour
         FlipSprite();
         MonitorGroundedState();
         CheckBottomBoundary();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision, moveInput is: " + moveInput.x + " now ");
+        string animationName = moveInput.x == 0 ? "Idle" : "Run";
+        float animationSpeed = moveInput.x == 0 ? 1f : 2f;
+        playerAnimations.StartAnimation(animationName, true, animationSpeed);
+
+        if (collision.gameObject.CompareTag("Breakable") && currentForm == PlayerForm.Titan)
+        {
+            Destroy(collision.gameObject);
+            return; // Early exit
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
+        {
+            float randomPitch = Random.Range(0.75f, 1.25f);
+            AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
+        }
     }
 
     #region Movement
@@ -279,24 +298,6 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        string animationName = moveInput.x == 0 ? "Idle" : "Run";
-        float animationSpeed = moveInput.x == 0 ? 1f : 2f;
-        playerAnimations.StartAnimation(animationName, true, animationSpeed);
-
-        if (collision.gameObject.CompareTag("Breakable") && currentForm == PlayerForm.Titan)
-        {
-            Destroy(collision.gameObject);
-            return; // Early exit
-        }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
-        {
-            float randomPitch = Random.Range(0.75f, 1.25f);
-            AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
-        }
-    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
