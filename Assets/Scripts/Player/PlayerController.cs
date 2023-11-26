@@ -20,7 +20,8 @@ public class PlayerController : MonoBehaviour
     [Header("Jumping")]
     [SerializeField] 
     [Tooltip("The time for the last chance to jump after falling off a platform.")]
-    float timeToLastChanceJump = 0f;
+    float timeToLastChanceJump = 0.5f;
+    private float originalJumpDelay;
 
     [SerializeField]
     [Tooltip("The force applied when jumping in the air after falling off a platform.")]
@@ -92,6 +93,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         GetGroundChecker();
         playerAnimations = GetComponent<PlayerAnimations>();
+        originalJumpDelay = timeToLastChanceJump;
     }
 
     void Start()
@@ -170,7 +172,7 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if (currentForm != PlayerForm.Titan && jumpCount < maxJumpCount)
+        if (currentForm != PlayerForm.Titan && jumpCount < maxJumpCount && timeToLastChanceJump > 0f)
         {
             jumping = true;
         }
@@ -207,7 +209,15 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded())
         {
-            jumpCount = 0; 
+            jumpCount = 0;
+            timeToLastChanceJump = originalJumpDelay;
+        }
+        else
+        {
+            if (timeToLastChanceJump > 0f)
+            {
+                timeToLastChanceJump -= Time.deltaTime;
+            }
         }
     }
 
