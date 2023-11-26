@@ -8,8 +8,9 @@ public class LevelManager : MonoBehaviour
     PlayerController player;
     CameraController cam;
     GameManager gameManager;
-    public bool checkpointReached;
     Transform checkpoint;
+    public bool checkpointReached;
+    
 
     [Header("Level Timer")]
     [SerializeField] float levelTimeout = 10f;

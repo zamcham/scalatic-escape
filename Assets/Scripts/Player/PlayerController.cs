@@ -5,23 +5,34 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
+    //================== Physics and Game Components ==================
+    Rigidbody2D rb;
+    LevelManager levelManager;
+
+    //================== Movement Variables ==================
     [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
-
+    public Vector2 moveInput;
     float currentSpeed, currentJumpForce;
 
+    //================== Jumping Variables ==================  
     [Header("Jumping")]
-    BoxCollider2D groundChecker;
-    [SerializeField] float jumpInterval = 0.25f;
+    [SerializeField] 
+    [Tooltip("The time for the last chance to jump after falling off a platform.")]
+    float timeToLastChanceJump = 0.5f;
+    private float originalJumpDelay;
+
+    [SerializeField]
+    [Tooltip("The force applied when jumping in the air after falling off a platform.")]
+    float jumpAirForce = 1.2f;
+    private float originalJumpForce;
+
     int maxJumpCount = 1;
-    int jumpCount = 0, jumpsInQueue = 0;
-    float jumpTimer;
+    int jumpCount = 0;
+    BoxCollider2D groundChecker;
 
-    Vector2 moveInput;
-    Rigidbody2D rb;
-
-    #region Characters 
+    //================== Shape Shifting Components ==================  
 
     enum PlayerForm { Pixie, Nomad, Titan }
     PlayerForm currentForm = PlayerForm.Nomad;
@@ -33,32 +44,11 @@ public class PlayerController : MonoBehaviour
         { PlayerForm.Pixie, new Vector2(0.1f, 0.1f) }
     };
 
-    #endregion
-
-    LevelManager levelManager;
-
-    bool canBreakPlatform = false;
-    Renderer titanRenderer;
-
-    [Header("Speed Boost")]
-    [SerializeField] float nomadSpeedBoostMultiplier;
-    [SerializeField] float nomadJumpBoostMultiplier;
-
-    [SerializeField] float pixieSpeedBoostMultiplier;
-    [SerializeField] float pixieJumpBoostMultiplier;
-
-    [SerializeField] float speedBoostDuration, speedBoostCooldown;
-
-    float boostDuration, boostCooldown;
-
-    // Pixie speed combo
-    int pixieCurrentCombo = 0;
-    float pixieComboCooldown = 0.5f, pixieComboTimer = 0f;
-
     // Entity
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
+    //TODO: Transfer to the audio manager
     [Header("Audio")]
     [SerializeField] AudioClip gameOverSound;
     [SerializeField] AudioClip jumpingSound, landingSound;
@@ -88,6 +78,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         GetGroundChecker();
         playerAnimations = GetComponent<PlayerAnimations>();
+        originalJumpDelay = timeToLastChanceJump;
+        originalJumpForce = jumpForce;
     }
 
     void Start()
@@ -111,16 +103,31 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        PixieComboUpdate();
-        SpeedBoostUpdate();
-
         Run();
-        FlipSprite();
-
-        CheckGround();
         Jump();
-
+        FlipSprite();
+        MonitorGroundedState();
         CheckBottomBoundary();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        string animationName = moveInput.x == 0 ? "Idle" : "Run";
+        float animationSpeed = moveInput.x == 0 ? 1f : 2f;
+        playerAnimations.StartAnimation(animationName, true, animationSpeed);
+
+        if (collision.gameObject.CompareTag("Breakable") && currentForm == PlayerForm.Titan)
+        {
+            Destroy(collision.gameObject);
+            return; // Early exit
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
+        {
+            float randomPitch = Random.Range(0.75f, 1.25f);
+            AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
+        }
+
+        jumpCount = 0;
     }
 
     #region Movement
@@ -128,6 +135,7 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+        
         if (IsGrounded())
         {
             playerAnimations.StartAnimation("Run", true, 2f);
@@ -150,13 +158,14 @@ public class PlayerController : MonoBehaviour
             if (inputKeyPressed && IsGrounded())
             {
                 inputKeyPressed = false;
-                Debug.Log("switching to Idle");
                 playerAnimations.StartAnimation("Idle", true, 1f);
             }
         }
-
     }
 
+    #endregion
+
+    #region Jumping
     void FlipSprite()
     {
         if (Mathf.Abs(rb.velocity.x) > Mathf.Epsilon)
@@ -165,9 +174,9 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if (currentForm != PlayerForm.Titan && jumpsInQueue < maxJumpCount)
+        if (currentForm != PlayerForm.Titan && jumpCount <= maxJumpCount && timeToLastChanceJump > 0f)
         {
-            jumpsInQueue++;
+            Debug.Log("Jumping!");
             jumping = true;
         }
 
@@ -175,30 +184,21 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (jumpsInQueue > 0 && jumpTimer <= 0f && jumpCount < maxJumpCount)
+        if (jumping && jumpCount <= maxJumpCount)
         {
-            if (jumping)
+            jumpCount+= 1;
+            jumping = false;
+            playerAnimations.StartAnimation("Jump", false, 1f);
+
+            if (IsGrounded())
             {
-                jumping = false;
-                playerAnimations.StartAnimation("Jump", false, 1f);
+                rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
             }
-            // Gradually increase gravity when jumping
-            currentGravity += gravityAdjustmentSpeed * Time.deltaTime;
-            rb.gravityScale = currentGravity;
-
-            jumpTimer = jumpInterval;
-            jumpsInQueue--;
-            jumpCount++;
-            rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
-
+            else
+            {
+                rb.AddForce(new Vector2(0f, jumpForce * jumpAirForce), ForceMode2D.Impulse);
+            }
             AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
-        }
-        else
-        {
-            // Gradually reset gravity when not jumping
-            currentGravity = Mathf.Lerp(currentGravity, baseGravity, gravityAdjustmentSpeed * Time.deltaTime);
-            rb.gravityScale = currentGravity;
-            jumpTimer -= Time.deltaTime;
         }
     }
 
@@ -207,25 +207,32 @@ public class PlayerController : MonoBehaviour
         return groundChecker.IsTouchingLayers(LayerMask.GetMask("Jumpable")) && rb.velocity.y <= 0f;
     }
 
-    void CheckGround()
+    // Updates the player's grounded status and manages the time window for last-chance jumps when falling.
+    void MonitorGroundedState()
     {
         if (IsGrounded())
         {
-            jumpTimer = 0f;
-            jumpCount = 0; 
+            jumpCount = 0;
+
+            if (currentForm != PlayerForm.Pixie)
+            {
+                timeToLastChanceJump = originalJumpDelay;
+            }
+            else 
+            {
+                timeToLastChanceJump = 5f;
+            }
+        }
+        else
+        {
+            if (timeToLastChanceJump > 0f)
+            {
+                timeToLastChanceJump -= Time.deltaTime;
+            }
         }
     }
 
-    void GroundPounding(Collision2D collision)
-    {
-        if (canBreakPlatform && collision.gameObject.CompareTag("Breakable"))
-            Destroy(collision.gameObject);
-        else if (canBreakPlatform)
-        {
-            canBreakPlatform = false;
-            titanRenderer.sharedMaterial.color = Color.white;
-        }
-    }
+    #endregion
 
     void GetGroundChecker()
     {
@@ -238,7 +245,6 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("GroundChecker not found!");
     }
 
-
     void CheckBottomBoundary()
     {
         if (groundChecker.IsTouchingLayers(LayerMask.GetMask("BottomBoundary")))
@@ -248,8 +254,6 @@ public class PlayerController : MonoBehaviour
             OnDeath();
         }
     }
-
-    #endregion
 
     #region Size Shifting
 
@@ -280,8 +284,6 @@ public class PlayerController : MonoBehaviour
 
             if (jumpCount > 0 && targetForm == PlayerForm.Titan)
             {
-                canBreakPlatform = true;
-                // TODO: Play ground pound animation
                 playerAnimations.StartAnimation("GroundPound", false, 1f);
             }
             else
@@ -293,31 +295,28 @@ public class PlayerController : MonoBehaviour
 
     void OnTitan()
     {
+        maxJumpCount = 0;
         ChangeForm(PlayerForm.Titan, levelManager.titanEnergyCost, 0, titanSound, levelManager.titanEnergyThreshold);
     }
 
     void OnNomad()
     {
+
+        maxJumpCount = 1;
+        timeToLastChanceJump = originalJumpDelay;
+        jumpForce = originalJumpForce;
         ChangeForm(PlayerForm.Nomad, levelManager.nomadEnergyCost, 1, nomadSound);
     }
 
     void OnPixie()
     {
+        maxJumpCount = 2;
+        timeToLastChanceJump = 5f;
+        jumpAirForce = 0.75f;
         ChangeForm(PlayerForm.Pixie, levelManager.pixieEnergyCost, 2, pixieSound, levelManager.pixieEnergyThreshold);
     }
 
     #endregion
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        GroundPounding(collision);
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Jumpable"))
-        {
-            float randomPitch = Random.Range(0.75f, 1.25f);
-            AudioManager.Instance.PlayOneShot(landingSound, 0.5f, randomPitch);
-        }
-    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -379,103 +378,4 @@ public class PlayerController : MonoBehaviour
             }
         }       
     }
-
-    #region Speed Boost
-
-    void SpeedBoostUpdate()
-    {
-        if (boostCooldown <= 0f)
-        {
-            if (boostDuration > 0f)
-            {
-                boostDuration -= Time.deltaTime;
-            }
-            else if (boostDuration > -1f)
-            {
-                boostDuration = -1f;
-                boostCooldown = speedBoostCooldown;
-
-                currentSpeed = moveSpeed;
-                currentJumpForce = jumpForce;
-
-                Debug.Log("Speed boost is done.");
-            }
-        }
-        else
-        {
-            boostCooldown -= Time.deltaTime;          
-        }
-    }
-
-    void OnNomadSpeedBoost()
-    {
-        if (boostCooldown > 0f)
-        {
-            Debug.Log("Nomad speed boost couldn't be activated! Cooldown is ongoing.");
-        }
-        else if (currentForm == PlayerForm.Nomad && boostDuration <= 0f)
-        {
-            Debug.Log("Nomad speed boost is  activated!");
-
-            currentSpeed = moveSpeed * nomadSpeedBoostMultiplier;
-            currentJumpForce = jumpForce * nomadJumpBoostMultiplier;
-
-            boostDuration = speedBoostDuration;
-        }
-    }
-
-    void PixieComboUpdate()
-    {
-        if (pixieComboTimer >= 0f)
-        {
-            pixieComboTimer -= Time.deltaTime;
-        }
-        else if (pixieComboTimer > -1f)
-        {
-            pixieCurrentCombo = 0;
-            pixieComboTimer = -1f;
-        }
-    }
-
-    void OnPixieSpeedBoostCombo1()
-    {
-        if (pixieCurrentCombo == 0)
-        {
-            pixieCurrentCombo = 1;
-            pixieComboTimer = pixieComboCooldown;
-        }
-    }
-
-    void OnPixieSpeedBoostCombo2()
-    {
-        if (pixieCurrentCombo == 1)
-        {
-            pixieCurrentCombo = 2;
-            pixieComboTimer = pixieComboCooldown;
-        }
-    }
-
-    void OnPixieSpeedBoostCombo3()
-    {
-        if (currentForm == PlayerForm.Pixie && pixieCurrentCombo == 2)
-        {
-            if (boostCooldown > 0f)
-            {
-                Debug.Log("Pixie speed boost couldn't be activated! Cooldown is ongoing.");
-            }
-            else if(boostDuration <= 0f)
-            {
-                Debug.Log("Pixie speed boost is  activated!");
-
-                currentSpeed = moveSpeed * pixieSpeedBoostMultiplier;
-                currentJumpForce = jumpForce * pixieJumpBoostMultiplier;
-
-                boostDuration = speedBoostDuration;
-            }            
-        }
-
-        pixieComboTimer = 0f;
-    }
-
-    #endregion
 }

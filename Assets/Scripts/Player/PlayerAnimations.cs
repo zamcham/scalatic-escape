@@ -31,8 +31,6 @@ public class PlayerAnimations : MonoBehaviour
 
     public void StartAnimation(string animationName, bool loop, float timeScale)
     {
-        Debug.Log($"Called SetAnimation: {animationName}");
-
         if (animationName == currentAnimation)
         {
             return;
