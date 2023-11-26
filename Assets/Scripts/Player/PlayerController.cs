@@ -8,22 +8,25 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpForce = 10f;
-
+    Vector2 moveInput;
     float currentSpeed, currentJumpForce;
 
     [Header("Jumping")]
-    BoxCollider2D groundChecker;
-    [SerializeField] float jumpInterval = 0.25f;
+    [SerializeField] float jumpTimer = 0f;
+    [SerializeField] float jumpAirForce = 1.2f;
     int maxJumpCount = 1;
-    int jumpCount = 0, jumpsInQueue = 0;
-    float jumpTimer;
+    int jumpCount = 0;
+    BoxCollider2D groundChecker;
 
-    Vector2 moveInput;
+
+    [Header("References")] 
     Rigidbody2D rb;
+    LevelManager levelManager;
 
     #region Characters 
 
     enum PlayerForm { Pixie, Nomad, Titan }
+
     PlayerForm currentForm = PlayerForm.Nomad;
 
     Dictionary<PlayerForm, Vector2> formScaleMapping = new Dictionary<PlayerForm, Vector2>
@@ -35,9 +38,6 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    LevelManager levelManager;
-
-    bool canBreakPlatform = false;
     Renderer titanRenderer;
 
     [Header("Speed Boost")]
@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
     public float health { get; set; } = 1f;
     public bool hasDied { get; set; } = false;
 
+    //TODO: Transfer to the audio manager
     [Header("Audio")]
     [SerializeField] AudioClip gameOverSound;
     [SerializeField] AudioClip jumpingSound, landingSound;
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+        
         if (IsGrounded())
         {
             playerAnimations.StartAnimation("Run", true, 2f);
@@ -165,9 +167,8 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if (currentForm != PlayerForm.Titan && jumpsInQueue < maxJumpCount)
+        if (currentForm != PlayerForm.Titan && jumpCount < maxJumpCount)
         {
-            jumpsInQueue++;
             jumping = true;
         }
 
@@ -175,30 +176,22 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (jumpsInQueue > 0 && jumpTimer <= 0f && jumpCount < maxJumpCount)
+        if (jumping && jumpCount < maxJumpCount)
         {
-            if (jumping)
+            jumping = false;
+            playerAnimations.StartAnimation("Jump", false, 1f);
+
+            if (IsGrounded())
             {
-                jumping = false;
-                playerAnimations.StartAnimation("Jump", false, 1f);
+                rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
             }
-            // Gradually increase gravity when jumping
-            currentGravity += gravityAdjustmentSpeed * Time.deltaTime;
-            rb.gravityScale = currentGravity;
+            else
+            {
+                rb.AddForce(new Vector2(0f, jumpForce * jumpAirForce), ForceMode2D.Impulse);
+            }
 
-            jumpTimer = jumpInterval;
-            jumpsInQueue--;
             jumpCount++;
-            rb.velocity = new Vector2(rb.velocity.y, currentJumpForce);
-
             AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
-        }
-        else
-        {
-            // Gradually reset gravity when not jumping
-            currentGravity = Mathf.Lerp(currentGravity, baseGravity, gravityAdjustmentSpeed * Time.deltaTime);
-            rb.gravityScale = currentGravity;
-            jumpTimer -= Time.deltaTime;
         }
     }
 
@@ -218,12 +211,12 @@ public class PlayerController : MonoBehaviour
 
     void GroundPounding(Collision2D collision)
     {
-        if (canBreakPlatform && collision.gameObject.CompareTag("Breakable"))
-            Destroy(collision.gameObject);
-        else if (canBreakPlatform)
+        if (collision.gameObject.CompareTag("Breakable"))
         {
-            canBreakPlatform = false;
-            titanRenderer.sharedMaterial.color = Color.white;
+            Destroy(collision.gameObject);
+        }
+        else {
+            playerAnimations.StartAnimation("Idle", true, 1f);
         }
     }
 
@@ -280,8 +273,6 @@ public class PlayerController : MonoBehaviour
 
             if (jumpCount > 0 && targetForm == PlayerForm.Titan)
             {
-                canBreakPlatform = true;
-                // TODO: Play ground pound animation
                 playerAnimations.StartAnimation("GroundPound", false, 1f);
             }
             else
