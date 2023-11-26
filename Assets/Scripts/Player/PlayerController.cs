@@ -12,8 +12,15 @@ public class PlayerController : MonoBehaviour
     float currentSpeed, currentJumpForce;
 
     [Header("Jumping")]
-    [SerializeField] float jumpTimer = 0f;
-    [SerializeField] float jumpAirForce = 1.2f;
+
+    [SerializeField] 
+    [Tooltip("The time for the last chance to jump after falling off a platform.")]
+    float timeToLastChanceJump = 0f;
+
+    [SerializeField]
+    [Tooltip("The force applied when jumping in the air after falling off a platform.")]
+    float jumpAirForce = 1.2f;
+
     int maxJumpCount = 1;
     int jumpCount = 0;
     BoxCollider2D groundChecker;
@@ -204,7 +211,6 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded())
         {
-            jumpTimer = 0f;
             jumpCount = 0; 
         }
     }
