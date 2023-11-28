@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     LevelManager levelManager;
     [SerializeField] float gravityScale = 5f;
     [SerializeField] float fallMultiplier = 5f; 
-    [SerializeField] float jumpMultiplier = 5f;
 
     //================== Movement Variables ==================
     [Header("Movement")]
@@ -27,11 +26,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The time for the last chance to jump after falling off a platform.")]
     float timeToLastChanceJump = 0.5f;
     private float originalJumpDelay;
-
-    [SerializeField]
-    [Tooltip("The force applied when jumping in the air after falling off a platform.")]
-    float jumpAirForce = 1.2f;
-    private float originalJumpForce;
 
     int maxJumpCount = 1;
     int jumpCount = 0;
@@ -76,7 +70,6 @@ public class PlayerController : MonoBehaviour
         GetGroundChecker();
         playerAnimations = GetComponent<PlayerAnimations>();
         originalJumpDelay = timeToLastChanceJump;
-        originalJumpForce = jumpForce;
         originalMoveSpeed = moveSpeed;
     }
 
@@ -156,25 +149,13 @@ public class PlayerController : MonoBehaviour
 
         if (IsGrounded())
         {   moveSpeed = originalMoveSpeed;
-            if (Mathf.Abs(moveInput.x) < 0.4f || changingDirection)
-            {
-                rb.drag = linearDrag;
-            }
-            else
-            {
-                rb.drag = 0f;
-            }
-
+            rb.drag = Mathf.Abs(moveInput.x) < 0.4f || changingDirection ? linearDrag : 0f;
             rb.gravityScale = 0f;
         }
         else {
             rb.gravityScale = gravityScale;
             rb.drag = linearDrag * 0.15f;
-            if (changingDirection)
-            {
-                moveSpeed *= 1.15f;
-            }
-            
+            if (changingDirection) moveSpeed *= 1.15f;
 
             if (rb.velocity.y < 0)
             {
@@ -198,7 +179,7 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if (currentForm != PlayerForm.Titan && jumpCount <= maxJumpCount && timeToLastChanceJump > 0f)
+        if (currentForm != PlayerForm.Titan && jumpCount <= maxJumpCount && (timeToLastChanceJump > 0f || IsGrounded()))
         {
             Jump();
         }
@@ -210,22 +191,7 @@ public class PlayerController : MonoBehaviour
         jumpCount += 1;
         rb.velocity = new Vector2(rb.velocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        // if (jumping && jumpCount <= maxJumpCount)
-        // {
-        //     jumpCount+= 1;
-        //     jumping = false;
-        //     playerAnimations.StartAnimation("Jump", false, 1f);
-
-        //     if (IsGrounded())
-        //     {
-        //         rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
-        //     }
-        //     else
-        //     {
-        //         rb.AddForce(new Vector2(0f, jumpForce * jumpAirForce), ForceMode2D.Impulse);
-        //     }
-        //     AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
-        // }
+        AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
     }
 
     bool IsGrounded()
@@ -262,8 +228,7 @@ public class PlayerController : MonoBehaviour
 
     void GetGroundChecker()
     {
-        Transform firstChild = transform.GetChild(0); // Get the first child
-        Transform groundCheckerTransform = firstChild.Find("GroundChecker");
+        Transform groundCheckerTransform = transform.GetChild(0)?.Find("GroundChecker");
 
         if (groundCheckerTransform != null)
             groundChecker = groundCheckerTransform.GetComponent<BoxCollider2D>();
@@ -330,7 +295,6 @@ public class PlayerController : MonoBehaviour
 
         maxJumpCount = 1;
         timeToLastChanceJump = originalJumpDelay;
-        jumpForce = originalJumpForce;
         ChangeForm(PlayerForm.Nomad, levelManager.nomadEnergyCost, 1, nomadSound);
     }
 
@@ -338,7 +302,6 @@ public class PlayerController : MonoBehaviour
     {
         maxJumpCount = 2;
         timeToLastChanceJump = 5f;
-        jumpAirForce = 0.75f;
         ChangeForm(PlayerForm.Pixie, levelManager.pixieEnergyCost, 2, pixieSound, levelManager.pixieEnergyThreshold);
     }
 
