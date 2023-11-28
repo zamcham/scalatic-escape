@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float linearDrag = 4f;
     public Vector2 moveInput;
     float originalMoveSpeed;
+    bool moveKeyPressed;
 
     //================== Jumping Variables ==================  
     [Header("Jumping")]
@@ -60,7 +61,6 @@ public class PlayerController : MonoBehaviour
 
     //Animation
     PlayerAnimations playerAnimations;
-    bool inputKeyPressed;
     bool jumping;
     
 
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded())
         {
             playerAnimations.StartAnimation("Run", true, 2f);
-            inputKeyPressed = true;
+            moveKeyPressed = true;
         }
     }
 
@@ -140,6 +140,12 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(rb.velocity.x) > maxSpeed)
         {
             rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * maxSpeed, rb.velocity.y);
+        }
+
+        if (Mathf.Approximately(moveInput.x, 0f) && moveKeyPressed && IsGrounded())
+        {
+            moveKeyPressed = false;
+            playerAnimations.StartAnimation("Idle", true, 1f);
         }
     }
 
@@ -181,6 +187,7 @@ public class PlayerController : MonoBehaviour
     {
         if (currentForm != PlayerForm.Titan && jumpCount <= maxJumpCount && (timeToLastChanceJump > 0f || IsGrounded()))
         {
+            playerAnimations.StartAnimation("Jump", false, 1f);
             Jump();
         }
 
