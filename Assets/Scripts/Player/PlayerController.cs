@@ -12,12 +12,13 @@ public class PlayerController : MonoBehaviour
     //================== Movement Variables ==================
     [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
-    [SerializeField] float jumpForce = 10f;
+    [SerializeField] float maxSpeed = 10f;
+    [SerializeField] float linearDrag = 4f;
     public Vector2 moveInput;
-    float currentSpeed, currentJumpForce;
 
     //================== Jumping Variables ==================  
     [Header("Jumping")]
+    [SerializeField] float jumpForce = 10f;
     [SerializeField] 
     [Tooltip("The time for the last chance to jump after falling off a platform.")]
     float timeToLastChanceJump = 0.5f;
@@ -93,17 +94,20 @@ public class PlayerController : MonoBehaviour
 
         currentSpeed = moveSpeed;
         currentJumpForce = jumpForce;
-        baseGravity = rb.gravityScale;
-        currentGravity = baseGravity;
     }
 
     void Update()
     {
-        Run();
-        Jump();
         FlipSprite();
         MonitorGroundedState();
         CheckBottomBoundary();
+    }
+
+    void FixedUpdate()
+    {
+        Run(moveInput.x);
+        modifyPhysics();
+        Jump();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -139,23 +143,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Run()
+    void Run(float horizontalInput)
     {
-        float targetVelocityX = moveInput.x * moveSpeed;
-
-        // Apply acceleration
-        rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, targetVelocityX, acceleration * Time.deltaTime), rb.velocity.y);
-
-
-        if (Mathf.Approximately(moveInput.x, 0f))
+        rb.AddForce(Vector2.right * horizontalInput * moveSpeed);
+        if (Mathf.Abs(rb.velocity.x) > maxSpeed)
         {
-            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, deceleration * Time.deltaTime), rb.velocity.y);
+            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * maxSpeed, rb.velocity.y);
+        }
+    }
 
-            if (inputKeyPressed && IsGrounded())
-            {
-                inputKeyPressed = false;
-                playerAnimations.StartAnimation("Idle", true, 1f);
-            }
+    void modifyPhysics() {
+        bool changingDirection = (moveInput.x > 0 && rb.velocity.x < 0) || (moveInput.x < 0 && rb.velocity.x > 0);
+
+        if (Mathf.Abs(moveInput.x) < 0.4f || changingDirection)
+        {
+            rb.drag = linearDrag;
+        }
+        else
+        {
+            rb.drag = 0f;
         }
     }
 
