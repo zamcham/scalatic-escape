@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     LevelManager levelManager;
     [SerializeField] float gravityScale = 5f;
     [SerializeField] float fallMultiplier = 5f; 
+    [SerializeField] float jumpMultiplier = 5f;
 
     //================== Movement Variables ==================
     [Header("Movement")]
@@ -140,6 +141,7 @@ public class PlayerController : MonoBehaviour
     void Run(float horizontalInput)
     {
         rb.AddForce(Vector2.right * horizontalInput * moveSpeed);
+
         if (Mathf.Abs(rb.velocity.x) > maxSpeed)
         {
             rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * maxSpeed, rb.velocity.y);
@@ -147,6 +149,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void modifyPhysics() {
+
         bool changingDirection = (moveInput.x > 0 && rb.velocity.x < 0) || (moveInput.x < 0 && rb.velocity.x > 0);
 
         if (IsGrounded())
