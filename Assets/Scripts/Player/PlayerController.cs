@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     //================== Physics and Game Components ==================
     Rigidbody2D rb;
     LevelManager levelManager;
+    [SerializeField] float gravityScale = 1f;
+    [SerializeField] float fallMultiplier = 5f;; 
 
     //================== Movement Variables ==================
     [Header("Movement")]
@@ -60,10 +62,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool hasArmor = false;
     bool fellDown = false;
 
-    //Momentum
-    [SerializeField] float acceleration = 5f;
-    [SerializeField] float deceleration = 5f;
-
     //Animation
     PlayerAnimations playerAnimations;
     bool inputKeyPressed;
@@ -107,7 +105,6 @@ public class PlayerController : MonoBehaviour
     {
         Run(moveInput.x);
         modifyPhysics();
-        Jump();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -155,13 +152,31 @@ public class PlayerController : MonoBehaviour
     void modifyPhysics() {
         bool changingDirection = (moveInput.x > 0 && rb.velocity.x < 0) || (moveInput.x < 0 && rb.velocity.x > 0);
 
-        if (Mathf.Abs(moveInput.x) < 0.4f || changingDirection)
+        if (IsGrounded())
         {
-            rb.drag = linearDrag;
+            if (Mathf.Abs(moveInput.x) < 0.4f || changingDirection)
+            {
+                rb.drag = linearDrag;
+            }
+            else
+            {
+                rb.drag = 0f;
+            }
+
+            rb.gravityScale = 0f;
         }
-        else
-        {
-            rb.drag = 0f;
+        else {
+            rb.gravityScale = gravityScale;
+            rb.drag = linearDrag * 0.15f;
+
+            if (rb.velocity.y < 0)
+            {
+                rb.gravityScale = gravityScale * fallMultiplier;
+            }
+            else if (rb.velocity.y > 0 && !moveInput.y > 0)
+            {
+                rb.gravityScale = gravityScale * (fallMultiplier / 2);
+            }
         }
     }
 
@@ -178,30 +193,32 @@ public class PlayerController : MonoBehaviour
     {
         if (currentForm != PlayerForm.Titan && jumpCount <= maxJumpCount && timeToLastChanceJump > 0f)
         {
-            Debug.Log("Jumping!");
-            jumping = true;
+            Jump();
         }
 
     }
 
     void Jump()
     {
-        if (jumping && jumpCount <= maxJumpCount)
-        {
-            jumpCount+= 1;
-            jumping = false;
-            playerAnimations.StartAnimation("Jump", false, 1f);
+        jumpCount += 1;
+        rb.velocity = new Vector2(rb.velocity.x, 0f);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        // if (jumping && jumpCount <= maxJumpCount)
+        // {
+        //     jumpCount+= 1;
+        //     jumping = false;
+        //     playerAnimations.StartAnimation("Jump", false, 1f);
 
-            if (IsGrounded())
-            {
-                rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
-            }
-            else
-            {
-                rb.AddForce(new Vector2(0f, jumpForce * jumpAirForce), ForceMode2D.Impulse);
-            }
-            AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
-        }
+        //     if (IsGrounded())
+        //     {
+        //         rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+        //     }
+        //     else
+        //     {
+        //         rb.AddForce(new Vector2(0f, jumpForce * jumpAirForce), ForceMode2D.Impulse);
+        //     }
+        //     AudioManager.Instance.PlayOneShot(jumpingSound, 0.5f);
+        // }
     }
 
     bool IsGrounded()
