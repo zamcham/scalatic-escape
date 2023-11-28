@@ -8,8 +8,8 @@ public class PlayerController : MonoBehaviour
     //================== Physics and Game Components ==================
     Rigidbody2D rb;
     LevelManager levelManager;
-    [SerializeField] float gravityScale = 1f;
-    [SerializeField] float fallMultiplier = 5f;; 
+    [SerializeField] float gravityScale = 5f;
+    [SerializeField] float fallMultiplier = 5f; 
 
     //================== Movement Variables ==================
     [Header("Movement")]
@@ -89,9 +89,6 @@ public class PlayerController : MonoBehaviour
         }   
 
         OnNomad();
-
-        currentSpeed = moveSpeed;
-        currentJumpForce = jumpForce;
     }
 
     void Update()
@@ -173,7 +170,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.gravityScale = gravityScale * fallMultiplier;
             }
-            else if (rb.velocity.y > 0 && !moveInput.y > 0)
+            else if (rb.velocity.y > 0 && moveInput.y != 0)
             {
                 rb.gravityScale = gravityScale * (fallMultiplier / 2);
             }

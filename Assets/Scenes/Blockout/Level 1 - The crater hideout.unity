@@ -48106,11 +48106,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3548139991080166883, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: maxSpeed
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3548139991080166883, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: moveSpeed
-      value: 10
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548139991080166883, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: gravityScale
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548139991080166883, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: fallMultiplier
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 5589222749991940671, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: m_Mesh
