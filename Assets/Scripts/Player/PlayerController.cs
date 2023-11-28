@@ -59,10 +59,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool hasArmor = false;
     bool fellDown = false;
 
-    float baseGravity;
-    float currentGravity;
-    float gravityAdjustmentSpeed = 2.0f;
-
     //Momentum
     [SerializeField] float acceleration = 5f;
     [SerializeField] float deceleration = 5f;
