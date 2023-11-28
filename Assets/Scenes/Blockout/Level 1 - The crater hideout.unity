@@ -48113,6 +48113,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3548139991080166883, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
+      propertyPath: linearDrag
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3548139991080166883, guid: cecdd651ddcb04ed58374b8a873eb4c0, type: 3}
       propertyPath: gravityScale
       value: 4
       objectReference: {fileID: 0}

@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxSpeed = 10f;
     [SerializeField] float linearDrag = 4f;
     public Vector2 moveInput;
+    float originalMoveSpeed;
 
     //================== Jumping Variables ==================  
     [Header("Jumping")]
@@ -76,6 +77,7 @@ public class PlayerController : MonoBehaviour
         playerAnimations = GetComponent<PlayerAnimations>();
         originalJumpDelay = timeToLastChanceJump;
         originalJumpForce = jumpForce;
+        originalMoveSpeed = moveSpeed;
     }
 
     void Start()
@@ -153,7 +155,7 @@ public class PlayerController : MonoBehaviour
         bool changingDirection = (moveInput.x > 0 && rb.velocity.x < 0) || (moveInput.x < 0 && rb.velocity.x > 0);
 
         if (IsGrounded())
-        {
+        {   moveSpeed = originalMoveSpeed;
             if (Mathf.Abs(moveInput.x) < 0.4f || changingDirection)
             {
                 rb.drag = linearDrag;
@@ -168,6 +170,11 @@ public class PlayerController : MonoBehaviour
         else {
             rb.gravityScale = gravityScale;
             rb.drag = linearDrag * 0.15f;
+            if (changingDirection)
+            {
+                moveSpeed *= 1.15f;
+            }
+            
 
             if (rb.velocity.y < 0)
             {
