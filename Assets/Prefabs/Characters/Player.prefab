@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2267404610411978519}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.08, y: -1.409, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -105,15 +105,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb3ec99191e2440c88cf119b3dd3dd8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 6
   jumpForce: 20
-  jumpInterval: 0.05
-  nomadSpeedBoostMultiplier: 2
-  nomadJumpBoostMultiplier: 2
-  pixieSpeedBoostMultiplier: 2
-  pixieJumpBoostMultiplier: 2
-  speedBoostDuration: 5
-  speedBoostCooldown: 5
+  timeToLastChanceJump: 0.15
+  jumpAirForce: 1.2
   gameOverSound: {fileID: 8300000, guid: a047844672d69b749959e77af729abd7, type: 3}
   jumpingSound: {fileID: 8300000, guid: 37dbdf0e0be0ee64c89a8b45cfd8665d, type: 3}
   landingSound: {fileID: 8300000, guid: 601d9dc0061c02746aea1be2d2f84303, type: 3}
@@ -151,7 +146,7 @@ GameObject:
   - component: {fileID: 7358730913875140973}
   - component: {fileID: 7502012776775613622}
   m_Layer: 0
-  m_Name: Nomad
+  m_Name: Animations
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,7 +255,7 @@ MonoBehaviour:
   disableRenderingOnOverride: 1
   updateTiming: 1
   unscaledTime: 0
-  _animationName: Run
+  _animationName: Idle
   loop: 1
   timeScale: 1
 --- !u!70 &7502012776775613622

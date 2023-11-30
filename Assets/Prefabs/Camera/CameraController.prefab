@@ -534,10 +534,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4283413781337377375}
-  - component: {fileID: 6507455741146306327}
+  - component: {fileID: 2692360105896777130}
   - component: {fileID: 2640597887896083537}
   - component: {fileID: 6487662611682127351}
-  - component: {fileID: 2692360105896777130}
+  - component: {fileID: 6507455741146306327}
   m_Layer: 0
   m_Name: CameraController
   m_TagString: Untagged
@@ -561,9 +561,9 @@ Transform:
   - {fileID: 5542737225998591913}
   - {fileID: 348425643234524589}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6507455741146306327
+--- !u!114 &2692360105896777130
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -572,14 +572,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7863468777581627592}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26621570e756e4b1c9974e6c531e1a49, type: 3}
+  m_Script: {fileID: 11500000, guid: 19533ef7f8249984cbe31a5737bd97c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  _ArmTransform: {fileID: 5542737225998591913}
-  _ArmLimits: {x: 0, y: 2, z: 0}
-  _ArmTarget: {fileID: 348425643234524589}
-  _speedModifier: 1
 --- !u!212 &2640597887896083537
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -667,7 +662,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.08
---- !u!114 &2692360105896777130
+--- !u!114 &6507455741146306327
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -676,6 +671,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7863468777581627592}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19533ef7f8249984cbe31a5737bd97c5, type: 3}
+  m_Script: {fileID: 11500000, guid: 26621570e756e4b1c9974e6c531e1a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 3
+  _ArmTransform: {fileID: 5542737225998591913}
+  _ArmLimits: {x: 0, y: 2, z: 0}
+  _ArmTarget: {fileID: 348425643234524589}
+  _speedModifier: 1

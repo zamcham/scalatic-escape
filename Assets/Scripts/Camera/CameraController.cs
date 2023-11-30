@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        //UpdateCameraArmPosition();
+        UpdateCameraArmPosition();
     }
 
     void FixedUpdate()
